@@ -83,8 +83,6 @@ public static class CSVLoader
                         headers,
                         field.Name);
 
-
-
                 // If the column does not exist, show warning
                 if (column == -1)
                 {
@@ -96,13 +94,9 @@ public static class CSVLoader
                     continue;
                 }
 
-
-
                 // Get the value from the CSV cell
                 string value =
                     values[column];
-
-
 
                 // Check if the cell is empty
                 if (CSVValidator.CheckEmpty(
@@ -114,8 +108,6 @@ public static class CSVLoader
                     continue;
                 }
 
-
-
                 // Convert the text value into the correct datatype
                 // Example: "10" becomes int 10
                 object converted =
@@ -123,20 +115,14 @@ public static class CSVLoader
                         value,
                         field.FieldType);
 
-
-
                 // Put the converted value into the object variable
                 field.SetValue(
                     item,
                     converted);
             }
-
-
             // Add the completed object to the list
             data.Add(item);
         }
-
-
         // Return all loaded data
         return data;
     }

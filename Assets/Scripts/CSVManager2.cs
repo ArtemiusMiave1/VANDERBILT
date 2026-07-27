@@ -35,14 +35,14 @@ public static class CSVManager2
 
             RequestData request = new RequestData();
 
-            request.id = int.Parse(columns[0]);
-            request.faction = columns[1];
-            request.title = columns[2];
-            request.resource = columns[3];
-            request.amount = int.Parse(columns[4]);
-            request.reward = int.Parse(columns[5]);
-            request.pollution = int.Parse(columns[6]);
-            request.hope = int.Parse(columns[7]);
+            //request.id = int.Parse(columns[0]);
+            //request.faction = columns[1];
+            //request.title = columns[2];
+            //request.resource = columns[3];
+            //request.amount = int.Parse(columns[4]);
+            //request.reward = int.Parse(columns[5]);
+            //request.pollution = int.Parse(columns[6]);
+            //request.hope = int.Parse(columns[7]);
 
             requests.Add(request);
         }
