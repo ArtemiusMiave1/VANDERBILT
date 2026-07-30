@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class LocationLineRenderer : MonoBehaviour
 {
-    private Location location;
+    public Location location;
+    public bool button = false;
 
     void Start()
     {
         location = GetComponent<Location>();
 
         DrawConnections();
+    }
+
+    private void Update()
+    {
+        if (button == true)
+        {
+            DrawConnections();
+            button = false;
+        }
     }
 
 
