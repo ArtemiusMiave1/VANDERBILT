@@ -31,6 +31,11 @@ public class ShipMovement : MonoBehaviour
             moving = false;
 
             Debug.Log("Arrived at " + currentLocation.name);
+            // Check requests at this location
+            foreach (RequestPaper paper in FindObjectsOfType<RequestPaper>())
+            {
+                paper.OnShipArrived(currentLocation);
+            }
         }
     }
 

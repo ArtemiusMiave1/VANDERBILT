@@ -1,18 +1,41 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LocationManager : MonoBehaviour
 {
+    public static LocationManager Instance { get; private set; }
+
+    [Header("Settings")]
     public float connectionDistance = 20f;
+
+    [Header("Locations")]
+    public List<Location> locations = new List<Location>();
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     private void Start()
     {
+        FindLocations();
         CreateConnections();
+    }
+
+    void FindLocations()
+    {
+        locations.Clear();
+        locations.AddRange(FindObjectsOfType<Location>());
     }
 
     void CreateConnections()
     {
-        Location[] locations = FindObjectsOfType<Location>();
-
         // Clear old connections
         foreach (Location location in locations)
         {
@@ -21,9 +44,9 @@ public class LocationManager : MonoBehaviour
         }
 
         // Compare every location with every other location
-        for (int i = 0; i < locations.Length; i++)
+        for (int i = 0; i < locations.Count; i++)
         {
-            for (int j = i + 1; j < locations.Length; j++)
+            for (int j = i + 1; j < locations.Count; j++)
             {
                 float distance = Vector3.Distance(
                     locations[i].transform.position,
@@ -40,6 +63,6 @@ public class LocationManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Connections created.");
+        Debug.Log($"Connections created for {locations.Count} locations.");
     }
 }

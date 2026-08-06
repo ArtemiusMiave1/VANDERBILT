@@ -1,0 +1,254 @@
+# Vanderbilt - Project Context
+
+## Overview
+
+Vanderbilt is a first-person dystopian political logistics simulation set during a steampunk revolution.
+
+The player is the captain of a transport blimp responsible for delivering resources between different factions. Every delivery influences the world's political, economic, and environmental state.
+
+The game focuses on logistics, moral decision-making, and replayability through interconnected systems.
+
+---
+
+## World
+
+There are two major populations:
+
+* **Cirri** – wealthy citizens living in the sky.
+* **Groundmeats** – poorer citizens living on the ground.
+
+Helping the Cirri increases wealth but pollutes the world and spreads disease.
+
+Helping the Groundmeats increases unrest and eventually leads to a revolution.
+
+The game has multiple endings depending on the player's choices.
+
+---
+
+## Core Gameplay Loop
+
+1. Receive requests.
+2. Accept deliveries.
+3. Plan a route.
+4. Fly the ship.
+5. Manage resources and hazards.
+6. Deliver cargo.
+7. World state changes.
+8. New requests appear.
+
+---
+
+## Current Mechanics
+
+### Ship
+
+* First-person interior.
+* Player never leaves the ship.
+* Ship travels around a world map.
+* Interior contains stations/desks for different gameplay systems.
+
+### World Map
+
+* Map contains multiple locations.
+* Every location represents a faction or industry.
+* Locations automatically connect to nearby locations at game start.
+* Connections are based on distance.
+* Ship may only travel to directly connected locations.
+* Routes are drawn between connected locations.
+* Future versions will use pathfinding (likely Dijkstra or A*).
+
+### Weather
+
+* Poison storm clouds move around the map.
+* Travelling through clouds damages the ship and/or resources.
+* Players choose between safer longer routes or dangerous shortcuts.
+
+### Future Events
+
+Examples:
+
+* Pirates stealing cargo.
+* Random world events.
+* Disease outbreaks.
+* Blocked routes.
+* Faction conflicts.
+
+---
+
+## Design Pillars
+
+1. Logistics / Resource Management
+2. Decision Making
+3. Enclosed Immersive Ship Interior
+
+---
+
+## Technical Architecture
+
+### Data Driven
+
+The game uses CSV files as databases.
+
+Designers edit gameplay values in Excel.
+
+CSV files are exported and loaded into Unity.
+
+No gameplay values should be hardcoded whenever possible.
+
+---
+
+### Current CSV Loader
+
+Uses C# Reflection (`FieldInfo`) to automatically:
+
+* Load any CSV
+* Match headers to class fields
+* Convert strings into datatypes
+* Ignore empty rows
+* Warn about missing fields
+* Validate empty cells
+
+Uses generic loading:
+
+```csharp
+CSVLoader.Load<RequestData>("Requests");
+```
+
+Current supporting scripts:
+
+* CSVLoader
+* CSVValidator
+* GameDatabase
+
+---
+
+### Planned Databases
+
+Requests.csv
+
+Factions.csv
+
+Resources.csv
+
+Locations.csv
+
+Events.csv
+
+Dialogue.csv
+
+Unlockables.csv
+
+---
+
+### GameDatabase
+
+Singleton.
+
+Loads all CSV files on startup.
+
+Stores lists of loaded objects.
+
+Other systems access data through:
+
+```csharp
+GameDatabase.Instance.Requests
+```
+
+---
+
+## Current Request System
+
+Requests are loaded from CSV.
+
+Each request contains information such as:
+
+* Title
+* Requesting Faction
+* Start Location
+* Destination
+* Requested Resource
+* Amount
+* Reward
+* Time Limit
+* Dialogue
+* Consequences
+* Unlockables
+
+Locations store available requests.
+
+Future request generation will be dynamic.
+
+---
+
+## Map System
+
+Each location is a node.
+
+Each node stores:
+
+* Connected locations
+* Distances
+* Available requests
+
+LocationManager automatically connects nearby nodes at startup.
+
+Ship movement is currently prototype level:
+
+* Click connected location
+* Ship moves there at a speed
+* Cannot move to unconnected locations
+
+---
+
+## Programming Goals
+
+The codebase should be:
+
+* Modular
+* Expandable
+* Data-driven
+* Easy for non-programmers to edit
+* Suitable for a team using GitHub
+
+Avoid hardcoding gameplay values.
+
+Prefer reusable systems over one-off scripts.
+
+---
+
+## Research Goals
+
+This project supports research into emergent gameplay and roguelike-inspired systems.
+
+The design investigates how interconnected systems and player decisions generate unique playthroughs through dynamic logistics, politics, and world simulation.
+
+---
+
+## Inspirations
+
+Gameplay:
+
+* Papers, Please
+* Warhammer 40,000: Rogue Trader
+* FAR: Lone Sails
+
+Visual style:
+
+* Steampunk
+* Industrial revolution
+* Airships
+* Brass machinery
+* Victorian technology
+
+---
+
+## When helping
+
+When suggesting code:
+
+* Prefer modular systems.
+* Prioritise scalability over quick fixes.
+* Explain design decisions.
+* Assume Unity and C#.
+* Keep future expansion in mind.
+* Avoid rewriting existing architecture unless there is a clear improvement.
