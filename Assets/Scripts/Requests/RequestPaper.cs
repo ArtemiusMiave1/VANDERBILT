@@ -10,10 +10,8 @@ public class RequestPaper : MonoBehaviour
     public TMP_Text rewardText;
     public TMP_Text dialogueText;
 
-
     [Header("Request Location")]
     public Location targetLocation;
-
 
     private RequestData request;
 
@@ -24,7 +22,7 @@ public class RequestPaper : MonoBehaviour
 
         titleText.text = data.Title;
         factionText.text = "Faction: " + data.Faction;
-        resourceText.text = "Resource: " + data.RequestedResources;
+        resourceText.text = "Requested " + data.RequestedResources + ": " + data.RequestedAmount;
         rewardText.text = "Reward: " + data.Reward;
         dialogueText.text = data.Dialogue;
     }
@@ -34,26 +32,57 @@ public class RequestPaper : MonoBehaviour
     {
         targetLocation = location;
 
-        // Highlight destination
         targetLocation.Highlight();
     }
 
 
     public void OnShipArrived(Location location)
     {
-        // Ignore if ship did not arrive at this request location
+        // Ignore if ship did not arrive at this request's location
         if (location != targetLocation)
             return;
 
+        // Find the ship
+        ShipCargo shipCargo = FindObjectOfType<ShipCargo>();
 
-        CompleteRequest();
+        if (shipCargo == null)
+        {
+            Debug.LogError("No ShipCargo found in the scene!");
+            return;
+        }
+
+        // Check how much of the requested resource the ship has
+        int cargoAmount = shipCargo.GetResourceAmount(request.RequestedResources);
+
+        // Check if there is enough
+        if (cargoAmount >= request.RequestedAmount)
+        {
+            CompleteRequest(shipCargo);
+        }
+        else
+        {
+            Debug.Log(
+                "Not enough " + request.RequestedResources +
+                "! Required: " + request.RequestedAmount +
+                ", Have: " + cargoAmount
+            );
+        }
     }
 
 
-    void CompleteRequest()
+    void CompleteRequest(ShipCargo shipCargo)
     {
         Debug.Log("Completed Request: " + request.Title);
 
+        // Remove the requested resources from the ship
+        shipCargo.AddOrRemoveResource(
+            request.RequestedResources,
+            -request.RequestedAmount
+        );
+        shipCargo.AddOrRemoveResource(
+            request.Reward,
+            request.RewardAmount
+        );
 
         // Remove yellow highlight
         if (targetLocation != null)
@@ -61,8 +90,7 @@ public class RequestPaper : MonoBehaviour
             targetLocation.ClearHighlight();
         }
 
-
-        // Remove paper
+        // Remove request paper
         Destroy(gameObject);
     }
 }

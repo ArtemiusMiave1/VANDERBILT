@@ -8,8 +8,12 @@ public class RequestData
     public string Faction;
 
     public string RequestedResources;
+    
+    public int RequestedAmount;
 
     public string Reward;
+
+    public int RewardAmount;
 
     public float TimeLimit;
 

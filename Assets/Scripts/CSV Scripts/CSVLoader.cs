@@ -55,9 +55,7 @@ public static class CSVLoader
             // Ignore completely empty rows
             if (IsRowEmpty(values))
             {
-                Debug.Log(
-                    "Ignored empty CSV row: " + row
-                );
+//                Debug.Log("Ignored empty CSV row: " + row);
 
                 continue;
             }

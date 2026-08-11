@@ -396,7 +396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.082, y: 0.75}
+  m_AnchoredPosition: {x: -0.175, y: 0.75}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &60291837050614888
@@ -678,6 +678,7 @@ MonoBehaviour:
   resourceText: {fileID: 1161148233469598826}
   rewardText: {fileID: 6121591181208317464}
   dialogueText: {fileID: 1941394759881542023}
+  targetLocation: {fileID: 0}
 --- !u!1 &5273900503028994546
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +896,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.082, y: 0.75}
+  m_AnchoredPosition: {x: -0.175, y: 0.75}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &6259666751554810301
