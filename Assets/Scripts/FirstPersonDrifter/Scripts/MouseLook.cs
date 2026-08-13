@@ -51,58 +51,55 @@ public class MouseLook : MonoBehaviour
  
 	void Update ()
 	{
-		if (!DialogueHandler.inDialogue)
-		{
-			if (axes == RotationAxes.MouseX)
+		if (axes == RotationAxes.MouseX)
+		{			
+			rotAverageX = 0f;
+ 
+			rotationX += Input.GetAxis("Mouse X") * sensitivityX * Time.timeScale;
+ 
+			rotArrayX.Add(rotationX);
+ 
+			if (rotArrayX.Count >= framesOfSmoothing)
 			{
-				rotAverageX = 0f;
-
-				rotationX += Input.GetAxis("Mouse X") * sensitivityX * Time.timeScale;
-
-				rotArrayX.Add(rotationX);
-
-				if (rotArrayX.Count >= framesOfSmoothing)
-				{
-					rotArrayX.RemoveAt(0);
-				}
-				for (int i = 0; i < rotArrayX.Count; i++)
-				{
-					rotAverageX += rotArrayX[i];
-				}
-				rotAverageX /= rotArrayX.Count;
-				rotAverageX = ClampAngle(rotAverageX, minimumX, maximumX);
-
-				Quaternion xQuaternion = Quaternion.AngleAxis(rotAverageX, Vector3.up);
-				transform.localRotation = originalRotation * xQuaternion;
+				rotArrayX.RemoveAt(0);
 			}
-			else
+			for(int i = 0; i < rotArrayX.Count; i++)
 			{
-				rotAverageY = 0f;
-
-				float invertFlag = 1f;
-				if (invertY)
-				{
-					invertFlag = -1f;
-				}
-				rotationY += Input.GetAxis("Mouse Y") * sensitivityY * invertFlag * Time.timeScale;
-
-				rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
-
-				rotArrayY.Add(rotationY);
-
-				if (rotArrayY.Count >= framesOfSmoothing)
-				{
-					rotArrayY.RemoveAt(0);
-				}
-				for (int j = 0; j < rotArrayY.Count; j++)
-				{
-					rotAverageY += rotArrayY[j];
-				}
-				rotAverageY /= rotArrayY.Count;
-
-				Quaternion yQuaternion = Quaternion.AngleAxis(rotAverageY, Vector3.left);
-				transform.localRotation = originalRotation * yQuaternion;
+				rotAverageX += rotArrayX[i];
 			}
+			rotAverageX /= rotArrayX.Count;
+			rotAverageX = ClampAngle(rotAverageX, minimumX, maximumX);
+ 
+			Quaternion xQuaternion = Quaternion.AngleAxis (rotAverageX, Vector3.up);
+			transform.localRotation = originalRotation * xQuaternion;			
+		}
+		else
+		{			
+			rotAverageY = 0f;
+ 
+ 			float invertFlag = 1f;
+ 			if( invertY )
+ 			{
+ 				invertFlag = -1f;
+ 			}
+			rotationY += Input.GetAxis("Mouse Y") * sensitivityY * invertFlag * Time.timeScale;
+			
+			rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+ 	
+			rotArrayY.Add(rotationY);
+ 
+			if (rotArrayY.Count >= framesOfSmoothing)
+			{
+				rotArrayY.RemoveAt(0);
+			}
+			for(int j = 0; j < rotArrayY.Count; j++)
+			{
+				rotAverageY += rotArrayY[j];
+			}
+			rotAverageY /= rotArrayY.Count;
+ 
+			Quaternion yQuaternion = Quaternion.AngleAxis (rotAverageY, Vector3.left);
+			transform.localRotation = originalRotation * yQuaternion;
 		}
 	}
 	

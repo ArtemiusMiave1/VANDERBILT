@@ -34,7 +34,7 @@ public class LocationManager : MonoBehaviour
         locations.AddRange(FindObjectsOfType<Location>());
     }
 
-    void CreateConnections()
+    public void CreateConnections()
     {
         // Clear old connections
         foreach (Location location in locations)
