@@ -53,6 +53,7 @@ public class RequestGenerator : MonoBehaviour
         );
 
         Location targetLocation = LocationManager.Instance.locations[locationIndex];
+        targetLocation.activeRequests.Add(requestPaperPrefab);
 
 
         // Spawn request paper

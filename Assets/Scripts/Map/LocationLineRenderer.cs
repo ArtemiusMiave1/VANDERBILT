@@ -32,6 +32,7 @@ public class LocationLineRenderer : MonoBehaviour
 
             LineRenderer line =
                 lineObject.AddComponent<LineRenderer>();
+            line.SetWidth(0.05f, 0.05f);
 
 
             line.positionCount = 2;
@@ -47,8 +48,9 @@ public class LocationLineRenderer : MonoBehaviour
             );
 
 
-            line.startWidth = 0.05f;
-            line.endWidth = 0.05f;
+            //line.startWidth = 0.05f;
+            //line.endWidth = 0.05f;
+            line.SetWidth(0.01f, 0.01f);
 
 
             line.material =
