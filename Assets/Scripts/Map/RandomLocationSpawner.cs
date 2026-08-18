@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomLocationSpawner : MonoBehaviour
@@ -17,6 +18,7 @@ public class RandomLocationSpawner : MonoBehaviour
 
     public LocationManager locationManager;
 
+    public GameDatabase gameData;
 
     private void Start()
     {
@@ -99,6 +101,11 @@ public class RandomLocationSpawner : MonoBehaviour
             locationManager.locations.Add(newLocation.GetComponent<Location>());
 
             spawned++;
+        }
+
+        foreach (Location place in locationManager.locations)
+        {
+            place.locationType = gameData.LocationData[Random.Range(0, gameData.LocationData.Count)];
         }
 
         Debug.Log($"Spawned {spawned} locations.");

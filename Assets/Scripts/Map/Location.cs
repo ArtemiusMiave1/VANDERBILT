@@ -10,6 +10,7 @@ public class Location : MonoBehaviour
     public Renderer locationRenderer;
 
     public List<RequestPaper> activeRequests;
+    public LocationData locationType;
 
     private void Awake()
     {
