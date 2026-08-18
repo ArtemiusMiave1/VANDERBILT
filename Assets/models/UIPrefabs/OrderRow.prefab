@@ -324,6 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9020838027632762036}
   - component: {fileID: 7831271347025118172}
+  - component: {fileID: 7058988243423525962}
   - component: {fileID: 2687892002281464041}
   m_Layer: 5
   m_Name: OrderRow
@@ -362,6 +363,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3166103822000913649}
   m_CullTransparentMesh: 1
+--- !u!114 &7058988243423525962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3166103822000913649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96cd408d84f5f9c47a8eb2910a89c489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceOrderRow
+  resourceType: 
+  price: 0
+  resourceNameText: {fileID: 3208275484282546591}
+  priceText: {fileID: 6899126449853430101}
+  quantityInput: {fileID: 7212483360897026723}
 --- !u!114 &2687892002281464041
 MonoBehaviour:
   m_ObjectHideFlags: 0
