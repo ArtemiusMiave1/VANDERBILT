@@ -1,0 +1,30 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/ShopStyle.uss?fileID=7433441132597879392&amp;guid=d21130f06210db846ad4f83ead7cd97b&amp;type=3#ShopStyle"/>
+    <ui:VisualElement name="container" style="flex-grow: 1;">
+        <ui:Label text="Label" name="Header" class="header"/>
+        <ui:IntegerField label="Integer Field" value="0" class="text">
+            <ui:Button text="Button"/>
+        </ui:IntegerField>
+        <ui:TextField label="food 2" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" name="Button" class="text"/>
+        </ui:TextField>
+        <ui:TextField label="coal 3" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" class="text"/>
+        </ui:TextField>
+        <ui:TextField label="medicine 5" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" class="text"/>
+        </ui:TextField>
+        <ui:TextField label="machinery 8" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" class="text"/>
+        </ui:TextField>
+        <ui:TextField label="ore 8" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" class="text"/>
+        </ui:TextField>
+        <ui:TextField label="fuel 3" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" class="text"/>
+        </ui:TextField>
+        <ui:TextField label="weapons 10" placeholder-text="filler text" max-length="5" name="TextField" class="text" style="width: 1312px; height: 64px; font-size: 40px; min-width: 150px;">
+            <ui:Button text="Purchase" class="text"/>
+        </ui:TextField>
+    </ui:VisualElement>
+</ui:UXML>
