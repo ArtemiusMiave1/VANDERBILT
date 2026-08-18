@@ -155,7 +155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -443}
+  m_AnchoredPosition: {x: 3, y: -484}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &87753514
@@ -201,7 +201,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 87753515}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 416084411}
+        m_TargetAssemblyTypeName: ResourceDepotPaper, Assembly-CSharp
+        m_MethodName: PurchaseOrder
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &87753515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,7 +527,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceDepotPaper
   shipCargo: {fileID: 1271246776}
-  orderRows: []
+  orderRows:
+  - {fileID: 1023807983}
   totalText: {fileID: 671823833}
   goldText: {fileID: 1978942399}
   remainingGoldText: {fileID: 1709816860}
@@ -996,6 +1009,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 9020838027632762036, guid: a7a6918228daece409af918bc21972c1, type: 3}
   m_PrefabInstance: {fileID: 5804484460439606715}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1023807983 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7058988243423525962, guid: a7a6918228daece409af918bc21972c1, type: 3}
+  m_PrefabInstance: {fileID: 5804484460439606715}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96cd408d84f5f9c47a8eb2910a89c489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceOrderRow
 --- !u!1 &1154439878
 GameObject:
   m_ObjectHideFlags: 0
@@ -2294,6 +2318,14 @@ PrefabInstance:
     - target: {fileID: 3166103822000913649, guid: a7a6918228daece409af918bc21972c1, type: 3}
       propertyPath: m_Name
       value: OrderRow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7058988243423525962, guid: a7a6918228daece409af918bc21972c1, type: 3}
+      propertyPath: price
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7058988243423525962, guid: a7a6918228daece409af918bc21972c1, type: 3}
+      propertyPath: resourceType
+      value: coal
       objectReference: {fileID: 0}
     - target: {fileID: 9020838027632762036, guid: a7a6918228daece409af918bc21972c1, type: 3}
       propertyPath: m_Pivot.x
