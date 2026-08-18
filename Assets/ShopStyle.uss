@@ -1,0 +1,11 @@
+:root {
+}
+
+.header {
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+}
+
+.text {
+    font-size: 40px;
+}

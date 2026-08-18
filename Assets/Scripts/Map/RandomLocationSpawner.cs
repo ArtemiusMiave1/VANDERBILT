@@ -15,6 +15,8 @@ public class RandomLocationSpawner : MonoBehaviour
     [Header("Parent")]
     public Transform locationParent;
 
+    public LocationManager locationManager;
+
 
     private void Start()
     {
@@ -70,9 +72,9 @@ public class RandomLocationSpawner : MonoBehaviour
             // Check distance from existing locations
             bool tooClose = false;
 
-            Location[] existingLocations = FindObjectsOfType<Location>();
+            //Location[] existingLocations = FindObjectsOfType<Location>();
 
-            foreach (Location location in existingLocations)
+            foreach (Location location in locationManager.locations)
             {
                 if (Vector3.Distance(
                     spawnPosition,
@@ -93,11 +95,13 @@ public class RandomLocationSpawner : MonoBehaviour
                 spawnPosition,
                 Quaternion.identity,
                 locationParent
-            );
+            ); 
+            locationManager.locations.Add(newLocation.GetComponent<Location>());
 
             spawned++;
         }
 
         Debug.Log($"Spawned {spawned} locations.");
+        locationManager.CreateConnections();
     }
 }

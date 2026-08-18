@@ -4,6 +4,7 @@ public class LocationLineRenderer : MonoBehaviour
 {
     public Location location;
     public bool button = false;
+    public float width = 0.005f;
 
     void Start()
     {
@@ -50,7 +51,7 @@ public class LocationLineRenderer : MonoBehaviour
 
             //line.startWidth = 0.05f;
             //line.endWidth = 0.05f;
-            line.SetWidth(0.01f, 0.01f);
+            line.SetWidth(width, width);
 
 
             line.material =
