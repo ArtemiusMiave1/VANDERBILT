@@ -8,25 +8,35 @@ public class WarningLight : MonoBehaviour
     Animator Animator;
     int RedHash;
     int PurpleHash;
+    public bool toggle;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Animator = GetComponent<Animator>();
+        PurpleHash = Animator.StringToHash("Base Layer.LightFlashPurple");
+        RedHash = Animator.StringToHash("Base Layer.LightFlashRed");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && toggle == false)
         {
             RedLight();
-            RedHash = Animator.StringToHash("Base Layer.LightFlashRed");
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && toggle == false)
         {
             PurpleLight();
-            PurpleHash = Animator.StringToHash("Base Layer.LightFlashPurple");
+        }
+
+
+        if (!toggle)
+        {
+            RedHash = Animator.StringToHash("Base Layer.New State");
+            PurpleHash = Animator.StringToHash("Base Layer.New State");
         }
     }
 
@@ -38,6 +48,7 @@ public class WarningLight : MonoBehaviour
         LightMaterial.SetColor("_EmissionColor", Color.red);
         LightMaterial.SetColor("_Color", Color.red);
         Animator.Play(RedHash);
+        toggle = true;
     }
 
     void PurpleLight()
@@ -46,5 +57,6 @@ public class WarningLight : MonoBehaviour
         LightMaterial.SetColor("_EmissionColor", Color.purple);
         LightMaterial.SetColor("_Color", Color.purple);
         Animator.Play(PurpleHash);
+        toggle = true;
     }
 }
