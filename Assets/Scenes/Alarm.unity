@@ -445,6 +445,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6746129626985554368, guid: 31ddc790c5fd4c04386237fde93c8793, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1448419414}
+    - targetCorrespondingSourceObject: {fileID: 6746129626985554368, guid: 31ddc790c5fd4c04386237fde93c8793, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1448419410}
   m_SourcePrefab: {fileID: 100100000, guid: 31ddc790c5fd4c04386237fde93c8793, type: 3}
 --- !u!1 &1448419401 stripped
@@ -464,9 +467,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e976fd920090def44a398be0ce9425d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V2WarningLight
-  RedLightToggle: 0
-  PurpleLightToggle: 0
+  CurrentColor: 
   materialVar: {fileID: 2100000, guid: d5ba8192310283a4caa062c5bab2d276, type: 2}
+  animatorVar: {fileID: 1448419414}
+--- !u!95 &1448419414
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448419401}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cfc3edd8decef16479e63d7bd092c3c0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
