@@ -2,26 +2,30 @@ using UnityEngine;
 
 public class RequestGenerator : MonoBehaviour
 {
-    public bool buttonPressed = false;
-
     [Header("Request Paper")]
     public RequestPaper requestPaperPrefab;
+
+    [Header("Spawn Settings")]
     public Transform spawnLocation;
 
+    public int requestsToSpawn = 3;
 
-    private void Update()
+
+    private void Start()
     {
-        if (buttonPressed)
-        {
-            buttonPressed = false;
-            GenerateRequest();
-        }
+        GenerateRequests();
     }
 
 
-    public void GenerateRequest()
+    public void GenerateRequests()
     {
-        // Check requests exist
+        // Check database
+        if (GameDatabase.Instance == null)
+        {
+            Debug.LogError("GameDatabase not found!");
+            return;
+        }
+
         if (GameDatabase.Instance.Requests.Count == 0)
         {
             Debug.LogWarning("No requests loaded!");
@@ -29,7 +33,13 @@ public class RequestGenerator : MonoBehaviour
         }
 
 
-        // Check locations exist
+        // Check locations
+        if (LocationManager.Instance == null)
+        {
+            Debug.LogError("LocationManager not found!");
+            return;
+        }
+
         if (LocationManager.Instance.locations.Count == 0)
         {
             Debug.LogWarning("No locations found!");
@@ -37,13 +47,24 @@ public class RequestGenerator : MonoBehaviour
         }
 
 
+        // Spawn the requested number of papers
+        for (int i = 0; i < requestsToSpawn; i++)
+        {
+            SpawnAvailableRequest();
+        }
+    }
+
+
+    private void SpawnAvailableRequest()
+    {
         // Pick random request
         int requestIndex = Random.Range(
             0,
             GameDatabase.Instance.Requests.Count
         );
 
-        RequestData request = GameDatabase.Instance.Requests[requestIndex];
+        RequestData request =
+            GameDatabase.Instance.Requests[requestIndex];
 
 
         // Pick random location
@@ -52,26 +73,29 @@ public class RequestGenerator : MonoBehaviour
             LocationManager.Instance.locations.Count
         );
 
-        Location targetLocation = LocationManager.Instance.locations[locationIndex];
-        targetLocation.activeRequests.Add(requestPaperPrefab);
+        Location targetLocation =
+            LocationManager.Instance.locations[locationIndex];
 
 
-        // Spawn request paper
+        // Spawn paper
         RequestPaper paper = Instantiate(
             requestPaperPrefab,
             spawnLocation.position,
-            Quaternion.identity
+            Quaternion.identity,
+            spawnLocation
         );
 
 
-        // Give paper request information
+        // Give paper its request
         paper.DisplayRequest(request);
+
+        // Give paper its location
         paper.targetLocation = targetLocation;
-        targetLocation.Highlight();
+
 
 
         Debug.Log(
-            $"Generated {request.Title} at {targetLocation.name}"
+            $"Available request: {request.Title} at {targetLocation.name}"
         );
     }
 }

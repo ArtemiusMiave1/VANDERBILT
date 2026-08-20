@@ -15,6 +15,9 @@ public class RequestPaper : MonoBehaviour
 
     private RequestData request;
 
+    // Is this request currently active?
+    private bool activeRequest = false;
+
 
     public void DisplayRequest(RequestData data)
     {
@@ -22,7 +25,12 @@ public class RequestPaper : MonoBehaviour
 
         titleText.text = data.Title;
         factionText.text = "Faction: " + data.Faction;
-        resourceText.text = "Requested " + data.RequestedResources + ": " + data.RequestedAmount;
+        resourceText.text =
+            "Requested " +
+            data.RequestedResources +
+            ": " +
+            data.RequestedAmount;
+
         rewardText.text = "Reward: " + data.Reward;
         dialogueText.text = data.Dialogue;
     }
@@ -32,15 +40,43 @@ public class RequestPaper : MonoBehaviour
     {
         targetLocation = location;
 
-        targetLocation.Highlight();
+        // Do NOT highlight the location yet.
+        // The request isn't active until the player accepts it.
+    }
+
+
+    // Called when the player clicks the request paper
+    public void AcceptRequest()
+    {
+        // Don't accept it twice
+        if (activeRequest)
+            return;
+
+        activeRequest = true;
+
+        Debug.Log("Accepted Request: " + request.Title);
+
+        // Highlight the destination
+        if (targetLocation != null)
+        {
+            targetLocation.Highlight();
+        }
+
+        // Hide the paper from the request board
+        gameObject.SetActive(false);
     }
 
 
     public void OnShipArrived(Location location)
     {
+        // Ignore inactive requests
+        if (!activeRequest)
+            return;
+
         // Ignore if ship did not arrive at this request's location
         if (location != targetLocation)
             return;
+
 
         // Find the ship
         ShipCargo shipCargo = FindObjectOfType<ShipCargo>();
@@ -51,8 +87,11 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
+
         // Check how much of the requested resource the ship has
-        int cargoAmount = shipCargo.GetResourceAmount(request.RequestedResources);
+        int cargoAmount =
+            shipCargo.GetResourceAmount(request.RequestedResources);
+
 
         // Check if there is enough
         if (cargoAmount >= request.RequestedAmount)
@@ -62,27 +101,38 @@ public class RequestPaper : MonoBehaviour
         else
         {
             Debug.Log(
-                "Not enough " + request.RequestedResources +
-                "! Required: " + request.RequestedAmount +
-                ", Have: " + cargoAmount
+                "Not enough " +
+                request.RequestedResources +
+                "! Required: " +
+                request.RequestedAmount +
+                ", Have: " +
+                cargoAmount
             );
         }
     }
 
 
-    void CompleteRequest(ShipCargo shipCargo)
+    private void CompleteRequest(ShipCargo shipCargo)
     {
-        Debug.Log("Completed Request: " + request.Title);
+        Debug.Log(
+            "Completed Request: " +
+            request.Title
+        );
 
-        // Remove the requested resources from the ship
+
+        // Remove requested resources
         shipCargo.AddOrRemoveResource(
             request.RequestedResources,
             -request.RequestedAmount
         );
+
+
+        // Give reward
         shipCargo.AddOrRemoveResource(
             request.Reward,
             request.RewardAmount
         );
+
 
         // Remove yellow highlight
         if (targetLocation != null)
@@ -90,7 +140,8 @@ public class RequestPaper : MonoBehaviour
             targetLocation.ClearHighlight();
         }
 
-        // Remove request paper
+
+        // Remove request
         Destroy(gameObject);
     }
 }
