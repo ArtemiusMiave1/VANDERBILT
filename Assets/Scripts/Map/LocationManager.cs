@@ -5,6 +5,8 @@ public class LocationManager : MonoBehaviour
 {
     public static LocationManager Instance { get; private set; }
 
+    public RandomLocationSpawner spawner;
+
     [Header("Settings")]
     public float connectionDistance = 20f;
 
@@ -24,11 +26,17 @@ public class LocationManager : MonoBehaviour
 
     private void Start()
     {
-        FindLocations();
-        CreateConnections();
-    }
+        //spawner.SpawnLocations();
+        //FindLocations();
+        //Debug.Log("test");
 
-    void FindLocations()
+        //CreateConnections();
+        //Debug.Log("asdf" + locations.Count);
+
+    }
+    //private void 
+
+    public void FindLocations()
     {
         locations.Clear();
         locations.AddRange(FindObjectsOfType<Location>());
@@ -51,6 +59,7 @@ public class LocationManager : MonoBehaviour
                 float distance = Vector3.Distance(
                     locations[i].transform.position,
                     locations[j].transform.position);
+                //print(distance);
 
                 if (distance <= connectionDistance)
                 {
