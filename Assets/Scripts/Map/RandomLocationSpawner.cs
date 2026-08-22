@@ -22,7 +22,7 @@ public class RandomLocationSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnLocations();
+        //SpawnLocations();
     }
 
 
@@ -103,12 +103,18 @@ public class RandomLocationSpawner : MonoBehaviour
             spawned++;
         }
 
+        //foreach (Location place in locationManager.locations)
+        //{
+        //    place.locationType = gameData.LocationData[Random.Range(0, gameData.LocationData.Count)];
+        //}
+
+    }
+
+    public void AssignLocationTypes()
+    {
         foreach (Location place in locationManager.locations)
         {
             place.locationType = gameData.LocationData[Random.Range(0, gameData.LocationData.Count)];
         }
-
-        Debug.Log($"Spawned {spawned} locations.");
-        locationManager.CreateConnections();
     }
 }
