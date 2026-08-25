@@ -64,12 +64,12 @@ public class V2WarningLight : MonoBehaviour
         switch (colorType)
         {
             case "Purple":
-                print("lol");
+                //print("lol");
                 LightOff("Red");
                 animatorVar.Play(PurpleHash);
                 break;
             case "Red":
-                print("aaa");
+               // print("aaa");
                 LightOff("Purple");
                 animatorVar.Play(RedHash);
                 break;
@@ -82,13 +82,13 @@ public class V2WarningLight : MonoBehaviour
         switch (TurnOff)
         {
             case "Purple":
-                print("a");
+               // print("a");
                 break;
             case "Red":
-                print("b");
+               // print("b");
                 break;
             case "Both":
-                print("both offff");
+               // print("both offff");
                 animatorVar.Play(OffHash);
                 break;
 

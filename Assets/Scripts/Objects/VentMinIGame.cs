@@ -8,6 +8,7 @@ public class VentMinIGame : MonoBehaviour
     public GameObject Vent;
     public GameObject ValveTurn;
     Animator ventAnimator;
+    public V2WarningLight v2warningLight;
 
     public float rotationSpeed = 0.05f;
     [SerializeField] private float cur_HP;
@@ -90,6 +91,7 @@ public class VentMinIGame : MonoBehaviour
         void OpenVent()
         {
             ventAnimator.SetBool("VentOpenBool", true);
+            v2warningLight.CurrentColor = "Neither";
         }
 
         // Update is called once per frame
