@@ -44,10 +44,6 @@ public class Location : MonoBehaviour
     public void SetLocationType(LocationData type)
     {
         locationType = type;
-        Debug.LogError(
-               gameObject.name +
-               " test."
-           );
         if (locationType == null)
         {
             Debug.LogWarning(

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 12400000}
   - component: {fileID: 8100000}
   - component: {fileID: 11400012}
+  - component: {fileID: 2074653843199495003}
   - component: {fileID: 11400008}
   - component: {fileID: 226279220648464857}
   m_Layer: 0
@@ -125,6 +126,20 @@ MonoBehaviour:
   minimumY: -85
   maximumY: 85
   framesOfSmoothing: 5
+--- !u!114 &2074653843199495003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf7afbc4efbe4942a540eb819451525, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
+  playerCamera: {fileID: 2000000}
+  interactionDistance: 3
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 0
