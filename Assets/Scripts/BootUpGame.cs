@@ -6,7 +6,7 @@ public class BootUpGame : MonoBehaviour
     public LocationManager manager;
 
 
-    private void Awake()
+    private void Start()
     {
         if (locationSpawner == null)
         {

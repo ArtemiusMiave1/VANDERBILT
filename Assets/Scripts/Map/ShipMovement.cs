@@ -6,7 +6,7 @@ public class ShipMovement : MonoBehaviour
 
     public Location currentLocation;
     public Location targetLocation;
-    public SupplyOrderInteraction supplyOrderInteraction;
+    public GameObject supplyOrderPaper;
 
     bool moving;
 
@@ -56,7 +56,7 @@ public class ShipMovement : MonoBehaviour
         moving = true;
         if (targetLocation.locationType.Name == "ResourceDepot")
         {
-            supplyOrderInteraction.OpenSupplyOrder();
+            supplyOrderPaper.SetActive(true);
         }
     }
     //public void TravelTo(Location destination)

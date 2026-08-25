@@ -276,10 +276,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ea75a26c07cf5479666990b18912e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RequestGenerator
-  requestPaperPrefab: {fileID: 0}
+  requestPaperPrefab: {fileID: 4937778293386024193, guid: f51552f02b8282b4680c3f18267839e5, type: 3}
   spawnLocation: {fileID: 2678145755853436121}
   requestsToSpawn: 1
   spawn: 0
+  requests:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  spawnDistance: 0.3
 --- !u!1 &7366574261125935316
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,13 +309,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7366574261125935316}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.835, z: -2.859}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 1.5227736, y: 0.975, z: 2.1068506}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6231173096653546091}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 90}
 --- !u!1 &8346290754248167048
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,6 +446,7 @@ MonoBehaviour:
   speed: 0.3
   currentLocation: {fileID: 4856053162501380249}
   targetLocation: {fileID: 0}
+  supplyOrderPaper: {fileID: 0}
 --- !u!114 &3408776223110070429
 MonoBehaviour:
   m_ObjectHideFlags: 0
