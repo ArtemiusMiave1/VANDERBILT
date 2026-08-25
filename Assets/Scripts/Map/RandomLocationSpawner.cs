@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomLocationSpawner : MonoBehaviour
@@ -16,14 +15,9 @@ public class RandomLocationSpawner : MonoBehaviour
     [Header("Parent")]
     public Transform locationParent;
 
+    [Header("References")]
     public LocationManager locationManager;
-
     public GameDatabase gameData;
-
-    private void Start()
-    {
-        //SpawnLocations();
-    }
 
 
     public void SpawnLocations()
@@ -40,8 +34,9 @@ public class RandomLocationSpawner : MonoBehaviour
             return;
         }
 
-        // Get plane dimensions
-        Renderer planeRenderer = spawnPlane.GetComponent<Renderer>();
+
+        Renderer planeRenderer =
+            spawnPlane.GetComponent<Renderer>();
 
         if (planeRenderer == null)
         {
@@ -49,21 +44,32 @@ public class RandomLocationSpawner : MonoBehaviour
             return;
         }
 
+
         Bounds bounds = planeRenderer.bounds;
 
         int spawned = 0;
         int attempts = 0;
 
-        // Prevent infinite loops if the plane is too small
         int maxAttempts = locationAmount * 100;
 
-        while (spawned < locationAmount && attempts < maxAttempts)
+
+        while (spawned < locationAmount &&
+               attempts < maxAttempts)
         {
             attempts++;
 
-            // Random position inside plane
-            float x = Random.Range(bounds.min.x, bounds.max.x);
-            float z = Random.Range(bounds.min.z, bounds.max.z);
+
+            // Random position
+            float x = Random.Range(
+                bounds.min.x,
+                bounds.max.x
+            );
+
+            float z = Random.Range(
+                bounds.min.z,
+                bounds.max.z
+            );
+
 
             Vector3 spawnPosition = new Vector3(
                 x,
@@ -71,12 +77,15 @@ public class RandomLocationSpawner : MonoBehaviour
                 z
             );
 
+
             // Check distance from existing locations
             bool tooClose = false;
 
-            //Location[] existingLocations = FindObjectsOfType<Location>();
+            Location[] existingLocations =
+                FindObjectsOfType<Location>();
 
-            foreach (Location location in locationManager.locations)
+
+            foreach (Location location in existingLocations)
             {
                 if (Vector3.Distance(
                     spawnPosition,
@@ -88,33 +97,80 @@ public class RandomLocationSpawner : MonoBehaviour
                 }
             }
 
+
             if (tooClose)
                 continue;
 
-            // Spawn location
-            GameObject newLocation = Instantiate(
+
+            // Spawn
+            Instantiate(
                 locationPrefab,
                 spawnPosition,
                 Quaternion.identity,
                 locationParent
-            ); 
-            locationManager.locations.Add(newLocation.GetComponent<Location>());
+            );
+
 
             spawned++;
         }
 
-        //foreach (Location place in locationManager.locations)
-        //{
-        //    place.locationType = gameData.LocationData[Random.Range(0, gameData.LocationData.Count)];
-        //}
 
+        Debug.Log(
+            $"Spawned {spawned} / {locationAmount} locations."
+        );
     }
+
 
     public void AssignLocationTypes()
     {
+        if (gameData == null)
+        {
+            Debug.LogError("GameDatabase reference is missing!");
+            return;
+        }
+
+        if (gameData.LocationData == null)
+        {
+            Debug.LogError("LocationData list is NULL!");
+            return;
+        }
+
+        if (gameData.LocationData.Count == 0)
+        {
+            Debug.LogError("LocationData contains 0 entries!");
+            return;
+        }
+
+        if (locationManager == null)
+        {
+            Debug.LogError("LocationManager reference is missing!");
+            return;
+        }
+
+
+        Debug.Log(
+            "Assigning location types from " +
+            gameData.LocationData.Count +
+            " available types."
+        );
+
+
         foreach (Location place in locationManager.locations)
         {
-            place.locationType = gameData.LocationData[Random.Range(0, gameData.LocationData.Count)];
+            LocationData randomType =
+                gameData.LocationData[
+                    Random.Range(
+                        0,
+                        gameData.LocationData.Count
+                    )
+                ];
+
+            place.SetLocationType(randomType);
+            //Debug.Log(
+            //    place.name +
+            //    " assigned type: " +
+            //    randomType.Name
+            //);
         }
     }
 }

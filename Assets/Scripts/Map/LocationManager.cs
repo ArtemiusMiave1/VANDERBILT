@@ -5,13 +5,15 @@ public class LocationManager : MonoBehaviour
 {
     public static LocationManager Instance { get; private set; }
 
-    public RandomLocationSpawner spawner;
 
     [Header("Settings")]
     public float connectionDistance = 20f;
 
+
     [Header("Locations")]
-    public List<Location> locations = new List<Location>();
+    public List<Location> locations =
+        new List<Location>();
+
 
     private void Awake()
     {
@@ -24,26 +26,34 @@ public class LocationManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-        //spawner.SpawnLocations();
-        //FindLocations();
-        //Debug.Log("test");
-
-        //CreateConnections();
-        //Debug.Log("asdf" + locations.Count);
-
-    }
-    //private void 
 
     public void FindLocations()
     {
         locations.Clear();
-        locations.AddRange(FindObjectsOfType<Location>());
+
+        locations.AddRange(
+            FindObjectsOfType<Location>()
+        );
+
+
+        Debug.Log(
+            $"Found {locations.Count} locations."
+        );
     }
+
 
     public void CreateConnections()
     {
+        if (locations.Count == 0)
+        {
+            Debug.LogWarning(
+                "Cannot create connections. No locations found!"
+            );
+
+            return;
+        }
+
+
         // Clear old connections
         foreach (Location location in locations)
         {
@@ -51,27 +61,46 @@ public class LocationManager : MonoBehaviour
             location.distances.Clear();
         }
 
-        // Compare every location with every other location
+
+        // Compare every location
         for (int i = 0; i < locations.Count; i++)
         {
-            for (int j = i + 1; j < locations.Count; j++)
+            for (int j = i + 1;
+                 j < locations.Count;
+                 j++)
             {
-                float distance = Vector3.Distance(
-                    locations[i].transform.position,
-                    locations[j].transform.position);
-                //print(distance);
+                float distance =
+                    Vector3.Distance(
+                        locations[i].transform.position,
+                        locations[j].transform.position
+                    );
+
 
                 if (distance <= connectionDistance)
                 {
-                    locations[i].connections.Add(locations[j]);
-                    locations[i].distances.Add(distance);
+                    locations[i].connections.Add(
+                        locations[j]
+                    );
 
-                    locations[j].connections.Add(locations[i]);
-                    locations[j].distances.Add(distance);
+                    locations[i].distances.Add(
+                        distance
+                    );
+
+
+                    locations[j].connections.Add(
+                        locations[i]
+                    );
+
+                    locations[j].distances.Add(
+                        distance
+                    );
                 }
             }
         }
 
-        Debug.Log($"Connections created for {locations.Count} locations.");
+
+        Debug.Log(
+            $"Connections created for {locations.Count} locations."
+        );
     }
 }

@@ -13,14 +13,14 @@ public class LocationLineRenderer : MonoBehaviour
         DrawConnections();
     }
 
-    private void Update()
-    {
-        if (button == true)
-        {
-            DrawConnections();
-            button = false;
-        }
-    }
+    //private void Update()
+    //{
+    //    if (button == true)
+    //    {
+    //        DrawConnections();
+    //        button = false;
+    //    }
+    //}
 
 
     void DrawConnections()
@@ -35,8 +35,12 @@ public class LocationLineRenderer : MonoBehaviour
                 lineObject.AddComponent<LineRenderer>();
             line.SetWidth(0.05f, 0.05f);
 
-
             line.positionCount = 2;
+
+            line.SetColors(
+                Color.darkSlateGray,
+                Color.darkSlateGray
+            );
 
             line.SetPosition(
                 0,

@@ -6,22 +6,37 @@ public class BootUpGame : MonoBehaviour
     public LocationManager manager;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
-        locationSpawner.SpawnLocations();
-        manager.FindLocations();
-    }
-    void Start()
-    {
-        manager.CreateConnections();
-        Debug.Log("test");
-        //locationSpawner.AssignLocationTypes();
-    }
+        if (locationSpawner == null)
+        {
+            Debug.LogError("LocationSpawner is not assigned!");
+            return;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (manager == null)
+        {
+            Debug.LogError("LocationManager is not assigned!");
+            return;
+        }
+
+
+        // 1. Spawn locations
+        locationSpawner.SpawnLocations();
+
+
+        // 2. Find the newly spawned locations
+        manager.FindLocations();
+
+
+        // 3. Assign location types
+        locationSpawner.AssignLocationTypes();
+
+
+        // 4. Create connections
+        manager.CreateConnections();
+
+
+        Debug.Log("Vanderbilt map generated.");
     }
 }

@@ -3,17 +3,24 @@ using UnityEngine;
 public class RequestGenerator : MonoBehaviour
 {
     [Header("Request Paper")]
-    public RequestPaper requestPaperPrefab;
+    //public RequestPaper requestPaperPrefab;
+    public GameObject requestPaperPrefab;
 
     [Header("Spawn Settings")]
     public Transform spawnLocation;
 
     public int requestsToSpawn = 3;
 
+    public bool spawn = false;
 
-    private void Start()
+
+    private void Update()
     {
-        GenerateRequests();
+        if (spawn)
+        {
+            spawn = false;
+            GenerateRequests();
+        }
     }
 
 
@@ -46,12 +53,13 @@ public class RequestGenerator : MonoBehaviour
             return;
         }
 
+        SpawnAvailableRequest();
 
         // Spawn the requested number of papers
-        for (int i = 0; i < requestsToSpawn; i++)
-        {
-            SpawnAvailableRequest();
-        }
+        //for (int i = 0; i < requestsToSpawn; i++)
+        //{
+        //    SpawnAvailableRequest();
+        //}
     }
 
 
@@ -65,7 +73,7 @@ public class RequestGenerator : MonoBehaviour
 
         RequestData request =
             GameDatabase.Instance.Requests[requestIndex];
-
+        //Debug.Log(GameDatabase.Instance.Requests.Count);
 
         // Pick random location
         int locationIndex = Random.Range(
@@ -78,7 +86,7 @@ public class RequestGenerator : MonoBehaviour
 
 
         // Spawn paper
-        RequestPaper paper = Instantiate(
+        GameObject paper = Instantiate(
             requestPaperPrefab,
             spawnLocation.position,
             Quaternion.identity,
@@ -87,10 +95,11 @@ public class RequestGenerator : MonoBehaviour
 
 
         // Give paper its request
-        paper.DisplayRequest(request);
+       //// paper.DisplayRequest(request);
 
         // Give paper its location
-        paper.targetLocation = targetLocation;
+       ////paper.targetLocation = targetLocation;
+        //targetLocation.activeRequests.Add(paper);
 
 
 

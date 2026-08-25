@@ -6,6 +6,7 @@ public class ShipMovement : MonoBehaviour
 
     public Location currentLocation;
     public Location targetLocation;
+    public SupplyOrderInteraction supplyOrderInteraction;
 
     bool moving;
 
@@ -45,14 +46,18 @@ public class ShipMovement : MonoBehaviour
             return;
 
         // Can only travel to connected locations
-        if (!currentLocation.connections.Contains(destination))
-        {
-            Debug.Log(destination.name + " is not connected to " + currentLocation.name);
-            return;
-        }
+        //if (!currentLocation.connections.Contains(destination))
+        //{
+        //    Debug.Log(destination.name + " is not connected to " + currentLocation.name);
+        //    return;
+        //}
 
         targetLocation = destination;
         moving = true;
+        if (targetLocation.locationType.Name == "ResourceDepot")
+        {
+            supplyOrderInteraction.OpenSupplyOrder();
+        }
     }
     //public void TravelTo(Location destination)
     //{
