@@ -528,21 +528,37 @@ PrefabInstance:
       propertyPath: v2warningLight
       value: 
       objectReference: {fileID: 285444737867423522}
+    - target: {fileID: 5468423200327768360, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0010001599
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468423200327768360, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.13299966
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320522881806030127, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320522881806030127, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.133
+      objectReference: {fileID: 0}
     - target: {fileID: 7479527087961866082, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
       propertyPath: m_Name
       value: Valve
       objectReference: {fileID: 0}
     - target: {fileID: 7820306064331548120, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.534
+      value: -12.505
       objectReference: {fileID: 0}
     - target: {fileID: 7820306064331548120, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.892
+      value: 1.687
       objectReference: {fileID: 0}
     - target: {fileID: 7820306064331548120, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.985
+      value: 3.071
       objectReference: {fileID: 0}
     - target: {fileID: 7820306064331548120, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -582,17 +598,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7820306064331548120, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
   m_PrefabInstance: {fileID: 4432167241507808382}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8983694496969170011 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4696768510981355557, guid: f0c30edc2ef777b4983458a51cfdb93e, type: 3}
-  m_PrefabInstance: {fileID: 4432167241507808382}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30ba0c91dfe027248b92404eb2e678e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VentMinIGame
 --- !u!1001 &4444061782749892759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -767,10 +772,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WarningLight (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 9067205931179080310, guid: ead1bf275b8b8404d9204d2ba5734af8, type: 3}
-      propertyPath: ventScript
-      value: 
-      objectReference: {fileID: 8983694496969170011}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -795,7 +796,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7624880299837500556, guid: a9ac8b719eba7ba4b9ee41ecaa45d0f6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.347
+      value: -11.891
       objectReference: {fileID: 0}
     - target: {fileID: 7624880299837500556, guid: a9ac8b719eba7ba4b9ee41ecaa45d0f6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -803,7 +804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7624880299837500556, guid: a9ac8b719eba7ba4b9ee41ecaa45d0f6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.199
+      value: 2.324
       objectReference: {fileID: 0}
     - target: {fileID: 7624880299837500556, guid: a9ac8b719eba7ba4b9ee41ecaa45d0f6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1090,10 +1091,6 @@ PrefabInstance:
       propertyPath: AlarmSnd
       value: 
       objectReference: {fileID: 1270056398215076238}
-    - target: {fileID: 9067205931179080310, guid: ead1bf275b8b8404d9204d2ba5734af8, type: 3}
-      propertyPath: ventScript
-      value: 
-      objectReference: {fileID: 8983694496969170011}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
