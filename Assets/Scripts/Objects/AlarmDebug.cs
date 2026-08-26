@@ -4,11 +4,12 @@ using UnityEngine;
 public class AlarmDebug : MonoBehaviour
 {
     public V2WarningLight v2warningLight;
+    public VentMinIGame ventScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(ChangeText(30f));
+        StartCoroutine(ChangeText(20f));
     }
 
     IEnumerator ChangeText(float halt)
@@ -22,8 +23,12 @@ public class AlarmDebug : MonoBehaviour
 
 
     void debugalarm()
-    {
-        v2warningLight.CurrentColor = "Purple";
+    {   if (v2warningLight.CurrentColor != "Purple")
+        {
+            v2warningLight.CurrentColor = "Purple";
+            //ventScript.ResetWheel();
+            print("vent reset");
+        }
     }
 
 }

@@ -13,7 +13,7 @@ public class VentMinIGame : MonoBehaviour
     public float rotationSpeed = 0.05f;
     [SerializeField] private float cur_HP;
 
-    private const float max_HP = 100;
+    private const float max_HP = 25;
     private Vector3 PrevmousePos;
     private bool ClickedOn;
 
@@ -76,13 +76,13 @@ public class VentMinIGame : MonoBehaviour
             {
                 cur_HP = 100;
             }
-            ValveTurn.transform.localRotation = Quaternion.Euler(0, 0, (-360 / max_HP * cur_HP)); // to fix: move only 80 degrees
+            ValveTurn.transform.localRotation = Quaternion.Euler(0, 0, (720 / max_HP * cur_HP)); // to fix: move only 80 degrees
             PrevmousePos = Input.mousePosition;
         }
 
-        void ResetWheel()
+       public void ResetWheel()
         {
-            cur_HP = 100;
+            cur_HP = max_HP;
             ValveTurn.transform.localRotation = Quaternion.Euler(0, 0, 0);
             ventAnimator.SetBool("VentOpenBool", false);
         
@@ -91,7 +91,8 @@ public class VentMinIGame : MonoBehaviour
         void OpenVent()
         {
             ventAnimator.SetBool("VentOpenBool", true);
-            //v2warningLight.CurrentColor = "Neither";
+            v2warningLight.CurrentColor = "Neither";
+            ResetWheel();
         }
 
         // Update is called once per frame

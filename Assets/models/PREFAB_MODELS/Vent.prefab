@@ -50,10 +50,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0051df7c7d8aabd40b155accbbbbdef5, type: 3}
       propertyPath: m_Name
-      value: VENT_Animated
+      value: Vent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0051df7c7d8aabd40b155accbbbbdef5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3776611238180141193}
   m_SourcePrefab: {fileID: 100100000, guid: 0051df7c7d8aabd40b155accbbbbdef5, type: 3}
+--- !u!1 &7105225108813280822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0051df7c7d8aabd40b155accbbbbdef5, type: 3}
+  m_PrefabInstance: {fileID: 7952157677546457959}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3776611238180141193
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7105225108813280822}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8bea9a5e8859dc94f8264bd0c2ae9e74, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
