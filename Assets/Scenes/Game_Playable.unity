@@ -258,6 +258,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Office Space
       objectReference: {fileID: 0}
+    - target: {fileID: 5692002652954122315, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: AlarmSnd
+      value: 
+      objectReference: {fileID: 1952028076}
     - target: {fileID: 9161726026980055430, guid: 2043282b239b37545857c62b02c55303, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.45836
@@ -304,6 +308,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2043282b239b37545857c62b02c55303, type: 3}
+--- !u!82 &1952028076 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1270056398215076238, guid: 2043282b239b37545857c62b02c55303, type: 3}
+  m_PrefabInstance: {fileID: 1952028075}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4612726792270359985
 PrefabInstance:
   m_ObjectHideFlags: 0
