@@ -16,7 +16,7 @@ public class RequestPaper : MonoBehaviour
     private RequestData request;
 
     // Is this request currently active?
-    private bool activeRequest = false;
+    public bool activeRequest = false;
 
 
     public void DisplayRequest(RequestData data)

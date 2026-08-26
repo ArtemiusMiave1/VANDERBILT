@@ -24,10 +24,17 @@ public class PlayerInteraction : MonoBehaviour
             {
                 SupplyOrderInteraction supplyOrder =
                     hit.collider.GetComponent<SupplyOrderInteraction>();
+                RequestPaper request = 
+                    hit.collider.GetComponent<RequestPaper>();
 
                 if (supplyOrder != null)
                 {
                     supplyOrder.OpenSupplyOrder();
+                }
+                if (request != null)
+                {
+                    print(request.name);
+                    request.AcceptRequest();
                 }
             }
         }

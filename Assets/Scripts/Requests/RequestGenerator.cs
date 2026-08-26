@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RequestGenerator : MonoBehaviour
@@ -12,6 +13,10 @@ public class RequestGenerator : MonoBehaviour
     public int requestsToSpawn = 3;
 
     public bool spawn = false;
+
+    public List<GameObject> requests = new List<GameObject>();
+
+    public float spawnDistance = 2;
 
 
     private void Update()
@@ -53,7 +58,20 @@ public class RequestGenerator : MonoBehaviour
             return;
         }
 
-        SpawnAvailableRequest();
+
+        for (int i = 0; i < requests.Count; i++)
+        {
+            if (requests[i] == null)
+            {
+                Vector3 tempPosition = spawnLocation.position;
+
+                float tempFloat = i;
+                tempPosition.x += tempFloat*spawnDistance;
+
+                GameObject tempObject = SpawnAvailableRequest(tempPosition);
+                requests[i] = tempObject;
+            }
+        }
 
         // Spawn the requested number of papers
         //for (int i = 0; i < requestsToSpawn; i++)
@@ -63,7 +81,7 @@ public class RequestGenerator : MonoBehaviour
     }
 
 
-    private void SpawnAvailableRequest()
+    private GameObject SpawnAvailableRequest(Vector3 spawnPoint)
     {
         // Pick random request
         int requestIndex = Random.Range(
@@ -88,7 +106,7 @@ public class RequestGenerator : MonoBehaviour
         // Spawn paper
         GameObject paper = Instantiate(
             requestPaperPrefab,
-            spawnLocation.position,
+            spawnPoint,
             Quaternion.identity,
             spawnLocation
         );
@@ -106,5 +124,6 @@ public class RequestGenerator : MonoBehaviour
         Debug.Log(
             $"Available request: {request.Title} at {targetLocation.name}"
         );
+        return paper;
     }
 }
