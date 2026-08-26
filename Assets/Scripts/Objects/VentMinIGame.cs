@@ -16,6 +16,7 @@ public class VentMinIGame : MonoBehaviour
     private const float max_HP = 25;
     private Vector3 PrevmousePos;
     private bool ClickedOn;
+    private bool alreadyOpen = false;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +36,7 @@ public class VentMinIGame : MonoBehaviour
             {
                 if (hit.transform != null)
                 {
-                    print(hit); // this doesnt really matter cause the handle is the only one with collision lol
+                    //print(hit); // this doesnt really matter cause the handle is the only one with collision lol
                     if (hit.transform.name == "pipe_handle")
                     {
                         ClickedOn = true;
@@ -69,8 +70,11 @@ public class VentMinIGame : MonoBehaviour
             if (cur_HP <= 0)
             {
                 cur_HP = 0;
-                print("open vent");
+               // print("open vent");
+               if (!alreadyOpen)
+            {
                 OpenVent();
+            }
             }
             if (cur_HP > 100)
             {
@@ -82,9 +86,10 @@ public class VentMinIGame : MonoBehaviour
 
        public void ResetWheel()
         {
+            ventAnimator.SetBool("VentOpenBool", false);
             cur_HP = max_HP;
             ValveTurn.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            ventAnimator.SetBool("VentOpenBool", false);
+            alreadyOpen = false;
         
         }
 
@@ -92,7 +97,8 @@ public class VentMinIGame : MonoBehaviour
         {
             ventAnimator.SetBool("VentOpenBool", true);
             v2warningLight.CurrentColor = "Neither";
-            ResetWheel();
+            alreadyOpen = true;
+            //ResetWheel();
         }
 
         // Update is called once per frame

@@ -9,10 +9,10 @@ public class AlarmDebug : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(ChangeText(20f));
+        StartCoroutine(StartAlarm(20f));
     }
 
-    IEnumerator ChangeText(float halt)
+    IEnumerator StartAlarm(float halt)
     {
 
         //Start of text change
@@ -26,9 +26,10 @@ public class AlarmDebug : MonoBehaviour
     {   if (v2warningLight.CurrentColor != "Purple")
         {
             v2warningLight.CurrentColor = "Purple";
-            //ventScript.ResetWheel();
+            ventScript.ResetWheel();
             print("vent reset");
         }
+        StartCoroutine(StartAlarm(20f));
     }
 
 }
