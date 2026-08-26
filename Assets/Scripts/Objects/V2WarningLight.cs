@@ -9,6 +9,7 @@ public class V2WarningLight : MonoBehaviour
     public string CurrentColor; // change color here
     public Material materialVar;
     public Animator animatorVar;
+    public AudioSource AlarmSnd;
     int RedHash;
     int PurpleHash;
     int OffHash;
@@ -67,11 +68,13 @@ public class V2WarningLight : MonoBehaviour
                 //print("lol");
                 LightOff("Red");
                 animatorVar.Play(PurpleHash);
+                AlarmSnd.Play();
                 break;
             case "Red":
                // print("aaa");
                 LightOff("Purple");
                 animatorVar.Play(RedHash);
+                AlarmSnd.Play();
                 break;
         }
 
@@ -90,6 +93,7 @@ public class V2WarningLight : MonoBehaviour
             case "Both":
                // print("both offff");
                 animatorVar.Play(OffHash);
+                AlarmSnd.Stop();
                 break;
 
 
