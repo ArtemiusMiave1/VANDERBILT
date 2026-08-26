@@ -10,7 +10,8 @@ public class FirstPersonDrifter: MonoBehaviour
 {
     public float walkSpeed = 6.0f;
     public float runSpeed = 10.0f;
- 
+    public AudioSource FootstepsSnd;
+
     // If true, diagonal speed (when strafing + moving forward or back) can't exceed normal move speed; otherwise it's about 1.4 times faster
     private bool limitDiagonalSpeed = true;
  
@@ -140,8 +141,13 @@ public class FirstPersonDrifter: MonoBehaviour
  
         // Move the controller, and set grounded true or false depending on whether we're standing on something
         grounded = (controller.Move(moveDirection * Time.deltaTime) & CollisionFlags.Below) != 0;
+
+        if (grounded && (inputX != 0 || inputY != 0))
+            FootstepsSnd.Play();
+        else
+            FootstepsSnd.Stop();
     }
- 
+
     // Store point that we're in contact with for use in FixedUpdate if needed
     void OnControllerColliderHit (ControllerColliderHit hit) {
         contactPoint = hit.point;
