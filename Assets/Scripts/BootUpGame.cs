@@ -4,6 +4,7 @@ public class BootUpGame : MonoBehaviour
 {
     public RandomLocationSpawner locationSpawner;
     public LocationManager manager;
+    public RequestGenerator requestGenerator;
 
 
     private void Start()
@@ -36,6 +37,7 @@ public class BootUpGame : MonoBehaviour
         // 4. Create connections
         manager.CreateConnections();
 
+        requestGenerator.GenerateRequests();
 
         Debug.Log("Vanderbilt map generated.");
     }

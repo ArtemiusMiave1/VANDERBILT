@@ -1,10 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class RequestGenerator : MonoBehaviour
 {
     [Header("Request Paper")]
-    //public RequestPaper requestPaperPrefab;
     public GameObject requestPaperPrefab;
 
     [Header("Spawn Settings")]
@@ -12,20 +11,51 @@ public class RequestGenerator : MonoBehaviour
 
     public int requestsToSpawn = 3;
 
+    public float spawnDistance = 2f;
+
+    [Header("Automatic Spawning")]
+    public bool automaticSpawning = true;
+
+    public float spawnInterval = 45f;
+
+    [Header("Manual Spawn")]
     public bool spawn = false;
 
+    [Header("Active Requests")]
     public List<GameObject> requests = new List<GameObject>();
 
-    public float spawnDistance = 2;
+
+    private void Start()
+    {
+        // Spawn the initial requests
+        GenerateRequests();
+
+        // Start automatic spawning
+        if (automaticSpawning)
+        {
+            InvokeRepeating(
+                nameof(GenerateRequests),
+                spawnInterval,
+                spawnInterval
+            );
+        }
+    }
 
 
     private void Update()
     {
+        // Manual testing spawn
         if (spawn)
         {
             spawn = false;
             GenerateRequests();
         }
+    }
+
+
+    private void OnDestroy()
+    {
+        CancelInvoke(nameof(GenerateRequests));
     }
 
 
@@ -59,48 +89,99 @@ public class RequestGenerator : MonoBehaviour
         }
 
 
-        for (int i = 0; i < requests.Count; i++)
+        // Make sure our request list is large enough
+        while (requests.Count < requestsToSpawn)
         {
-            if (requests[i] == null)
-            {
-                Vector3 tempPosition = spawnLocation.position;
-
-                float tempFloat = i;
-                tempPosition.x += tempFloat*spawnDistance;
-
-                GameObject tempObject = SpawnAvailableRequest(tempPosition);
-                requests[i] = tempObject;
-            }
+            requests.Add(null);
         }
 
-        // Spawn the requested number of papers
-        //for (int i = 0; i < requestsToSpawn; i++)
-        //{
-        //    SpawnAvailableRequest();
-        //}
+
+        // Spawn requests into empty slots
+        for (int i = 0; i < requestsToSpawn; i++)
+        {
+            if (requests[i] != null)
+                continue;
+
+
+            Vector3 spawnPoint = spawnLocation.position;
+
+            spawnPoint.z += i * spawnDistance;
+
+
+            GameObject newRequest =
+                SpawnAvailableRequest(spawnPoint);
+
+
+            if (newRequest != null)
+            {
+                requests[i] = newRequest;
+            }
+        }
     }
 
 
     private GameObject SpawnAvailableRequest(Vector3 spawnPoint)
     {
+        // Find requests that have at least one matching location
+        List<RequestData> validRequests =
+            new List<RequestData>();
+
+
+        foreach (RequestData request in GameDatabase.Instance.Requests)
+        {
+            List<Location> matchingLocations =
+                FindLocationsForRequest(request);
+
+
+            if (matchingLocations.Count > 0)
+            {
+                validRequests.Add(request);
+            }
+        }
+
+
+        // No valid requests
+        if (validRequests.Count == 0)
+        {
+            Debug.LogWarning(
+                "No requests have a matching LocationType!"
+            );
+
+            return null;
+        }
+
+
         // Pick random request
-        int requestIndex = Random.Range(
-            0,
-            GameDatabase.Instance.Requests.Count
-        );
+        RequestData selectedRequest =
+            validRequests[
+                Random.Range(0, validRequests.Count)
+            ];
 
-        RequestData request =
-            GameDatabase.Instance.Requests[requestIndex];
-        //Debug.Log(GameDatabase.Instance.Requests.Count);
 
-        // Pick random location
-        int locationIndex = Random.Range(
-            0,
-            LocationManager.Instance.locations.Count
-        );
+        // Find ALL locations matching this request
+        List<Location> matchingLocationsForRequest =
+            FindLocationsForRequest(selectedRequest);
 
+
+        if (matchingLocationsForRequest.Count == 0)
+        {
+            Debug.LogWarning(
+                "Could not find location for request: " +
+                selectedRequest.Title
+            );
+
+            return null;
+        }
+
+
+        // Pick a RANDOM matching location
         Location targetLocation =
-            LocationManager.Instance.locations[locationIndex];
+            matchingLocationsForRequest[
+                Random.Range(
+                    0,
+                    matchingLocationsForRequest.Count
+                )
+            ];
 
 
         // Spawn paper
@@ -112,18 +193,95 @@ public class RequestGenerator : MonoBehaviour
         );
 
 
-        // Give paper its request
-       //// paper.DisplayRequest(request);
+        // Get RequestPaper
+        RequestPaper requestPaper =
+            paper.GetComponent<RequestPaper>();
+
+
+        if (requestPaper == null)
+        {
+            Debug.LogError(
+                "Request Paper prefab does not have a RequestPaper component!"
+            );
+
+            Destroy(paper);
+            return null;
+        }
+
+
+        // Give paper the request
+        requestPaper.DisplayRequest(selectedRequest);
+
 
         // Give paper its location
-       ////paper.targetLocation = targetLocation;
-        //targetLocation.activeRequests.Add(paper);
+        requestPaper.AssignLocation(targetLocation);
 
+
+        // Add request to location
+        targetLocation.activeRequests.Add(requestPaper);
 
 
         Debug.Log(
-            $"Available request: {request.Title} at {targetLocation.name}"
+            $"Available request: {selectedRequest.Title} " +
+            $"→ {targetLocation.name} " +
+            $"({targetLocation.locationType.Name})"
         );
+
+
         return paper;
+    }
+
+
+    private List<Location> FindLocationsForRequest(
+        RequestData request)
+    {
+        List<Location> matchingLocations =
+            new List<Location>();
+
+
+        foreach (Location location
+                 in LocationManager.Instance.locations)
+        {
+            if (location == null)
+                continue;
+
+
+            if (location.locationType == null)
+                continue;
+
+
+            if (location.locationType.LocationType ==
+                request.LocationType)
+            {
+                matchingLocations.Add(location);
+            }
+        }
+
+
+        return matchingLocations;
+    }
+
+
+    public void ClearRequests()
+    {
+        foreach (GameObject request in requests)
+        {
+            if (request != null)
+            {
+                Destroy(request);
+            }
+        }
+
+
+        requests.Clear();
+    }
+
+
+    public void removeRequest(RequestPaper requestPaper)
+    {
+        if (requestPaper != null)
+        {
+            requests.Remove(requestPaper.gameObject);
+        }
     }
 }

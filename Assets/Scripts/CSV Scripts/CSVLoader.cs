@@ -1,182 +1,279 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Globalization;
 using UnityEngine;
 
-
-// Loads CSV files and converts them into C# objects
 public static class CSVLoader
 {
-
-    // Loads a CSV file and converts each row into an object of type T
     public static List<T> Load<T>(string fileName)
     {
-        // Create an empty list to store the loaded data
         List<T> data = new List<T>();
 
-        // Load CSV file from Resources/CSV folder
         TextAsset file =
             Resources.Load<TextAsset>("CSV/" + fileName);
 
-
-        // Check if the file exists
         if (file == null)
         {
-            Debug.LogError(
-                "CSV Missing: " + fileName
-            );
-
+            Debug.LogError("CSV Missing: " + fileName);
             return data;
         }
 
-
-        // Split the CSV into separate rows
+        // Split file into rows
         string[] rows =
             file.text.Split(
-                new string[] { "\n" },
-                StringSplitOptions.RemoveEmptyEntries);
+                new string[] { "\r\n", "\n" },
+                StringSplitOptions.RemoveEmptyEntries
+            );
 
+        if (rows.Length == 0)
+        {
+            Debug.LogWarning("CSV is empty: " + fileName);
+            return data;
+        }
 
+        // Read headers using the same CSV parser
+        string[] headers = ParseCSVLine(rows[0]);
 
-        // The first row contains the column names
-        string[] headers =
-            rows[0].Split(',');
-
-
-
-        // Loop through every row after the header
+        // Loop through rows
         for (int row = 1; row < rows.Length; row++)
         {
+            string[] values = ParseCSVLine(rows[row]);
 
-            // Split the current row into individual values
-            string[] values =
-                rows[row].Split(',');
-
-            // Ignore completely empty rows
+            // Ignore empty rows
             if (IsRowEmpty(values))
             {
-//                Debug.Log("Ignored empty CSV row: " + row);
-
                 continue;
             }
 
-            // Create a new object of type T
             T item = Activator.CreateInstance<T>();
 
-
-            // Get all variables inside the class
-            // Example: id, name, reward, etc.
             FieldInfo[] fields =
                 typeof(T).GetFields();
 
-
-
-            // Fill each variable with CSV data
             foreach (FieldInfo field in fields)
             {
-
-                // Find which CSV column matches this variable name
+                // Find matching column
                 int column =
                     Array.IndexOf(
                         headers,
-                        field.Name);
+                        field.Name
+                    );
 
-                // If the column does not exist, show warning
                 if (column == -1)
                 {
                     Debug.LogWarning(
-                        "Missing column: "
-                        + field.Name
+                        $"Missing column '{field.Name}' in {fileName}"
                     );
 
                     continue;
                 }
 
-                // Get the value from the CSV cell
-                string value =
-                    values[column];
+                // Make sure the row actually contains this column
+                if (column >= values.Length)
+                {
+                    Debug.LogWarning(
+                        $"Row {row} is missing value for '{field.Name}'"
+                    );
 
-                // Check if the cell is empty
-                if (CSVValidator.CheckEmpty(
-                    value,
-                    fileName,
-                    field.Name,
-                    row))
+                    continue;
+                }
+
+                string value =
+                    values[column].Trim();
+
+                // Empty value
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     continue;
                 }
 
-                // Convert the text value into the correct datatype
-                // Example: "10" becomes int 10
-                object converted =
-                    ConvertValue(
-                        value,
-                        field.FieldType);
+                try
+                {
+                    object converted =
+                        ConvertValue(
+                            value,
+                            field.FieldType
+                        );
 
-                // Put the converted value into the object variable
-                field.SetValue(
-                    item,
-                    converted);
+                    field.SetValue(
+                        item,
+                        converted
+                    );
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(
+                        $"CSV Error in {fileName}, " +
+                        $"row {row}, field '{field.Name}', " +
+                        $"value '{value}': {e.Message}"
+                    );
+                }
             }
-            // Add the completed object to the list
+
             data.Add(item);
         }
-        // Return all loaded data
+
         return data;
     }
 
 
+    // --------------------------------------------------
+    // CSV PARSER
+    // --------------------------------------------------
+
+    private static string[] ParseCSVLine(string line)
+    {
+        List<string> values = new List<string>();
+
+        bool insideQuotes = false;
+        string currentValue = "";
+
+        for (int i = 0; i < line.Length; i++)
+        {
+            char character = line[i];
+
+            // Quote
+            if (character == '"')
+            {
+                // Double quote inside quoted text
+                if (insideQuotes &&
+                    i + 1 < line.Length &&
+                    line[i + 1] == '"')
+                {
+                    currentValue += '"';
+                    i++;
+                }
+                else
+                {
+                    insideQuotes = !insideQuotes;
+                }
+
+                continue;
+            }
+
+            // Comma outside quotes = new column
+            if (character == ',' && !insideQuotes)
+            {
+                values.Add(currentValue);
+                currentValue = "";
+                continue;
+            }
+
+            currentValue += character;
+        }
+
+        // Add final value
+        values.Add(currentValue);
+
+        return values.ToArray();
+    }
 
 
+    // --------------------------------------------------
+    // DATATYPE CONVERSION
+    // --------------------------------------------------
 
-    // Converts CSV text into the correct C# datatype
-    static object ConvertValue(
+    private static object ConvertValue(
         string value,
         Type type)
     {
+        value = value.Trim();
 
-        // Convert text into an integer
+        // INT
         if (type == typeof(int))
-            return int.Parse(value);
+        {
+            if (int.TryParse(
+                value,
+                NumberStyles.Integer,
+                CultureInfo.InvariantCulture,
+                out int result))
+            {
+                return result;
+            }
+
+            throw new FormatException(
+                $"'{value}' is not a valid integer."
+            );
+        }
 
 
-        // Convert text into a decimal number
+        // FLOAT
         if (type == typeof(float))
-            return float.Parse(value);
+        {
+            if (float.TryParse(
+                value,
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out float result))
+            {
+                return result;
+            }
+
+            throw new FormatException(
+                $"'{value}' is not a valid float."
+            );
+        }
 
 
-        // Convert text into true/false
+        // BOOL
         if (type == typeof(bool))
-            return bool.Parse(value);
+        {
+            if (bool.TryParse(
+                value,
+                out bool result))
+            {
+                return result;
+            }
+
+            throw new FormatException(
+                $"'{value}' is not a valid boolean. " +
+                "Use TRUE or FALSE."
+            );
+        }
 
 
-        // Keep text as a string
+        // STRING
         if (type == typeof(string))
+        {
             return value;
+        }
 
 
-        // Convert text into an enum value
+        // ENUM
         if (type.IsEnum)
-            return Enum.Parse(type, value);
+        {
+            return Enum.Parse(
+                type,
+                value,
+                true
+            );
+        }
 
 
-        // Return nothing if the datatype is unsupported
+        // Unsupported type
+        Debug.LogWarning(
+            $"Unsupported datatype: {type}"
+        );
+
         return null;
     }
 
-    // Checks if every cell in a row is empty
-    static bool IsRowEmpty(string[] values)
+
+    // --------------------------------------------------
+    // EMPTY ROW CHECK
+    // --------------------------------------------------
+
+    private static bool IsRowEmpty(string[] values)
     {
         foreach (string value in values)
         {
-            // If any cell contains text, the row is valid
             if (!string.IsNullOrWhiteSpace(value))
             {
                 return false;
             }
         }
 
-        // Every cell was empty
         return true;
     }
 }

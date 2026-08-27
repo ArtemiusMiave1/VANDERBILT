@@ -365,6 +365,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ajs prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 6015036642240476157, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015036642240476157, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.858
+      objectReference: {fileID: 0}
     - target: {fileID: 6943408924321513564, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: interactionDistance
       value: 3

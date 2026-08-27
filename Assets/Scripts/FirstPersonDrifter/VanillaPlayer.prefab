@@ -69,7 +69,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 75
   orthographic: 0
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   playerCamera: {fileID: 2000000}
   interactionDistance: 3
+  requestGenerator: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 6
   runSpeed: 10
+  FootstepsSnd: {fileID: 0}
   enableRunning: 0
   jumpSpeed: 4
   gravity: 10
@@ -410,7 +412,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: cb74ac2745ad41a4c99177895c56d691, type: 3}
       propertyPath: m_Name
-      value: Lara_Scaled
+      value: Scaling model
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cb74ac2745ad41a4c99177895c56d691, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

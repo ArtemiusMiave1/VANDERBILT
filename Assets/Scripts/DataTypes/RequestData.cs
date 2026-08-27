@@ -27,5 +27,7 @@ public class RequestData
 
     public bool Repeatable;
 
+    public string LocationType;
+
     public string Unlockables;
 }
