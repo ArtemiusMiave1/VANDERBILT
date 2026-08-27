@@ -119,8 +119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axes: 2
   invertY: 0
-  sensitivityX: 10
-  sensitivityY: 9
+  sensitivityX: 5
+  sensitivityY: 4
   minimumX: -360
   maximumX: 360
   minimumY: -85
@@ -140,6 +140,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   playerCamera: {fileID: 2000000}
   interactionDistance: 3
+  interactionImage: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  interactableColor: {r: 1, g: 0, b: 0, a: 1}
   requestGenerator: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
@@ -355,8 +358,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axes: 1
   invertY: 0
-  sensitivityX: 10
-  sensitivityY: 9
+  sensitivityX: 5
+  sensitivityY: 4
   minimumX: -360
   maximumX: 360
   minimumY: -85

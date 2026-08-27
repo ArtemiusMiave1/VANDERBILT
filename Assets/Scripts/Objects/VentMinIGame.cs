@@ -80,7 +80,7 @@ public class VentMinIGame : MonoBehaviour
             {
                 cur_HP = 100;
             }
-            ValveTurn.transform.localRotation = Quaternion.Euler(0, 0, (720 / max_HP * cur_HP)); // to fix: move only 80 degrees
+            ValveTurn.transform.localRotation = Quaternion.Euler(0, (720 / max_HP * cur_HP), 0); // to fix: move only 80 degrees
             PrevmousePos = Input.mousePosition;
         }
 
