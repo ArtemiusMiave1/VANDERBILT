@@ -27,6 +27,7 @@ public class CorkBoard : MonoBehaviour
 
         acceptedRequests.Add(request);
 
+
         Debug.Log(
             "Added request to cork board: " +
             request.GetRequestTitle()

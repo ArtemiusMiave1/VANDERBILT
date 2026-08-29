@@ -1875,6 +1875,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WarningLight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8099504988456896579, guid: ead1bf275b8b8404d9204d2ba5734af8, type: 3}
+      propertyPath: AlarmSnd
+      value: 
+      objectReference: {fileID: 1270056398215076238}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

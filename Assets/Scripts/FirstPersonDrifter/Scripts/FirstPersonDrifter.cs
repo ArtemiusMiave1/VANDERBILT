@@ -143,9 +143,16 @@ public class FirstPersonDrifter: MonoBehaviour
         grounded = (controller.Move(moveDirection * Time.deltaTime) & CollisionFlags.Below) != 0;
 
         if (grounded && (inputX != 0 || inputY != 0))
-            FootstepsSnd.Play();
+        {
+            if (!FootstepsSnd.isPlaying)
+                FootstepsSnd.Play();
+        }
         else
-            FootstepsSnd.Stop();
+        {
+            if (FootstepsSnd.isPlaying)
+                FootstepsSnd.Stop();
+        }
+
     }
 
     // Store point that we're in contact with for use in FixedUpdate if needed
