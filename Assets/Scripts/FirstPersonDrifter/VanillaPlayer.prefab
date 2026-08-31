@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 14300000}
   - component: {fileID: 11400014}
   - component: {fileID: 11400010}
+  - component: {fileID: 7435354460179368076}
   m_Layer: 0
   m_Name: VanillaPlayer
   m_TagString: Player
@@ -365,6 +366,21 @@ MonoBehaviour:
   minimumY: -85
   maximumY: 85
   framesOfSmoothing: 5
+--- !u!114 &7435354460179368076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ec50af78e355f4a8801db546c1ff51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapRouting
+  mapCamera: {fileID: 2000000}
+  shipMovement: {fileID: 0}
+  clickDistance: 100
 --- !u!1001 &4029421300635773556
 PrefabInstance:
   m_ObjectHideFlags: 0

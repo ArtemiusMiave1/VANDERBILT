@@ -854,7 +854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SupplyOrderInteraction
   playerCamera: {fileID: 8931616165998156052}
   uiCamera: {fileID: 5007662448742664214}
-  supplyOrderUI: {fileID: 7342999414191759971}
+  supplyOrderUI: {fileID: 3488851501905498405}
   playerMovement: {fileID: 8931616166003584730}
   playerMouseLook: {fileID: 8931616166003584734}
   cameraMouseLook: {fileID: 8931616166003584728}
@@ -2159,7 +2159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9161586139634632638
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3301,6 +3301,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7342999414191759971}
     - target: {fileID: 1261493100823445886, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
+      propertyPath: resourceDepotPaper
+      value: 
+      objectReference: {fileID: 3488851501905498405}
+    - target: {fileID: 1261493100823445886, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
       propertyPath: supplyOrderInteraction
       value: 
       objectReference: {fileID: 6943408924321513564}
@@ -3390,6 +3394,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68c562689a44e749ac4065bbf087616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomLocationSpawner
+--- !u!114 &3089141469082330759 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1261493100823445886, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
+  m_PrefabInstance: {fileID: 4278257494689884153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd3d7cb146d6d945bda49c5fec575a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipMovement
 --- !u!114 &5135169940425462169 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8943204777642587744, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
@@ -4171,6 +4186,10 @@ PrefabInstance:
       propertyPath: interactionImage
       value: 
       objectReference: {fileID: 6725070012240423450}
+    - target: {fileID: 7435354460179368076, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
+      propertyPath: shipMovement
+      value: 
+      objectReference: {fileID: 3089141469082330759}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

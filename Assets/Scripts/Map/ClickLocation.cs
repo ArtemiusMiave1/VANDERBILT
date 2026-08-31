@@ -15,7 +15,7 @@ public class ClickLocation : MonoBehaviour
 
         if (ship.currentLocation.connections.Contains(location))
         {
-            ship.TravelTo(location);
+            //ship.TravelTo(location);
         }
     }
 

@@ -115,9 +115,9 @@ public class RandomLocationSpawner : MonoBehaviour
         }
 
 
-        Debug.Log(
-            $"Spawned {spawned} / {locationAmount} locations."
-        );
+        //Debug.Log(
+        //    $"Spawned {spawned} / {locationAmount} locations."
+        //);
     }
 
 
@@ -148,11 +148,11 @@ public class RandomLocationSpawner : MonoBehaviour
         }
 
 
-        Debug.Log(
-            "Assigning location types from " +
-            gameData.LocationData.Count +
-            " available types."
-        );
+        //Debug.Log(
+        //    "Assigning location types from " +
+        //    gameData.LocationData.Count +
+        //    " available types."
+        //);
 
 
         foreach (Location place in locationManager.locations)
