@@ -13,10 +13,51 @@ public class ShipCargo : MonoBehaviour
     public int weapons = 100;
 
 
+    [Header("Cargo Capacity")]
+    public float maxCargoWeight = 1000f;
 
-    public void AddOrRemoveResource(string resourceType, int amount)
+
+    [Header("Resource Weights")]
+    public float foodWeight = .3f;
+    public float coalWeight = 2f;
+    public float medicineWeight = 1f;
+    public float machineryWeight = 3f;
+    public float oreWeight = 4f;
+    public float fuelWeight = .5f;
+    public float goldWeight = .1f;
+    public float weaponsWeight = 3f;
+
+
+    // =========================================================
+    // ADD / REMOVE RESOURCE
+    // =========================================================
+
+    public void AddOrRemoveResource(
+        string resourceType,
+        int amount
+    )
     {
-        switch (resourceType.ToLower())
+        resourceType = resourceType.ToLower();
+
+
+        // If adding resources, check cargo capacity first
+        if (amount > 0)
+        {
+            if (!CanCarry(resourceType, amount))
+            {
+                Debug.Log(
+                    "Not enough cargo space for " +
+                    amount +
+                    " " +
+                    resourceType
+                );
+
+                return;
+            }
+        }
+
+
+        switch (resourceType)
         {
             case "food":
                 food += amount;
@@ -51,31 +92,139 @@ public class ShipCargo : MonoBehaviour
                 break;
 
             default:
-                Debug.LogWarning("Unknown resource type: " + resourceType);
+                Debug.LogWarning(
+                    "Unknown resource type: " +
+                    resourceType
+                );
+
                 return;
         }
 
+
         ClampResources();
 
-        Debug.Log($"{resourceType}: {GetResourceAmount(resourceType)}");
+
+        Debug.Log(
+            $"{resourceType}: " +
+            $"{GetResourceAmount(resourceType)}"
+        );
+
+        Debug.Log(
+            "Cargo Weight: " +
+            GetCurrentCargoWeight() +
+            " / " +
+            maxCargoWeight
+        );
     }
 
 
-    private void ClampResources()
+    // =========================================================
+    // CHECK CARGO CAPACITY
+    // =========================================================
+
+    public bool CanCarry(
+        string resourceType,
+        int amount
+    )
     {
-        food = Mathf.Max(0, food);
-        coal = Mathf.Max(0, coal);
-        medicine = Mathf.Max(0, medicine);
-        machinery = Mathf.Max(0, machinery);
-        ore = Mathf.Max(0, ore);
-        fuel = Mathf.Max(0, fuel);
-        gold = Mathf.Max(0, gold);
-        weapons = Mathf.Max(0, weapons);
+        float weightToAdd =
+            GetResourceWeight(resourceType) * amount;
 
+
+        float newWeight =
+            GetCurrentCargoWeight() + weightToAdd;
+
+
+        return newWeight <= maxCargoWeight;
     }
 
 
-    public int GetResourceAmount(string resourceType)
+    // =========================================================
+    // GET CURRENT CARGO WEIGHT
+    // =========================================================
+
+    public float GetCurrentCargoWeight()
+    {
+        float totalWeight = 0f;
+
+
+        totalWeight += food * foodWeight;
+        totalWeight += coal * coalWeight;
+        totalWeight += medicine * medicineWeight;
+        totalWeight += machinery * machineryWeight;
+        totalWeight += ore * oreWeight;
+        totalWeight += fuel * fuelWeight;
+        totalWeight += gold * goldWeight;
+        totalWeight += weapons * weaponsWeight;
+
+
+        return totalWeight;
+    }
+
+
+    // =========================================================
+    // GET REMAINING CAPACITY
+    // =========================================================
+
+    public float GetRemainingCargoCapacity()
+    {
+        return maxCargoWeight -
+               GetCurrentCargoWeight();
+    }
+
+
+    // =========================================================
+    // GET RESOURCE WEIGHT
+    // =========================================================
+
+    public float GetResourceWeight(
+        string resourceType
+    )
+    {
+        switch (resourceType.ToLower())
+        {
+            case "food":
+                return foodWeight;
+
+            case "coal":
+                return coalWeight;
+
+            case "medicine":
+                return medicineWeight;
+
+            case "machinery":
+                return machineryWeight;
+
+            case "ore":
+                return oreWeight;
+
+            case "fuel":
+                return fuelWeight;
+
+            case "gold":
+                return goldWeight;
+
+            case "weapons":
+                return weaponsWeight;
+
+            default:
+                Debug.LogWarning(
+                    "Unknown resource type: " +
+                    resourceType
+                );
+
+                return 0f;
+        }
+    }
+
+
+    // =========================================================
+    // GET RESOURCE AMOUNT
+    // =========================================================
+
+    public int GetResourceAmount(
+        string resourceType
+    )
     {
         switch (resourceType.ToLower())
         {
@@ -104,8 +253,29 @@ public class ShipCargo : MonoBehaviour
                 return weapons;
 
             default:
-                Debug.LogWarning("Unknown resource type: " + resourceType);
+                Debug.LogWarning(
+                    "Unknown resource type: " +
+                    resourceType
+                );
+
                 return 0;
         }
+    }
+
+
+    // =========================================================
+    // CLAMP RESOURCES
+    // =========================================================
+
+    private void ClampResources()
+    {
+        food = Mathf.Max(0, food);
+        coal = Mathf.Max(0, coal);
+        medicine = Mathf.Max(0, medicine);
+        machinery = Mathf.Max(0, machinery);
+        ore = Mathf.Max(0, ore);
+        fuel = Mathf.Max(0, fuel);
+        gold = Mathf.Max(0, gold);
+        weapons = Mathf.Max(0, weapons);
     }
 }

@@ -10,31 +10,63 @@ public class RequestPaper : MonoBehaviour
     public TMP_Text rewardText;
     public TMP_Text dialogueText;
 
-    [Header("Icon Objects")]
+    [Header("Timer")]
+    public TMP_Text timerText;
+
+    [Header("Icons")]
     public Renderer locationIcon;
     public Renderer resourceIcon;
 
     [Header("Request Location")]
     public Location targetLocation;
 
-    private RequestData request;
-
     [Header("Cork Board")]
     public CorkBoard corkBoard;
 
+    // Request data
+    private RequestData request;
+
     // Is this request currently active?
     public bool activeRequest = false;
+
+    // Timer
+    private float timeRemaining;
+    private bool timerRunning = false;
+
 
     private void Awake()
     {
         corkBoard = FindObjectOfType<CorkBoard>();
     }
+
+
+    private void Update()
+    {
+        if (!activeRequest || !timerRunning)
+            return;
+
+        // Count down
+        timeRemaining -= Time.deltaTime;
+
+        // Update UI
+        UpdateTimerDisplay();
+
+        // Request expired
+        if (timeRemaining <= 0f)
+        {
+            timeRemaining = 0f;
+            timerRunning = false;
+
+            ExpireRequest();
+        }
+    }
+
+
     public void DisplayRequest(RequestData data)
     {
         request = data;
 
-        // Text
-        titleText.text = data.Title;
+        titleText.text = data.Title;SetLocationIcon();
 
         factionText.text =
             "Faction: " + data.Faction;
@@ -54,11 +86,10 @@ public class RequestPaper : MonoBehaviour
         dialogueText.text =
             data.Dialogue;
 
-
-        // Resource icon
+        // Show the time limit before the request is accepted
+        timeRemaining = data.TimeLimit;
         SetResourceIcon();
-
-
+        UpdateTimerDisplay();
     }
 
 
@@ -66,25 +97,30 @@ public class RequestPaper : MonoBehaviour
     {
         targetLocation = location;
 
-        // Location icon
+        // Don't highlight yet.
+        // The request isn't active until accepted.
         SetLocationIcon();
-        // Do NOT highlight the location yet.
-        // The request isn't active until the player accepts it.
-
-        // Set the icon based on the location type
     }
 
 
-    // Called when the player clicks the request paper
+    // Called when the player clicks the request
     public void AcceptRequest()
     {
-        // Don't accept it twice
         if (activeRequest)
             return;
 
         activeRequest = true;
 
-        Debug.Log("Accepted Request: " + request.Title);
+        Debug.Log(
+            "Accepted Request: " +
+            request.Title
+        );
+
+        // Start timer
+        timeRemaining = request.TimeLimit;
+        timerRunning = true;
+
+        UpdateTimerDisplay();
 
         // Highlight destination
         if (targetLocation != null)
@@ -92,7 +128,7 @@ public class RequestPaper : MonoBehaviour
             targetLocation.Highlight();
         }
 
-        // Add request to cork board
+        // Move request onto corkboard
         if (corkBoard != null)
         {
             corkBoard.AddRequest(this);
@@ -100,14 +136,31 @@ public class RequestPaper : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                "No CorkBoard assigned to " +
-                request.Title
+                "No CorkBoard found!"
             );
         }
-
-        // Don't hide it anymore
-        // gameObject.SetActive(false);
     }
+
+
+    private void UpdateTimerDisplay()
+    {
+        if (timerText == null)
+            return;
+
+        int minutes =
+            Mathf.FloorToInt(timeRemaining / 60f);
+
+        int seconds =
+            Mathf.FloorToInt(timeRemaining % 60f);
+
+        timerText.text =
+            string.Format(
+                "{0:00}:{1:00}",
+                minutes,
+                seconds
+            );
+    }
+
     public string GetRequestTitle()
     {
         if (request == null)
@@ -177,27 +230,30 @@ public class RequestPaper : MonoBehaviour
         if (!activeRequest)
             return;
 
-        // Ignore if ship did not arrive at this request's location
+        // Ignore wrong location
         if (location != targetLocation)
             return;
 
 
-        // Find the ship
-        ShipCargo shipCargo = FindObjectOfType<ShipCargo>();
+        ShipCargo shipCargo =
+            FindObjectOfType<ShipCargo>();
 
         if (shipCargo == null)
         {
-            Debug.LogError("No ShipCargo found in the scene!");
+            Debug.LogError(
+                "No ShipCargo found in the scene!"
+            );
+
             return;
         }
 
 
-        // Check how much of the requested resource the ship has
         int cargoAmount =
-            shipCargo.GetResourceAmount(request.RequestedResources);
+            shipCargo.GetResourceAmount(
+                request.RequestedResources
+            );
 
 
-        // Check if there is enough
         if (cargoAmount >= request.RequestedAmount)
         {
             CompleteRequest(shipCargo);
@@ -216,12 +272,18 @@ public class RequestPaper : MonoBehaviour
     }
 
 
-    private void CompleteRequest(ShipCargo shipCargo)
+    private void CompleteRequest(
+        ShipCargo shipCargo
+    )
     {
         Debug.Log(
             "Completed Request: " +
             request.Title
         );
+
+        // Stop timer
+        timerRunning = false;
+        activeRequest = false;
 
 
         // Remove requested resources
@@ -238,6 +300,35 @@ public class RequestPaper : MonoBehaviour
         );
 
 
+        // Remove highlight
+        if (targetLocation != null)
+        {
+            targetLocation.ClearHighlight();
+        }
+
+
+        // Remove from corkboard
+        if (corkBoard != null)
+        {
+            corkBoard.RemoveRequest(this);
+        }
+
+
+        // Destroy request
+        Destroy(gameObject);
+    }
+
+
+    private void ExpireRequest()
+    {
+        Debug.Log(
+            "Request expired: " +
+            request.Title
+        );
+
+        activeRequest = false;
+
+
         // Remove location highlight
         if (targetLocation != null)
         {
@@ -245,14 +336,14 @@ public class RequestPaper : MonoBehaviour
         }
 
 
-        // Remove from cork board
+        // Remove from corkboard
         if (corkBoard != null)
         {
             corkBoard.RemoveRequest(this);
         }
 
 
-        // Destroy request paper
+        // Destroy request
         Destroy(gameObject);
     }
 

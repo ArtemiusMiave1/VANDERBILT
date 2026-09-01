@@ -19,18 +19,53 @@ public class ShipMovement : MonoBehaviour
     [Header("Resource Depot UI")]
     public GameObject resourceDepotPaper;
 
+    [Header("Fuel")]
+    public int fuelPerLocation = 5;
+
+    [Header("Cargo Weight")]
+    public float maximumCargoWeight = 2500f;
+    public float minimumSpeedMultiplier = 0.25f;
+
+    private ShipCargo shipCargo;
+
     private bool moving = false;
 
+    private void Start()
+    {
+        shipCargo = FindObjectOfType<ShipCargo>();
+
+        if (shipCargo == null)
+        {
+            Debug.LogError("ShipCargo not found!");
+        }
+
+        UpdateResourceDepotPaper();
+    }
 
     private void Update()
     {
         if (!moving || targetLocation == null)
             return;
 
+        // Stop the ship if it runs out of fuel
+        if (shipCargo == null || shipCargo.GetResourceAmount("fuel") <= 0)
+        {
+            moving = false;
+            targetLocation = null;
+
+            Debug.Log("Ship has run out of fuel!");
+
+            UpdateRouteLine();
+
+            return;
+        }
+
+        float currentSpeed = GetCurrentSpeed();
+
         transform.position = Vector3.MoveTowards(
             transform.position,
             targetLocation.transform.position,
-            speed * Time.deltaTime
+            currentSpeed * Time.deltaTime
         );
 
         if (Vector3.Distance(
@@ -52,6 +87,26 @@ public class ShipMovement : MonoBehaviour
 
         Debug.Log("Arrived at " + currentLocation.name);
 
+
+        // ========================================
+        // USE FUEL
+        // ========================================
+
+        if (shipCargo != null)
+        {
+            shipCargo.AddOrRemoveResource(
+                "fuel",
+                -fuelPerLocation
+            );
+
+            Debug.Log(
+                "Used " + fuelPerLocation +
+                " fuel. Remaining fuel: " +
+                shipCargo.GetResourceAmount("fuel")
+            );
+        }
+
+
         UpdateResourceDepotPaper();
 
 
@@ -61,8 +116,6 @@ public class ShipMovement : MonoBehaviour
 
         if (currentLocation.activeRequests != null)
         {
-            // Make a copy because completing a request
-            // can remove it from the list
             List<RequestPaper> requestsAtLocation =
                 new List<RequestPaper>(
                     currentLocation.activeRequests
@@ -77,25 +130,15 @@ public class ShipMovement : MonoBehaviour
             }
         }
 
-
-        // ========================================
-        // REMOVE LOCATION FROM ROUTE
-        // ========================================
-
         if (route.Count > 0)
         {
             route.RemoveAt(0);
         }
 
-
         // Update visible route
         UpdateRouteLine();
 
-
-        // ========================================
-        // CONTINUE TO NEXT LOCATION
-        // ========================================
-
+        
         if (route.Count > 0)
         {
             targetLocation = route[0];
@@ -182,6 +225,16 @@ public class ShipMovement : MonoBehaviour
         }
 
 
+        // ========================================
+        // CHECK FUEL
+        // ========================================
+
+        if (!HasEnoughFuel())
+        {
+            return;
+        }
+
+
         // Add destination
         route.Add(destination);
 
@@ -192,7 +245,6 @@ public class ShipMovement : MonoBehaviour
         );
 
 
-        // Update red line
         UpdateRouteLine();
 
 
@@ -209,6 +261,50 @@ public class ShipMovement : MonoBehaviour
         }
     }
 
+    private float GetCurrentSpeed()
+    {
+        if (shipCargo == null)
+            return speed;
+
+        float weight =
+            shipCargo.GetCurrentCargoWeight();
+
+        float weightPercentage =
+            weight / maximumCargoWeight;
+
+        weightPercentage =
+            Mathf.Clamp01(weightPercentage);
+
+        float speedMultiplier =
+            Mathf.Lerp(
+                1f,
+                minimumSpeedMultiplier,
+                weightPercentage
+            );
+
+        return speed * speedMultiplier;
+    }
+
+    private bool HasEnoughFuel()
+    {
+        if (shipCargo == null)
+            return false;
+
+        int currentFuel = shipCargo.GetResourceAmount("fuel");
+
+        if (currentFuel < fuelPerLocation)
+        {
+            Debug.Log(
+                "Not enough fuel! " +
+                "Required: " + fuelPerLocation +
+                " | Have: " + currentFuel
+            );
+
+            return false;
+        }
+
+        return true;
+    }
 
     public void ClearRoute()
     {
