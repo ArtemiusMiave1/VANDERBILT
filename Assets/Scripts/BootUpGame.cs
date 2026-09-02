@@ -27,15 +27,16 @@ public class BootUpGame : MonoBehaviour
 
 
         // 2. Find the newly spawned locations
-        manager.FindLocations();
-
+        //manager.FindLocations();
+        
+        // 4. Create connections
+        manager.CreateConnections();
 
         // 3. Assign location types
         locationSpawner.AssignLocationTypes();
 
 
-        // 4. Create connections
-        manager.CreateConnections();
+        
 
         requestGenerator.GenerateRequests();
 

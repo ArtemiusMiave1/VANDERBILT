@@ -1,11 +1,15 @@
-[System.Serializable]
+using System;
+using UnityEngine;
+
+[Serializable]
 public class RouteConnection
 {
-    public Location destination;
+    public Location locationA;
+    public Location locationB;
 
+    [Header("Route")]
     public float distance;
 
-    //[Range(0, 5)]
     public int dangerLevel;
 
     public float fuelCost;

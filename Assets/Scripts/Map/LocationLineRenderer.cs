@@ -10,7 +10,7 @@ public class LocationLineRenderer : MonoBehaviour
     {
         location = GetComponent<Location>();
 
-        DrawConnections();
+        //DrawConnections();
     }
 
     //private void Update()
@@ -23,45 +23,45 @@ public class LocationLineRenderer : MonoBehaviour
     //}
 
 
-    void DrawConnections()
-    {
-        foreach (Location connected in location.connections)
-        {
-            GameObject lineObject = new GameObject(
-                "Route Line"
-            );
+    //void DrawConnections()
+    //{
+    //    foreach (Location connected in location.connections)
+    //    {
+    //        GameObject lineObject = new GameObject(
+    //            "Route Line"
+    //        );
 
-            LineRenderer line =
-                lineObject.AddComponent<LineRenderer>();
-            line.SetWidth(0.05f, 0.05f);
+    //        LineRenderer line =
+    //            lineObject.AddComponent<LineRenderer>();
+    //        line.SetWidth(0.05f, 0.05f);
 
-            line.positionCount = 2;
+    //        line.positionCount = 2;
 
-            line.SetColors(
-                Color.darkSlateGray,
-                Color.darkSlateGray
-            );
+    //        line.SetColors(
+    //            Color.darkSlateGray,
+    //            Color.darkSlateGray
+    //        );
 
-            line.SetPosition(
-                0,
-                transform.position
-            );
+    //        line.SetPosition(
+    //            0,
+    //            transform.position
+    //        );
 
-            line.SetPosition(
-                1,
-                connected.transform.position
-            );
-
-
-            //line.startWidth = 0.05f;
-            //line.endWidth = 0.05f;
-            line.SetWidth(width, width);
+    //        line.SetPosition(
+    //            1,
+    //            connected.transform.position
+    //        );
 
 
-            line.material =
-                new Material(
-                    Shader.Find("Sprites/Default")
-                );
-        }
-    }
+    //        //line.startWidth = 0.05f;
+    //        //line.endWidth = 0.05f;
+    //        line.SetWidth(width, width);
+
+
+    //        line.material =
+    //            new Material(
+    //                Shader.Find("Sprites/Default")
+    //            );
+    //    }
+    //}
 }

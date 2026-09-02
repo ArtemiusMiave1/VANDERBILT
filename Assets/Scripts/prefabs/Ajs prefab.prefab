@@ -1610,6 +1610,7 @@ Transform:
   - {fileID: 4230603339194035657}
   - {fileID: 8564558912254710498}
   - {fileID: 7577116322740658500}
+  - {fileID: 8710324669298975227}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6129104498542989940
@@ -3007,6 +3008,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5251331942042264923, guid: ed21beadfd2675e4e97addbbb78a15a5, type: 3}
   m_PrefabInstance: {fileID: 2433959969940440095}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3352366993863654612
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3271361826690844679}
+    m_Modifications:
+    - target: {fileID: 34714610338206347, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 8931616165998156052}
+    - target: {fileID: 2062180239789115501, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_Name
+      value: TradeRoute
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.911
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+--- !u!4 &8710324669298975227 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6226026544953793839, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+  m_PrefabInstance: {fileID: 3352366993863654612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4229674961225658679
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3157,8 +3224,12 @@ PrefabInstance:
       value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 1261493100823445886, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
-      propertyPath: fuelPerLocation
-      value: 2
+      propertyPath: mapCamera
+      value: 
+      objectReference: {fileID: 8931616165998156052}
+    - target: {fileID: 1261493100823445886, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
+      propertyPath: routeLineHeight
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1261493100823445886, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
       propertyPath: supplyOrderPaper
@@ -3172,10 +3243,6 @@ PrefabInstance:
       propertyPath: supplyOrderInteraction
       value: 
       objectReference: {fileID: 6943408924321513564}
-    - target: {fileID: 3408776223110070429, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
-      propertyPath: maxCargoWeight
-      value: 750
-      objectReference: {fileID: 0}
     - target: {fileID: 3735743907796191493, guid: 6c71c72cd3cc85e489688bd64495f5a8, type: 3}
       propertyPath: m_Name
       value: map system test

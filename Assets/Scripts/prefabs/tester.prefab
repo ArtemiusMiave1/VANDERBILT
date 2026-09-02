@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 5744725605359875649}
   - component: {fileID: 2263904611969315512}
   - component: {fileID: 8943204777642587744}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,6 +232,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocationManager
   connectionDistance: 0.5
   locations: []
+  routes: []
+  routeLinePrefab: {fileID: 2062180239789115501, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+  routeLineParent: {fileID: 6936192141620168088}
 --- !u!1 &6676034357441323922
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +380,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 45bee0716e32ef341948c362fb0296b5, type: 2}
+  - {fileID: 2100000, guid: 70d222baa1c558345b088fb7e31b411e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -411,7 +414,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.026216753
+        value: 0.045976885
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -451,11 +454,11 @@ LineRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 4
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureMode: 1
+    textureScale: {x: 22, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -589,10 +592,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipMovement
   speed: 0.3
+  currentSpeed: 0
+  currentCargoWeight: 0
   currentLocation: {fileID: 4856053162501380249}
   targetLocation: {fileID: 0}
   route: []
   routeLine: {fileID: 6902453433650852630}
+  mapCamera: {fileID: 0}
+  mapPlaneLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  routeLineHeight: 0.01
+  resourceDepotPaper: {fileID: 0}
+  fuelPerLocation: 2
+  maximumCargoWeight: 2500
+  minimumSpeedMultiplier: 0.25
 --- !u!114 &3408776223110070429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,14 +619,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d533616983cb20d4d8eb3a3fc301ad63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipCargo
+  totalCargoWeight: 0
   food: 100
-  coal: 100
   medicine: 100
   machinery: 100
-  ore: 100
   fuel: 100
   gold: 300
   weapons: 100
+  maxCargoWeight: 750
+  foodWeight: 0.3
+  medicineWeight: 1
+  machineryWeight: 3
+  fuelWeight: 0.5
+  goldWeight: 0.1
+  weaponsWeight: 3
 --- !u!1001 &2195766041209100895
 PrefabInstance:
   m_ObjectHideFlags: 0
