@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ShipMovement : MonoBehaviour
 {
-    [Header("Movement")]
-    public float speed = 5f;
 
     [Header("Locations")]
     public Location currentLocation;
@@ -20,7 +18,14 @@ public class ShipMovement : MonoBehaviour
     public GameObject resourceDepotPaper;
 
     [Header("Fuel")]
-    public int fuelPerLocation = 5;
+    public int fuelPerLocation = 2;
+
+    [Header("Movement")]
+    public float speed = .3f;
+
+    [Header("Current Movement Stats")]
+    public float currentSpeed;
+    public float currentCargoWeight;
 
     [Header("Cargo Weight")]
     public float maximumCargoWeight = 2500f;
@@ -44,11 +49,15 @@ public class ShipMovement : MonoBehaviour
 
     private void Update()
     {
+        // Keep the Inspector values updated
+        GetCurrentSpeed();
+
         if (!moving || targetLocation == null)
             return;
 
         // Stop the ship if it runs out of fuel
-        if (shipCargo == null || shipCargo.GetResourceAmount("fuel") <= 0)
+        if (shipCargo == null ||
+            shipCargo.GetResourceAmount("fuel") <= 0)
         {
             moving = false;
             targetLocation = null;
@@ -59,8 +68,6 @@ public class ShipMovement : MonoBehaviour
 
             return;
         }
-
-        float currentSpeed = GetCurrentSpeed();
 
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -73,7 +80,8 @@ public class ShipMovement : MonoBehaviour
             targetLocation.transform.position
         ) < 0.05f)
         {
-            transform.position = targetLocation.transform.position;
+            transform.position =
+                targetLocation.transform.position;
 
             ArriveAtLocation();
         }
@@ -264,17 +272,23 @@ public class ShipMovement : MonoBehaviour
     private float GetCurrentSpeed()
     {
         if (shipCargo == null)
-            return speed;
+        {
+            currentCargoWeight = 0f;
+            currentSpeed = speed;
+            return currentSpeed;
+        }
 
-        float weight =
-            shipCargo.GetCurrentCargoWeight();
+        // Get current cargo weight
+        currentCargoWeight = shipCargo.GetTotalWeight();
 
+        // Convert weight into a percentage
         float weightPercentage =
-            weight / maximumCargoWeight;
+            currentCargoWeight / maximumCargoWeight;
 
         weightPercentage =
             Mathf.Clamp01(weightPercentage);
 
+        // Calculate speed multiplier
         float speedMultiplier =
             Mathf.Lerp(
                 1f,
@@ -282,7 +296,11 @@ public class ShipMovement : MonoBehaviour
                 weightPercentage
             );
 
-        return speed * speedMultiplier;
+        // Calculate final speed
+        currentSpeed =
+            speed * speedMultiplier;
+
+        return currentSpeed;
     }
 
     private bool HasEnoughFuel()
