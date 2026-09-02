@@ -154,7 +154,7 @@ public class RandomLocationSpawner : MonoBehaviour
         //    " available types."
         //);
 
-
+        Debug.Log(locationManager.locations.Count);
         foreach (Location place in locationManager.locations)
         {
             LocationData randomType =
@@ -166,11 +166,11 @@ public class RandomLocationSpawner : MonoBehaviour
                 ];
 
             place.SetLocationType(randomType);
-            //Debug.Log(
-            //    place.name +
-            //    " assigned type: " +
-            //    randomType.Name
-            //);
+            Debug.Log(
+                place.name +
+                " assigned type: " +
+                randomType.Name
+            );
         }
     }
 }

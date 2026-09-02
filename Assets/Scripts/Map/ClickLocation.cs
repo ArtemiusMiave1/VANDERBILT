@@ -13,10 +13,10 @@ public class ClickLocation : MonoBehaviour
     {
         ShipMovement ship = FindObjectOfType<ShipMovement>();
 
-        if (ship.currentLocation.connections.Contains(location))
-        {
-            //ship.TravelTo(location);
-        }
+        //if (ship.currentLocation.connections.Contains(location))
+        //{
+        //    //ship.TravelTo(location);
+        //}
     }
 
     //private void OnMouseDown()

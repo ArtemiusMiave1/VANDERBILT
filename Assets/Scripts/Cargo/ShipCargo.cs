@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class ShipCargo : MonoBehaviour
 {
+    [Header("Current Cargo Weight")]
+    public float totalCargoWeight;
+
     [Header("Cargo")]
     public int food = 100;
-    public int coal = 100;
     public int medicine = 100;
     public int machinery = 100;
-    public int ore = 100;
     public int fuel = 100;
     public int gold = 300;
     public int weapons = 100;
@@ -19,10 +20,8 @@ public class ShipCargo : MonoBehaviour
 
     [Header("Resource Weights")]
     public float foodWeight = .3f;
-    public float coalWeight = 2f;
     public float medicineWeight = 1f;
     public float machineryWeight = 3f;
-    public float oreWeight = 4f;
     public float fuelWeight = .5f;
     public float goldWeight = .1f;
     public float weaponsWeight = 3f;
@@ -63,20 +62,12 @@ public class ShipCargo : MonoBehaviour
                 food += amount;
                 break;
 
-            case "coal":
-                coal += amount;
-                break;
-
             case "medicine":
                 medicine += amount;
                 break;
 
             case "machinery":
                 machinery += amount;
-                break;
-
-            case "ore":
-                ore += amount;
                 break;
 
             case "fuel":
@@ -149,10 +140,8 @@ public class ShipCargo : MonoBehaviour
 
 
         totalWeight += food * foodWeight;
-        totalWeight += coal * coalWeight;
         totalWeight += medicine * medicineWeight;
         totalWeight += machinery * machineryWeight;
-        totalWeight += ore * oreWeight;
         totalWeight += fuel * fuelWeight;
         totalWeight += gold * goldWeight;
         totalWeight += weapons * weaponsWeight;
@@ -186,17 +175,11 @@ public class ShipCargo : MonoBehaviour
             case "food":
                 return foodWeight;
 
-            case "coal":
-                return coalWeight;
-
             case "medicine":
                 return medicineWeight;
 
             case "machinery":
                 return machineryWeight;
-
-            case "ore":
-                return oreWeight;
 
             case "fuel":
                 return fuelWeight;
@@ -231,17 +214,11 @@ public class ShipCargo : MonoBehaviour
             case "food":
                 return food;
 
-            case "coal":
-                return coal;
-
             case "medicine":
                 return medicine;
 
             case "machinery":
                 return machinery;
-
-            case "ore":
-                return ore;
 
             case "fuel":
                 return fuel;
@@ -270,12 +247,23 @@ public class ShipCargo : MonoBehaviour
     private void ClampResources()
     {
         food = Mathf.Max(0, food);
-        coal = Mathf.Max(0, coal);
         medicine = Mathf.Max(0, medicine);
         machinery = Mathf.Max(0, machinery);
-        ore = Mathf.Max(0, ore);
         fuel = Mathf.Max(0, fuel);
         gold = Mathf.Max(0, gold);
         weapons = Mathf.Max(0, weapons);
+    }
+    public float GetTotalWeight()
+    {
+        totalCargoWeight = 0f;
+
+        totalCargoWeight += food * foodWeight;
+        totalCargoWeight += medicine * medicineWeight;
+        totalCargoWeight += machinery * machineryWeight;
+        totalCargoWeight += fuel * fuelWeight;
+        totalCargoWeight += gold * goldWeight;
+        totalCargoWeight += weapons * weaponsWeight;
+
+        return totalCargoWeight;
     }
 }

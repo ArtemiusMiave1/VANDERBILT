@@ -4,12 +4,13 @@ using UnityEngine;
 public class Location : MonoBehaviour
 {
     [Header("Connections")]
-    public List<Location> connections = new List<Location>();
-    public List<float> distances = new List<float>();
+    public List<RouteConnection> connections =
+        new List<RouteConnection>();
 
 
     [Header("Requests")]
-    public List<RequestPaper> activeRequests = new List<RequestPaper>();
+    public List<RequestPaper> activeRequests =
+        new List<RequestPaper>();
 
 
     [Header("Location Type")]
@@ -131,21 +132,4 @@ public class Location : MonoBehaviour
             locationRenderer.material.color = Color.white;
         }
     }
-
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.green;
-
-    //    foreach (Location location in connections)
-    //    {
-    //        if (location != null)
-    //        {
-    //            Gizmos.DrawLine(
-    //                transform.position,
-    //                location.transform.position
-    //            );
-    //        }
-    //    }
-    //}
 }
