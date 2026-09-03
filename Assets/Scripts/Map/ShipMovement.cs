@@ -17,6 +17,9 @@ public class ShipMovement : MonoBehaviour
     [Header("Route")]
     public List<Location> route = new List<Location>();
 
+    [Header("Route Danger")]
+    public RouteDangerSystem routeDangerSystem;
+
     [Header("Route Line")]
     public LineRenderer routeLine;
 
@@ -143,12 +146,29 @@ public class ShipMovement : MonoBehaviour
 
     private void ArriveAtLocation()
     {
+        Location previousLocation = currentLocation;
+
         currentLocation = targetLocation;
 
-        Debug.Log(
-            "Arrived at " +
-            currentLocation.name
-        );
+        //Debug.Log(
+        //    "Arrived at " +
+        //    currentLocation.name
+        //);
+
+
+        // CHECK ROUTE DANGER
+        RouteConnection completedRoute =
+            GetRouteConnection(
+                previousLocation,
+                currentLocation
+            );
+
+        if (routeDangerSystem != null)
+        {
+            routeDangerSystem.CheckRouteDanger(
+                completedRoute
+            );
+        }
 
 
         // USE FUEL
@@ -159,12 +179,12 @@ public class ShipMovement : MonoBehaviour
                 -fuelPerLocation
             );
 
-            Debug.Log(
-                "Used " +
-                fuelPerLocation +
-                " fuel. Remaining fuel: " +
-                shipCargo.GetResourceAmount("fuel")
-            );
+            //Debug.Log(
+            //    "Used " +
+            //    fuelPerLocation +
+            //    " fuel. Remaining fuel: " +
+            //    shipCargo.GetResourceAmount("fuel")
+            //);
         }
 
 
@@ -200,17 +220,17 @@ public class ShipMovement : MonoBehaviour
         {
             targetLocation = route[0];
 
-            Debug.Log(
-                "Travelling to " +
-                targetLocation.name
-            );
+            //Debug.Log(
+            //    "Travelling to " +
+            //    targetLocation.name
+            //);
         }
         else
         {
             targetLocation = null;
             moving = false;
 
-            Debug.Log("Route complete.");
+            //Debug.Log("Route complete.");
 
             UpdateRouteLine();
         }
@@ -293,10 +313,10 @@ public class ShipMovement : MonoBehaviour
 
         if (destination == currentLocation)
         {
-            Debug.Log(
-                "Already at " +
-                destination.name
-            );
+            //Debug.Log(
+            //    "Already at " +
+            //    destination.name
+            //);
 
             return;
         }
@@ -304,10 +324,10 @@ public class ShipMovement : MonoBehaviour
 
         if (route.Contains(destination))
         {
-            Debug.Log(
-                destination.name +
-                " is already in the route."
-            );
+            //Debug.Log(
+            //    destination.name +
+            //    " is already in the route."
+            //);
 
             return;
         }
@@ -368,11 +388,11 @@ public class ShipMovement : MonoBehaviour
         route.Add(destination);
 
 
-        Debug.Log(
-            "Added " +
-            destination.name +
-            " to route."
-        );
+        //Debug.Log(
+        //    "Added " +
+        //    destination.name +
+        //    " to route."
+        //);
 
 
         Debug.Log(
@@ -391,10 +411,10 @@ public class ShipMovement : MonoBehaviour
             moving = true;
 
 
-            Debug.Log(
-                "Ship travelling to " +
-                targetLocation.name
-            );
+            //Debug.Log(
+            //    "Ship travelling to " +
+            //    targetLocation.name
+            //);
         }
     }
 
@@ -415,13 +435,13 @@ public class ShipMovement : MonoBehaviour
 
         if (currentFuel < fuelPerLocation)
         {
-            Debug.Log(
-                "Not enough fuel! " +
-                "Required: " +
-                fuelPerLocation +
-                " | Have: " +
-                currentFuel
-            );
+            //Debug.Log(
+            //    "Not enough fuel! " +
+            //    "Required: " +
+            //    fuelPerLocation +
+            //    " | Have: " +
+            //    currentFuel
+            //);
 
             return false;
         }
@@ -447,7 +467,7 @@ public class ShipMovement : MonoBehaviour
         UpdateRouteLine();
 
 
-        Debug.Log("Route cleared.");
+        //Debug.Log("Route cleared.");
     }
 
 
@@ -710,11 +730,11 @@ public class ShipMovement : MonoBehaviour
         route.Add(location);
 
 
-        Debug.Log(
-            "Added " +
-            location.name +
-            " to route."
-        );
+        //Debug.Log(
+        //    "Added " +
+        //    location.name +
+        //    " to route."
+        //);
 
 
         Debug.Log(
@@ -738,10 +758,10 @@ public class ShipMovement : MonoBehaviour
             moving = true;
 
 
-            Debug.Log(
-                "Ship travelling to " +
-                targetLocation.name
-            );
+            //Debug.Log(
+            //    "Ship travelling to " +
+            //    targetLocation.name
+            //);
         }
     }
 

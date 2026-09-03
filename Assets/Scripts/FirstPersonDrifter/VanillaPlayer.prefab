@@ -354,7 +354,7 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 10
   FootstepsSnd: {fileID: 0}
-  enableRunning: 0
+  enableRunning: 1
   jumpSpeed: 4
   gravity: 10
   slideWhenOverSlopeLimit: 0
@@ -398,7 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapRouting
   mapCamera: {fileID: 2000000}
   shipMovement: {fileID: 0}
-  clickDistance: 100
+  clickDistance: 3
 --- !u!1001 &2123425785484685627
 PrefabInstance:
   m_ObjectHideFlags: 0
