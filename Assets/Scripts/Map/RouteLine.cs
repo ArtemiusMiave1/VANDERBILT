@@ -4,6 +4,11 @@ public class RouteLine : MonoBehaviour
 {
     public LineRenderer lineRenderer;
 
+    [Header("Route Materials")]
+    public Material normalRouteMaterial;
+    public Material dangerousRouteMaterial;
+    public Material veryDangerousRouteMaterial;
+
     [Header("Mouse Route")]
     public Camera playerCamera;
     public LayerMask mapPlaneLayer;
@@ -29,7 +34,10 @@ public class RouteLine : MonoBehaviour
         }
     }
 
-    public void Setup(Location locationA, Location locationB)
+    public void Setup(
+        Location locationA,
+        Location locationB,
+        RouteConnection route)
     {
         if (locationA == null || locationB == null)
             return;
@@ -43,6 +51,9 @@ public class RouteLine : MonoBehaviour
             return;
         }
 
+        // Set the route material
+        SetRouteMaterial(route);
+
         lineRenderer.positionCount = 2;
 
         lineRenderer.SetPosition(
@@ -54,6 +65,38 @@ public class RouteLine : MonoBehaviour
             1,
             locationB.transform.position
         );
+    }
+
+    private void SetRouteMaterial(RouteConnection route)
+    {
+        if (route == null)
+            return;
+
+        Material selectedMaterial = null;
+
+        switch (route.dangerLevel)
+        {
+            case 0:
+                selectedMaterial =
+                    normalRouteMaterial;
+                break;
+
+            case 1:
+                selectedMaterial =
+                    dangerousRouteMaterial;
+                break;
+
+            default:
+                selectedMaterial =
+                    veryDangerousRouteMaterial;
+                break;
+        }
+
+        if (selectedMaterial != null)
+        {
+            lineRenderer.material =
+                selectedMaterial;
+        }
     }
 
     private void UpdateMousePosition()
@@ -79,13 +122,11 @@ public class RouteLine : MonoBehaviour
                 hit.point;
 
             // Raise the line slightly above the plane
-            mousePosition.y += heightAbovePlane;
+            mousePosition.y +=
+                heightAbovePlane;
 
-            // Make sure the line has 3 points
+            // Add a temporary third point
             lineRenderer.positionCount = 3;
-
-            Vector3 lastPosition =
-                lineRenderer.GetPosition(1);
 
             lineRenderer.SetPosition(
                 2,

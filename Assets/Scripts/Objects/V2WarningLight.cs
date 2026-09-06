@@ -68,14 +68,13 @@ public class V2WarningLight : MonoBehaviour
                 //print("lol");
                 LightOff("Red");
                 animatorVar.Play(PurpleHash);
-                AlarmSnd.Play();
                 break;
             case "Red":
                // print("aaa");
                 LightOff("Purple");
                 animatorVar.Play(RedHash);
-                AlarmSnd.Play();
                 break;
+                AlarmSnd.Play(); 
         }
 
     }
@@ -93,9 +92,9 @@ public class V2WarningLight : MonoBehaviour
             case "Both":
                // print("both offff");
                 animatorVar.Play(OffHash);
-                AlarmSnd.Stop();
                 break;
 
+                AlarmSnd.Stop();
 
         }
     }

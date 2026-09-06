@@ -95,17 +95,17 @@ public class ShipCargo : MonoBehaviour
         ClampResources();
 
 
-        Debug.Log(
-            $"{resourceType}: " +
-            $"{GetResourceAmount(resourceType)}"
-        );
+        //Debug.Log(
+        //    $"{resourceType}: " +
+        //    $"{GetResourceAmount(resourceType)}"
+        //);
 
-        Debug.Log(
-            "Cargo Weight: " +
-            GetCurrentCargoWeight() +
-            " / " +
-            maxCargoWeight
-        );
+        //Debug.Log(
+        //    "Cargo Weight: " +
+        //    GetCurrentCargoWeight() +
+        //    " / " +
+        //    maxCargoWeight
+        //);
     }
 
 

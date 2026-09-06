@@ -156,6 +156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RouteLine
   lineRenderer: {fileID: 8195982262737493315}
+  normalRouteMaterial: {fileID: 2100000, guid: 002259c201ab1ff46bec2fb0e708e5c9, type: 2}
+  dangerousRouteMaterial: {fileID: 2100000, guid: 06dcbb2d8da56d9438c67d30767decd7, type: 2}
+  veryDangerousRouteMaterial: {fileID: 2100000, guid: 6d1eb478050927e4da15dd9ec6626135, type: 2}
   playerCamera: {fileID: 0}
   mapPlaneLayer:
     serializedVersion: 2

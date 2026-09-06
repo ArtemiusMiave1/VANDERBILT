@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
+  - canPickUp
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Map
   - Water
   - UI
-  - 
+  - holdLayer
   - 
   - 
   - 

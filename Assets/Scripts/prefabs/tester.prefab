@@ -114,9 +114,10 @@ GameObject:
   - component: {fileID: 8954736991829567899}
   - component: {fileID: 5744725605359875649}
   - component: {fileID: 2263904611969315512}
+  - component: {fileID: 5288057740025062267}
   - component: {fileID: 8943204777642587744}
   m_Layer: 3
-  m_Name: Plane
+  m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,6 +219,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &5288057740025062267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4326961186416185546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bfce14ed373f1e44ade3e4e84d8b2c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RouteDangerSystem
+  dangerLevel1Chance: 0.25
+  dangerLevel2Chance: 0.5
+  minimumCargoLoss: 5
+  maximumCargoLoss: 20
+  minimumFuelLoss: 1
+  maximumFuelLoss: 5
 --- !u!114 &8943204777642587744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,7 +424,7 @@ LineRenderer:
   m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0.27}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -458,7 +477,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 1
-    textureScale: {x: 22, y: 1}
+    textureScale: {x: 11.24, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -495,7 +514,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.22731595, y: 0.03569002, z: 5.2192855}
-  m_LocalScale: {x: 0.15100959, y: 0.08297346, z: 0.3005816}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5843697160851073536}
@@ -575,7 +594,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -597,6 +616,7 @@ MonoBehaviour:
   currentLocation: {fileID: 4856053162501380249}
   targetLocation: {fileID: 0}
   route: []
+  routeDangerSystem: {fileID: 5288057740025062267}
   routeLine: {fileID: 6902453433650852630}
   mapCamera: {fileID: 0}
   mapPlaneLayer:
@@ -721,27 +741,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalScale.x
-      value: 27.20692
+      value: 4.1085057
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalScale.y
-      value: 29.709547
+      value: 2.465104
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalScale.z
-      value: 6.341721
+      value: 1.9062047
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.011722
+      value: -0.0017708987
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.92474
+      value: 0.07672894
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.034231
+      value: -0.010289669
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalRotation.w
@@ -749,7 +769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalRotation.y
@@ -757,7 +777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -782,10 +802,36 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 904b85031d90a3c4b988de7972526262, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1253246615960691368}
   m_SourcePrefab: {fileID: 100100000, guid: 904b85031d90a3c4b988de7972526262, type: 3}
 --- !u!4 &5843697160851073536 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
   m_PrefabInstance: {fileID: 6238121990440472043}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6508593405424890042 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 904b85031d90a3c4b988de7972526262, type: 3}
+  m_PrefabInstance: {fileID: 6238121990440472043}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1253246615960691368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508593405424890042}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d4c43a289d4ba458098d6c485b25d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipMapBoid
+  orbitRadius: 0.1
+  orbitSpeed: 10
+  centreMoveSpeed: 0
+  centreMoveRadius: 0
+  movementSmoothness: 3
+  heightAboveMap: 0
