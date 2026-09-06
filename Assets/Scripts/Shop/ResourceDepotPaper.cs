@@ -109,6 +109,7 @@ public class ResourceDepotPaper : MonoBehaviour
                 row.resourceType,
                 amount
             );
+            print("Amount" + amount + "row" +row.name);
         }
 
 

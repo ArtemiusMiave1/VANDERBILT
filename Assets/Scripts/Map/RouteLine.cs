@@ -2,136 +2,72 @@ using UnityEngine;
 
 public class RouteLine : MonoBehaviour
 {
+    [Header("Line Renderer")]
     public LineRenderer lineRenderer;
 
-    [Header("Route Materials")]
-    public Material normalRouteMaterial;
-    public Material dangerousRouteMaterial;
-    public Material veryDangerousRouteMaterial;
+    [Header("Map")]
+    public Transform mapObject;
 
-    [Header("Mouse Route")]
-    public Camera playerCamera;
-    public LayerMask mapPlaneLayer;
-
-    public float heightAbovePlane = 0.2f;
+    [Tooltip("How far above the map the route should sit.")]
+    public float heightOffset = 0.01f;
 
     private void Awake()
     {
         if (lineRenderer == null)
-            lineRenderer = GetComponent<LineRenderer>();
-
-        if (playerCamera == null)
-            playerCamera = Camera.main;
-    }
-
-    private void Update()
-    {
-        // Only update the temporary line while
-        // the player is holding right mouse button
-        if (Input.GetMouseButton(1))
         {
-            UpdateMousePosition();
+            lineRenderer = GetComponent<LineRenderer>();
+        }
+
+        // Force world-space coordinates
+        if (lineRenderer != null)
+        {
+            lineRenderer.useWorldSpace = true;
         }
     }
 
     public void Setup(
         Location locationA,
-        Location locationB,
-        RouteConnection route)
+        Location locationB)
     {
         if (locationA == null || locationB == null)
-            return;
-
-        if (lineRenderer == null)
         {
-            Debug.LogError(
-                "RouteLine has no LineRenderer!"
-            );
-
+            Debug.LogError("RouteLine: Missing location!");
             return;
         }
 
-        // Set the route material
-        SetRouteMaterial(route);
+        if (lineRenderer == null)
+        {
+            Debug.LogError("RouteLine: Missing LineRenderer!");
+            return;
+        }
+
+        // Get actual WORLD positions
+        Vector3 positionA =
+            locationA.transform.position;
+
+        Vector3 positionB =
+            locationB.transform.position;
+
+        // Put the line at the map's height
+        if (mapObject != null)
+        {
+            positionA.y =
+                mapObject.position.y + heightOffset;
+
+            positionB.y =
+                mapObject.position.y + heightOffset;
+        }
 
         lineRenderer.positionCount = 2;
 
         lineRenderer.SetPosition(
             0,
-            locationA.transform.position
+            positionA
         );
 
         lineRenderer.SetPosition(
             1,
-            locationB.transform.position
+            positionB
         );
-    }
-
-    private void SetRouteMaterial(RouteConnection route)
-    {
-        if (route == null)
-            return;
-
-        Material selectedMaterial = null;
-
-        switch (route.dangerLevel)
-        {
-            case 0:
-                selectedMaterial =
-                    normalRouteMaterial;
-                break;
-
-            case 1:
-                selectedMaterial =
-                    dangerousRouteMaterial;
-                break;
-
-            default:
-                selectedMaterial =
-                    veryDangerousRouteMaterial;
-                break;
-        }
-
-        if (selectedMaterial != null)
-        {
-            lineRenderer.material =
-                selectedMaterial;
-        }
-    }
-
-    private void UpdateMousePosition()
-    {
-        if (playerCamera == null)
-            return;
-
-        Ray ray =
-            playerCamera.ScreenPointToRay(
-                Input.mousePosition
-            );
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(
-            ray,
-            out hit,
-            1000f,
-            mapPlaneLayer
-        ))
-        {
-            Vector3 mousePosition =
-                hit.point;
-
-            // Raise the line slightly above the plane
-            mousePosition.y +=
-                heightAbovePlane;
-
-            // Add a temporary third point
-            lineRenderer.positionCount = 3;
-
-            lineRenderer.SetPosition(
-                2,
-                mousePosition
-            );
-        }
     }
 }

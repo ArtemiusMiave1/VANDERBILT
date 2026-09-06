@@ -88,7 +88,7 @@ public class CorkBoard : MonoBehaviour
 
 
             request.transform.localRotation =
-                Quaternion.Euler(0f, -90f, 0f);
+                Quaternion.Euler(0f, 45f, 0f);
         }
     }
 }

@@ -17,6 +17,9 @@ public class ShipMovement : MonoBehaviour
     [Header("Route")]
     public List<Location> route = new List<Location>();
 
+    [Header("Route String Height")]
+    public float routeLineHeightOffset = 0.5f;
+
     [Header("Route Danger")]
     public RouteDangerSystem routeDangerSystem;
 
@@ -480,26 +483,35 @@ public class ShipMovement : MonoBehaviour
         if (routeLine == null)
             return;
 
-
         if (currentLocation == null)
             return;
 
+        routeLine.useWorldSpace = true;
 
-        routeLine.positionCount =
-            route.Count + 1;
+        routeLine.positionCount = route.Count + 1;
 
+        // Start at current location
+        Vector3 startPosition =
+            currentLocation.transform.position;
+
+        startPosition.y += routeLineHeightOffset;
 
         routeLine.SetPosition(
             0,
-            currentLocation.transform.position
+            startPosition
         );
 
-
+        // Draw the route string above the map
         for (int i = 0; i < route.Count; i++)
         {
+            Vector3 position =
+                route[i].transform.position;
+
+            position.y += routeLineHeightOffset;
+
             routeLine.SetPosition(
                 i + 1,
-                route[i].transform.position
+                position
             );
         }
     }

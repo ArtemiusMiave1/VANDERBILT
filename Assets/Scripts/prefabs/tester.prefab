@@ -136,6 +136,7 @@ Transform:
   m_LocalScale: {x: 0.13442855, y: 0.22404756, z: 0.2897383}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5843697160851073536}
   - {fileID: 8555062979194494386}
   - {fileID: 8291884086741092238}
   m_Father: {fileID: 6340584047342942636}
@@ -252,7 +253,11 @@ MonoBehaviour:
   connectionDistance: 0.5
   locations: []
   routes: []
-  routeLinePrefab: {fileID: 2062180239789115501, guid: a7fabab343185c246980cdd9b278ce3a, type: 3}
+  locationHeight: 0.94
+  mapObject: {fileID: 1890185745016316861}
+  normalRoutePrefab: {fileID: 0}
+  dangerousRoutePrefab: {fileID: 0}
+  veryDangerousRoutePrefab: {fileID: 0}
   routeLineParent: {fileID: 6936192141620168088}
 --- !u!1 &6676034357441323922
 GameObject:
@@ -335,7 +340,7 @@ Transform:
   m_GameObject: {fileID: 7366574261125935316}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 2.915, y: 0.845, z: 1.683}
+  m_LocalPosition: {x: -5.988, y: 1.126, z: -2.333}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -516,8 +521,7 @@ Transform:
   m_LocalPosition: {x: -0.22731595, y: 0.03569002, z: 5.2192855}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5843697160851073536}
+  m_Children: []
   m_Father: {fileID: 1890185745016316861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2134058122541944123
@@ -616,6 +620,7 @@ MonoBehaviour:
   currentLocation: {fileID: 4856053162501380249}
   targetLocation: {fileID: 0}
   route: []
+  routeLineHeightOffset: 0.01
   routeDangerSystem: {fileID: 5288057740025062267}
   routeLine: {fileID: 6902453433650852630}
   mapCamera: {fileID: 0}
@@ -640,12 +645,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipCargo
   totalCargoWeight: 0
-  food: 100
-  medicine: 100
-  machinery: 100
+  food: 90
+  medicine: 90
+  machinery: 90
   fuel: 100
-  gold: 300
-  weapons: 100
+  gold: 200
+  weapons: 90
   maxCargoWeight: 750
   foodWeight: 0.3
   medicineWeight: 1
@@ -737,7 +742,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8555062979194494386}
+    m_TransformParent: {fileID: 1890185745016316861}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalScale.x
@@ -745,7 +750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.465104
+      value: 2.4651043
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalScale.z
@@ -753,15 +758,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0017708987
+      value: -0.22908685
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.07672894
+      value: 0.112418965
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.010289669
+      value: 5.208996
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       propertyPath: m_LocalRotation.w
@@ -805,6 +810,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 904b85031d90a3c4b988de7972526262, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2380185744279848605}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 904b85031d90a3c4b988de7972526262, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1253246615960691368}
   m_SourcePrefab: {fileID: 100100000, guid: 904b85031d90a3c4b988de7972526262, type: 3}
 --- !u!4 &5843697160851073536 stripped
@@ -817,6 +825,23 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 904b85031d90a3c4b988de7972526262, type: 3}
   m_PrefabInstance: {fileID: 6238121990440472043}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2380185744279848605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508593405424890042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d27678e6fb52744a898151d19e11a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NucleusShipBoid
+  centerPoint: {fileID: 8555062979194494386}
+  orbitRadius: 0.05
+  orbitSpeed: 20
+  rotationSpeed: 5
+  modelRotationOffset: 0
 --- !u!114 &1253246615960691368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,7 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d4c43a289d4ba458098d6c485b25d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipMapBoid
-  orbitRadius: 0.1
+  orbitRadius: 0.05
   orbitSpeed: 10
   centreMoveSpeed: 0
   centreMoveRadius: 0

@@ -120,8 +120,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axes: 2
   invertY: 0
-  sensitivityX: 5
-  sensitivityY: 4
+  sensitivityX: 3
+  sensitivityY: 3
   minimumX: -360
   maximumX: 360
   minimumY: -85
@@ -377,8 +377,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axes: 1
   invertY: 0
-  sensitivityX: 5
-  sensitivityY: 4
+  sensitivityX: 3
+  sensitivityY: 3
   minimumX: -360
   maximumX: 360
   minimumY: -85
@@ -578,6 +578,34 @@ PrefabInstance:
     - target: {fileID: 6340914839949571408, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
       propertyPath: m_Name
       value: Clipboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7590533621827275435, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.2290397
+      objectReference: {fileID: 0}
+    - target: {fileID: 7590533621827275435, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 16.573421
+      objectReference: {fileID: 0}
+    - target: {fileID: 7590533621827275435, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 16.573421
+      objectReference: {fileID: 0}
+    - target: {fileID: 7590533621827275435, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.495
+      objectReference: {fileID: 0}
+    - target: {fileID: 7590533621827275435, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7590533621827275435, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8725190379135681466, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2117353066065357185, guid: 764752a2d8d42a3459cb61aec4a65de2, type: 3}

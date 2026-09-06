@@ -14,8 +14,18 @@ public class LocationManager : MonoBehaviour
     [Header("Routes")]
     public List<RouteConnection> routes = new List<RouteConnection>();
 
-    [Header("Route Line")]
-    public GameObject routeLinePrefab;
+    [Header("Location Height")]
+    public float locationHeight = 0.5f;
+
+    [Header("Map Height")]
+    public Transform mapObject;
+
+    [Header("Route Line Prefabs")]
+    public GameObject normalRoutePrefab;
+    public GameObject dangerousRoutePrefab;
+    public GameObject veryDangerousRoutePrefab;
+
+    [Header("Route Line Parent")]
     public Transform routeLineParent;
 
 
@@ -41,7 +51,18 @@ public class LocationManager : MonoBehaviour
         foreach (Location location in foundLocations)
         {
             if (location != null)
+            {
                 locations.Add(location);
+
+                // Raise location above the board
+                Vector3 position =
+                    location.transform.position;
+
+                position.y = locationHeight;
+
+                location.transform.position =
+                    position;
+            }
         }
 
 
@@ -76,21 +97,20 @@ public class LocationManager : MonoBehaviour
                     );
 
 
-                // Only connect nearby locations
                 if (distance <= connectionDistance)
                 {
                     RouteConnection route =
                         new RouteConnection();
 
 
-                    // =========================================
-                    // ROUTE INFORMATION
-                    // =========================================
+                    route.locationA =
+                        locationA;
 
-                    route.locationA = locationA;
-                    route.locationB = locationB;
+                    route.locationB =
+                        locationB;
 
-                    route.distance = distance;
+                    route.distance =
+                        distance;
 
 
                     // =========================================
@@ -103,29 +123,23 @@ public class LocationManager : MonoBehaviour
 
                     if (dangerRoll < 0.05f)
                     {
-                        // 5% chance
-                        // VERY DANGEROUS
-
+                        // 5% Very Dangerous
                         route.dangerLevel = 2;
                     }
                     else if (dangerRoll < 0.20f)
                     {
-                        // 15% chance
-                        // DANGEROUS
-
+                        // 15% Dangerous
                         route.dangerLevel = 1;
                     }
                     else
                     {
-                        // 80% chance
-                        // SAFE
-
+                        // 80% Safe
                         route.dangerLevel = 0;
                     }
 
 
                     // =========================================
-                    // FUEL COST
+                    // FUEL
                     // =========================================
 
                     route.fuelCost =
@@ -136,10 +150,6 @@ public class LocationManager : MonoBehaviour
                             )
                         );
 
-
-                    // =========================================
-                    // BLOCKED
-                    // =========================================
 
                     route.blocked = false;
 
@@ -155,20 +165,10 @@ public class LocationManager : MonoBehaviour
 
 
                     // =========================================
-                    // CREATE VISUAL LINE
+                    // CREATE VISUAL ROUTE
                     // =========================================
 
                     CreateRouteLine(route);
-
-
-                    // DEBUG
-                    Debug.Log(
-                        locationA.name +
-                        " -> " +
-                        locationB.name +
-                        " | Danger Level: " +
-                        route.dangerLevel
-                    );
                 }
             }
         }
@@ -184,54 +184,78 @@ public class LocationManager : MonoBehaviour
     }
 
 
-    private void CreateRouteLine(
-        RouteConnection route)
+    // =========================================================
+    // CREATE ROUTE LINE
+    // =========================================================
+
+    
+    private void CreateRouteLine(RouteConnection route)
+{
+    if (route == null)
+        return;
+
+    GameObject selectedPrefab = null;
+
+    switch (route.dangerLevel)
     {
-        if (routeLinePrefab == null)
-        {
-            Debug.LogWarning(
-                "No Route Line Prefab assigned!"
-            );
+        case 0:
+            selectedPrefab = normalRoutePrefab;
+            break;
 
-            return;
-        }
+        case 1:
+            selectedPrefab = dangerousRoutePrefab;
+            break;
 
+        case 2:
+            selectedPrefab = veryDangerousRoutePrefab;
+            break;
+    }
 
-        GameObject lineObject =
-            Instantiate(
-                routeLinePrefab,
-                Vector3.zero,
-                Quaternion.identity
-            );
+    if (selectedPrefab == null)
+    {
+        Debug.LogWarning(
+            "No route prefab assigned for danger level " +
+            route.dangerLevel
+        );
 
+        return;
+    }
 
-        if (routeLineParent != null)
-        {
-            lineObject.transform.SetParent(
-                routeLineParent
-            );
-        }
+    GameObject lineObject = Instantiate(
+        selectedPrefab,
+        Vector3.zero,
+        Quaternion.identity
+    );
 
-
-        RouteLine routeLine =
-            lineObject.GetComponent<RouteLine>();
-
-
-        if (routeLine == null)
-        {
-            Debug.LogError(
-                "Route Line Prefab is missing " +
-                "the RouteLine script!"
-            );
-
-            return;
-        }
-
-
-        routeLine.Setup(
-            route.locationA,
-            route.locationB,
-            route
+    if (routeLineParent != null)
+    {
+        lineObject.transform.SetParent(
+            routeLineParent,
+            false
         );
     }
+
+    RouteLine routeLine =
+        lineObject.GetComponent<RouteLine>();
+
+    if (routeLine == null)
+    {
+        Debug.LogError(
+            "Route prefab is missing RouteLine!"
+        );
+
+        Destroy(lineObject);
+        return;
+    }
+
+    // Use the map object's height
+    if (mapObject != null)
+    {
+    }
+
+    routeLine.Setup(
+        route.locationA,
+        route.locationB
+    );
+}
 }
