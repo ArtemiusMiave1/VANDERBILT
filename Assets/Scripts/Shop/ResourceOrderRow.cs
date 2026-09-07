@@ -22,10 +22,19 @@ public class ResourceOrderRow : MonoBehaviour
         resourceNameText.text = resourceType;
         priceText.text = price + " Gold";
 
+
+        quantityInput.contentType = TMP_InputField.ContentType.IntegerNumber;
+        quantityInput.onValidateInput += ValidateNumberInput;
+
         quantityInput.text = "0";
 
         // Update the depot whenever the player changes the number
         quantityInput.onValueChanged.AddListener(OnQuantityChanged);
+    }
+
+    private char ValidateNumberInput(string text, int charIndex, char addedChar)
+    {
+        return char.IsDigit(addedChar) ? addedChar : '\0';
     }
 
     private void OnQuantityChanged(string value)

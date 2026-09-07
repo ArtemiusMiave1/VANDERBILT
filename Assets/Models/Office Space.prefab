@@ -56,6 +56,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   SFXSource: {fileID: 8020529068152684391}
   Request: {fileID: 8300000, guid: bbc43f9833f38dc4998fdd60aa5137af, type: 3}
+  RequestComplete: {fileID: 8300000, guid: 45243d31ed8688e4daa0ebbb90f2b6ce, type: 3}
+  FaxPrint: {fileID: 8300000, guid: 9795217c2da62374bbb0e69e520e4637, type: 3}
+  FaxPurchase: {fileID: 8300000, guid: 8dc62523a246b174387feb08850f0a4f, type: 3}
 --- !u!1 &1672345757995984900
 GameObject:
   m_ObjectHideFlags: 0

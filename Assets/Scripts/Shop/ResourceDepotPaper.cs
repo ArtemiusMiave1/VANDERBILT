@@ -19,6 +19,13 @@ public class ResourceDepotPaper : MonoBehaviour
     [Header("Purchase")]
     public Button purchaseButton;
 
+    SoundManager soundManager;
+
+    private void Awake()
+    {
+        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
+    }
+
 
     private void Start()
     {
@@ -129,7 +136,7 @@ public class ResourceDepotPaper : MonoBehaviour
             }
         }
 
-
+        soundManager.PlaySFX(soundManager.FaxPurchase);
         UpdateTotal();
     }
 }

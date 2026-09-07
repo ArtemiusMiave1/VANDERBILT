@@ -34,9 +34,12 @@ public class RequestPaper : MonoBehaviour
     private bool timerRunning = false;
 
 
+    SoundManager soundManager;
+
     private void Awake()
     {
         corkBoard = FindObjectOfType<CorkBoard>();
+        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
     }
 
 
@@ -313,7 +316,7 @@ public class RequestPaper : MonoBehaviour
             corkBoard.RemoveRequest(this);
         }
 
-
+        soundManager.PlaySFX(soundManager.RequestComplete);
         // Destroy request
         Destroy(gameObject);
     }

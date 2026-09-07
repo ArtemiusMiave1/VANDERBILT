@@ -5,6 +5,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioSource SFXSource;
 
     public AudioClip Request;
+    public AudioClip RequestComplete;
+    public AudioClip FaxPrint;
+    public AudioClip FaxPurchase;
 
     public void PlaySFX(AudioClip clip)
     {

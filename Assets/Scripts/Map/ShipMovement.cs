@@ -47,6 +47,13 @@ public class ShipMovement : MonoBehaviour
 
     private bool moving = false;
 
+    SoundManager soundManager;
+
+    private void Awake()
+    {
+        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
+    }
+
 
     private void Start()
     {
@@ -258,6 +265,7 @@ public class ShipMovement : MonoBehaviour
             "ResourceDepot")
         {
             resourceDepotPaper.SetActive(true);
+            soundManager.PlaySFX(soundManager.FaxPrint);
         }
         else
         {
