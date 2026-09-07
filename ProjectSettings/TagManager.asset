@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - canPickUp
+  - Audio
   layers:
   - Default
   - TransparentFX
