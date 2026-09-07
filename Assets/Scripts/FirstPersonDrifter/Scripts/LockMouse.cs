@@ -1,32 +1,28 @@
-﻿// by @torahhorse
-
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 public class LockMouse : MonoBehaviour
-{	
-	void Start()
-	{
-		LockCursor(true);
-	}
+{
+    [Header("Cursor")]
+    public bool cursorLocked = true;
 
-    void Update()
+    private void Start()
     {
-    	// lock when mouse is clicked
-    	if( Input.GetMouseButtonDown(0) && Time.timeScale > 0.0f )
-    	{
-    		LockCursor(true);
-    	}
-    
-    	// unlock when escape is hit
-        if  ( Input.GetKeyDown(KeyCode.Escape) )
-        {
-        	LockCursor(Cursor.lockState == CursorLockMode.Locked);
-        }
+        LockCursor(cursorLocked);
     }
-    
+
     public void LockCursor(bool lockCursor)
     {
-        Cursor.lockState = lockCursor? CursorLockMode.Locked: CursorLockMode.None;
+        cursorLocked = lockCursor;
+
+        if (lockCursor)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 }

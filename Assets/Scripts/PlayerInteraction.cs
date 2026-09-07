@@ -16,12 +16,6 @@ public class PlayerInteraction : MonoBehaviour
     [Header("Request Generator")]
     public RequestGenerator requestGenerator;
 
-    SoundManager soundManager;
-
-    private void Awake()
-    {
-        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
-    }
 
     private void Start()
     {
@@ -47,6 +41,7 @@ public class PlayerInteraction : MonoBehaviour
             Interact();
         }
     }
+
 
     void CheckForInteractable()
     {
@@ -115,15 +110,23 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
+        // Book
+        BookInteraction book =
+            hit.collider.GetComponent<BookInteraction>();
+
+        if (book != null)
+        {
+            book.OpenBook();
+            return;
+        }
 
         // Request Paper
         RequestPaper request =
-            hit.collider.GetComponent<RequestPaper>(); 
+            hit.collider.GetComponent<RequestPaper>();
 
         if (request != null)
         {
             request.AcceptRequest();
-            soundManager.PlaySFX(soundManager.Request); 
 
             if (requestGenerator != null)
             {

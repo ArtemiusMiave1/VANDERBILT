@@ -300,18 +300,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 893401499519047300}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.23548344, y: 0.18218374, z: 0.83717036}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8571213885580944097}
   - {fileID: 7166222699622973331}
-  m_Father: {fileID: 1049392748218506012}
+  m_Father: {fileID: 1301048322477735006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 13, y: -16}
+  m_AnchoredPosition: {x: 3.0612879, y: -2.9149399}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &977836556545874815
@@ -341,15 +341,15 @@ RectTransform:
   m_GameObject: {fileID: 977836556545874815}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.17928532, y: 0.13870558, z: 0.63737965}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1301048322477735006}
+  m_Father: {fileID: 1863371996259598004}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41.939613, y: 44.543926}
-  m_SizeDelta: {x: -51.7, y: -57.2}
+  m_AnchoredPosition: {x: 0.00008010864, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1270095332400364689
 CanvasRenderer:
@@ -1034,16 +1034,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3245750007461632028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.23548344, y: 0.18218374, z: 0.83717036}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5910283991322016296}
   - {fileID: 4910720764032074319}
   - {fileID: 2046469133575675081}
   - {fileID: 8907191538894992536}
-  m_Father: {fileID: 1049392748218506012}
+  m_Father: {fileID: 1301048322477735006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1170,7 +1170,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2854636013191086156}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8107458282384877573}
+        m_TargetAssemblyTypeName: Book, Assembly-CSharp
+        m_MethodName: PreviousPage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4399694295478117867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,16 +1343,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4525954628406725240}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.23548344, y: 0.18218374, z: 0.83717036}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4553876522652018889}
   - {fileID: 8277271426555291782}
   - {fileID: 3478881694809175541}
   - {fileID: 8878460409480770838}
-  m_Father: {fileID: 1049392748218506012}
+  m_Father: {fileID: 1301048322477735006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1570,7 +1582,7 @@ GameObject:
   - component: {fileID: 5402846459568410831}
   - component: {fileID: 7417867341110060094}
   m_Layer: 5
-  m_Name: Next (1)
+  m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1587,7 +1599,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.17928532, y: 0.13870558, z: 0.63737965}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3723806784922233621}
   m_Father: {fileID: 1301048322477735006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1676,7 +1689,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5402846459568410831}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8107458282384877573}
+        m_TargetAssemblyTypeName: Book, Assembly-CSharp
+        m_MethodName: CloseBook
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5818314908262706542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1700,18 +1725,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5818314908262706542}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0796, y: 1.0796, z: 1.0796}
+  m_LocalScale: {x: 0.2542279, y: 0.19668557, z: 0.90380913}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3359540144644904875}
   - {fileID: 399953554135422768}
-  m_Father: {fileID: 1049392748218506012}
+  m_Father: {fileID: 1301048322477735006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 46}
+  m_AnchoredPosition: {x: 0, y: 8.380459}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6235673040372830524
@@ -1834,7 +1859,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7991641708921144503}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8107458282384877573}
+        m_TargetAssemblyTypeName: Book, Assembly-CSharp
+        m_MethodName: NextPage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6312261038234877231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,16 +1967,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6616304893069399434}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.23548344, y: 0.18218374, z: 0.83717036}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6357904555480306486}
   - {fileID: 1557814312895137223}
   - {fileID: 5990276300928601790}
   - {fileID: 6389424557407383629}
-  m_Father: {fileID: 1049392748218506012}
+  m_Father: {fileID: 1301048322477735006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1963,7 +2000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1301048322477735006
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1977,9 +2014,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1863371996259598004}
-  - {fileID: 3723806784922233621}
   - {fileID: 128151814638946610}
   - {fileID: 6950377440357235964}
+  - {fileID: 4032371807648661422}
+  - {fileID: 8101674498896796669}
+  - {fileID: 5514880283304443355}
+  - {fileID: 6095397181691603875}
+  - {fileID: 128283546725076146}
   m_Father: {fileID: 1049392748218506012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2740,6 +2781,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1049392748218506012}
+  - component: {fileID: 8107458282384877573}
   m_Layer: 5
   m_Name: Instruction Book
   m_TagString: Untagged
@@ -2760,11 +2802,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1301048322477735006}
-  - {fileID: 4032371807648661422}
-  - {fileID: 8101674498896796669}
-  - {fileID: 5514880283304443355}
-  - {fileID: 6095397181691603875}
-  - {fileID: 128283546725076146}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2772,3 +2809,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8107458282384877573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9133809162992733525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e771616c50fb17f42bd5b65834b4582a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Book
+  bookCanvas: {fileID: 7037943563328524079}
+  pages:
+  - {fileID: 6616304893069399434}
+  - {fileID: 893401499519047300}
+  - {fileID: 5818314908262706542}
+  - {fileID: 893401499519047300}
+  - {fileID: 4525954628406725240}
+  - {fileID: 893401499519047300}
+  - {fileID: 3245750007461632028}
+  - {fileID: 893401499519047300}
+  - {fileID: 893401499519047300}
+  leftPageButton: {fileID: 4128101114119454489}
+  rightPageButton: {fileID: 749226418282270455}
+  exitButton: {fileID: 7417867341110060094}
+  playerState: {fileID: 0}

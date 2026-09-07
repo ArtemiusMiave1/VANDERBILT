@@ -86,21 +86,11 @@ public class ShipMovement : MonoBehaviour
         {
             UpdateMovement();
         }
-
-
-        // =====================================================
-        // ROUTE PREVIEW
-        // =====================================================
-
-        if (Input.GetMouseButton(1))
-        {
-            UpdateRoutePreview();
-        }
-        else
-        {
-            RemoveRoutePreview();
-        }
     }
+
+    // =========================================================
+    // START ROUTE PLACEMENT
+    // =========================================================
 
 
     // =========================================================
@@ -470,23 +460,22 @@ public class ShipMovement : MonoBehaviour
     {
         route.Clear();
 
+        targetLocation = null;
+        moving = false;
 
-        if (!moving)
-            targetLocation = null;
+        if (routeLine != null)
+        {
+            routeLine.positionCount = 0;
+        }
 
-
-        UpdateRouteLine();
-
-
-        //Debug.Log("Route cleared.");
+        Debug.Log("Route cleared.");
     }
-
 
     // =========================================================
     // ROUTE LINE
     // =========================================================
 
-    private void UpdateRouteLine()
+    public void UpdateRouteLine()
     {
         if (routeLine == null)
             return;
@@ -633,23 +622,34 @@ public class ShipMovement : MonoBehaviour
     // CLICK LOCATION
     // =========================================================
 
-    public void HandleRouteLocation(Location location)
+    public void HandleRouteLocation(Location location, bool rightClick = false)
     {
         if (location == null)
             return;
 
 
-        // -----------------------------------------
-        // REMOVE LAST LOCATION
-        // -----------------------------------------
+        // =====================================================
+        // RIGHT CLICK
+        // ONLY REMOVE THE END OF THE ROUTE
+        // =====================================================
 
-        if (route.Count > 0 &&
-            route[route.Count - 1] == location)
+        if (rightClick)
         {
-            route.RemoveAt(
-                route.Count - 1
-            );
+            // Nothing to remove
+            if (route.Count == 0)
+                return;
 
+            // Only allow removing the LAST location
+            if (route[route.Count - 1] != location)
+            {
+                Debug.Log(
+                    "Can only remove the end location of the route."
+                );
+
+                return;
+            }
+
+            route.RemoveAt(route.Count - 1);
 
             Debug.Log(
                 "Removed " +
@@ -658,20 +658,19 @@ public class ShipMovement : MonoBehaviour
             );
 
 
-            if (moving)
+            // Update movement
+            if (route.Count > 0)
             {
-                if (route.Count > 0)
+                if (moving)
                 {
-                    targetLocation =
-                        route[0];
-                }
-                else
-                {
-                    targetLocation = null;
-                    moving = false;
+                    targetLocation = route[0];
                 }
             }
-
+            else
+            {
+                targetLocation = null;
+                moving = false;
+            }
 
             UpdateRouteLine();
 
@@ -679,20 +678,21 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // -----------------------------------------
-        // DON'T ADD DUPLICATES
-        // -----------------------------------------
+        // =====================================================
+        // LEFT CLICK
+        // ADD LOCATION TO ROUTE
+        // =====================================================
 
+        if (location == currentLocation)
+            return;
+
+        // Don't allow duplicate locations
         if (route.Contains(location))
             return;
 
 
-        // -----------------------------------------
-        // FIND PREVIOUS LOCATION
-        // -----------------------------------------
-
+        // Find the previous location
         Location previousLocation;
-
 
         if (route.Count > 0)
         {
@@ -706,16 +706,15 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // -----------------------------------------
-        // FIND CONNECTION
-        // -----------------------------------------
+        // =====================================================
+        // CHECK CONNECTION
+        // =====================================================
 
         RouteConnection connection =
             GetRouteConnection(
                 previousLocation,
                 location
             );
-
 
         if (connection == null)
         {
@@ -729,59 +728,56 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // -----------------------------------------
+        // =====================================================
         // CHECK BLOCKED
-        // -----------------------------------------
+        // =====================================================
 
         if (connection.blocked)
         {
             Debug.Log(
-                "This route is blocked!"
+                "Route to " +
+                location.name +
+                " is blocked!"
             );
 
             return;
         }
 
 
-        // -----------------------------------------
+        // =====================================================
         // ADD LOCATION
-        // -----------------------------------------
+        // =====================================================
 
         route.Add(location);
 
-
-        //Debug.Log(
-        //    "Added " +
-        //    location.name +
-        //    " to route."
-        //);
-
-
         Debug.Log(
-            "Danger Level: " +
-            connection.dangerLevel
+            "Added " +
+            location.name +
+            " to route."
         );
 
+        Debug.Log(
+            "Route contains " +
+            route.Count +
+            " locations."
+        );
+
+
+        // =====================================================
+        // UPDATE ROUTE LINE
+        // =====================================================
 
         UpdateRouteLine();
 
 
-        // -----------------------------------------
+        // =====================================================
         // START MOVEMENT
-        // -----------------------------------------
+        // =====================================================
 
         if (!moving)
         {
-            targetLocation =
-                route[0];
-
+            targetLocation = route[0];
             moving = true;
-
-
-            //Debug.Log(
-            //    "Ship travelling to " +
-            //    targetLocation.name
-            //);
         }
     }
 
