@@ -461,6 +461,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 506770117258611603, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506770117258611603, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506770117258611603, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506770117258611603, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
     - target: {fileID: 3271361826690844679, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -553,6 +569,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 6291362425492585517, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2393871961988881153, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3576646897543611636, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
