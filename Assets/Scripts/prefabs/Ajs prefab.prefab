@@ -5220,10 +5220,22 @@ PrefabInstance:
       propertyPath: enableRunning
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 75303882855775873, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 83745592726637968, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2074653843199495003, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
       propertyPath: interactionImage
       value: 
       objectReference: {fileID: 6725070012240423450}
+    - target: {fileID: 2768972229930925500, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5364653130586593317, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
       propertyPath: shipCargo
       value: 
