@@ -142,6 +142,7 @@ public class RequestPaper : MonoBehaviour
                 "No CorkBoard found!"
             );
         }
+        soundManager.PlaySFX(soundManager.Request);
     }
 
 
