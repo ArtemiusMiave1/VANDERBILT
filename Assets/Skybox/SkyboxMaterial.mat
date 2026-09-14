@@ -100,15 +100,15 @@ Material:
     - _AlphaToMask: 0
     - _AtmosphereThickness: 1
     - _Blend: 0
-    - _BlendHeight: 0.18
+    - _BlendHeight: -0.43
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CloudDensity: 0.683
+    - _CloudDensity: 0.156
     - _CloudIntensity: 1
-    - _CloudScale: 187.66
-    - _CloudScatter: 0.856
+    - _CloudScale: 188.28
+    - _CloudScatter: 0.546
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
