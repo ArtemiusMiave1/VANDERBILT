@@ -1045,7 +1045,7 @@ MonoBehaviour:
   m_text: 'Left Click and Hold to interact with the map and direct your route around
     the area.
 
-    TRY TO STEER CLEAR OF DANGER ROUTES!!!'
+    !TRY TO STEER CLEAR OF DANGEROUS ROUTES!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
@@ -2614,15 +2614,15 @@ RectTransform:
   m_GameObject: {fileID: 7073538669625355590}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.8308837, y: 3.8308837, z: 3.8308837}
+  m_LocalScale: {x: 3.2041264, y: 3.2041264, z: 3.2041264}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 128283546725076146}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8.9, y: 88}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -14.4664, y: 96.25068}
+  m_SizeDelta: {x: 102.2886, y: 105.1631}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &597787570342895858
 CanvasRenderer:
@@ -2895,15 +2895,15 @@ RectTransform:
   m_GameObject: {fileID: 7384002456386461280}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.508447, y: 3.508447, z: 3.508447}
+  m_LocalScale: {x: 3.0555058, y: 3.0555058, z: 3.0555058}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8101674498896796669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 45.2}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 41.895}
+  m_SizeDelta: {x: 100, y: 104.07}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7860752977902810931
 CanvasRenderer:
