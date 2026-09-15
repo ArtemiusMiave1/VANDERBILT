@@ -23,38 +23,32 @@ public class RequestPaper : MonoBehaviour
     [Header("Cork Board")]
     public CorkBoard corkBoard;
 
-    // Request data
+    [Header("Sound")]
+    public AudioSource audioSource;
+    public AudioClip requestAcceptedSound;
+    public AudioClip requestCompletedSound;
+
     private RequestData request;
 
-    // Is this request currently active?
     public bool activeRequest = false;
 
-    // Timer
     private float timeRemaining;
     private bool timerRunning = false;
-
-
-    SoundManager soundManager;
 
     private void Awake()
     {
         corkBoard = FindObjectOfType<CorkBoard>();
-        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
     }
-
 
     private void Update()
     {
         if (!activeRequest || !timerRunning)
             return;
 
-        // Count down
         timeRemaining -= Time.deltaTime;
 
-        // Update UI
         UpdateTimerDisplay();
 
-        // Request expired
         if (timeRemaining <= 0f)
         {
             timeRemaining = 0f;
@@ -64,12 +58,11 @@ public class RequestPaper : MonoBehaviour
         }
     }
 
-
     public void DisplayRequest(RequestData data)
     {
         request = data;
 
-        titleText.text = data.Title;SetLocationIcon();
+        titleText.text = data.Title;
 
         factionText.text =
             "Faction: " + data.Faction;
@@ -89,24 +82,27 @@ public class RequestPaper : MonoBehaviour
         dialogueText.text =
             data.Dialogue;
 
-        // Show the time limit before the request is accepted
-        timeRemaining = data.TimeLimit;
+        timeRemaining =
+            data.TimeLimit;
+
+        SetLocationIcon();
         SetResourceIcon();
         UpdateTimerDisplay();
     }
-
 
     public void AssignLocation(Location location)
     {
         targetLocation = location;
 
-        // Don't highlight yet.
-        // The request isn't active until accepted.
         SetLocationIcon();
     }
 
-
-    // Called when the player clicks the request
+    // ---------------------------------------------------------
+    // OLD DIRECT ACCEPT METHOD
+    // ---------------------------------------------------------
+    // This can still exist, but with the new pickup system
+    // the player should normally use E to pick up the paper
+    // and E again while looking at the corkboard.
     public void AcceptRequest()
     {
         if (activeRequest)
@@ -119,19 +115,26 @@ public class RequestPaper : MonoBehaviour
             request.Title
         );
 
-        // Start timer
-        timeRemaining = request.TimeLimit;
+        timeRemaining =
+            request.TimeLimit;
+
         timerRunning = true;
+
+        if (audioSource != null &&
+            requestAcceptedSound != null)
+        {
+            audioSource.PlayOneShot(
+                requestAcceptedSound
+            );
+        }
 
         UpdateTimerDisplay();
 
-        // Highlight destination
         if (targetLocation != null)
         {
             targetLocation.Highlight();
         }
 
-        // Move request onto corkboard
         if (corkBoard != null)
         {
             corkBoard.AddRequest(this);
@@ -142,9 +145,49 @@ public class RequestPaper : MonoBehaviour
                 "No CorkBoard found!"
             );
         }
-        soundManager.PlaySFX(soundManager.Request);
+        //soundManager.PlaySFX(soundManager.Request);
     }
 
+    // ---------------------------------------------------------
+    // ACCEPT FROM CORK BOARD
+    // ---------------------------------------------------------
+
+    public void AcceptFromBoard()
+    {
+        if (activeRequest)
+            return;
+
+        activeRequest = true;
+
+        Debug.Log(
+            "Accepted Request: " +
+            request.Title
+        );
+
+        timeRemaining =
+            request.TimeLimit;
+
+        timerRunning = true;
+
+        if (audioSource != null &&
+            requestAcceptedSound != null)
+        {
+            audioSource.PlayOneShot(
+                requestAcceptedSound
+            );
+        }
+
+        UpdateTimerDisplay();
+
+        if (targetLocation != null)
+        {
+            targetLocation.Highlight();
+        }
+    }
+
+    // ---------------------------------------------------------
+    // TIMER
+    // ---------------------------------------------------------
 
     private void UpdateTimerDisplay()
     {
@@ -152,10 +195,14 @@ public class RequestPaper : MonoBehaviour
             return;
 
         int minutes =
-            Mathf.FloorToInt(timeRemaining / 60f);
+            Mathf.FloorToInt(
+                timeRemaining / 60f
+            );
 
         int seconds =
-            Mathf.FloorToInt(timeRemaining % 60f);
+            Mathf.FloorToInt(
+                timeRemaining % 60f
+            );
 
         timerText.text =
             string.Format(
@@ -165,6 +212,10 @@ public class RequestPaper : MonoBehaviour
             );
     }
 
+    // ---------------------------------------------------------
+    // GET REQUEST TITLE
+    // ---------------------------------------------------------
+
     public string GetRequestTitle()
     {
         if (request == null)
@@ -173,11 +224,18 @@ public class RequestPaper : MonoBehaviour
         return request.Title;
     }
 
+    // ---------------------------------------------------------
+    // LOCATION ICON
+    // ---------------------------------------------------------
+
     private void SetLocationIcon()
     {
         if (targetLocation == null)
         {
-            Debug.LogWarning("Request has no target location.");
+            Debug.LogWarning(
+                "Request has no target location."
+            );
+
             return;
         }
 
@@ -199,14 +257,13 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
+        string iconName =
+            targetLocation.locationType.Name;
 
-        // Get the location type name
-        string iconName = targetLocation.locationType.Name;
-
-        // Load material from Resources/Icons
         Material iconMaterial =
-            Resources.Load<Material>("Icons/" + iconName);
-
+            Resources.Load<Material>(
+                "Icons/" + iconName
+            );
 
         if (iconMaterial == null)
         {
@@ -219,25 +276,21 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
-
-        // Apply material to the plane
-        locationIcon.material = iconMaterial;
-
-        Debug.Log(
-            "Set request icon to: " +
-            iconName
-        );
+        locationIcon.material =
+            iconMaterial;
     }
+
+    // ---------------------------------------------------------
+    // SHIP ARRIVES
+    // ---------------------------------------------------------
+
     public void OnShipArrived(Location location)
     {
-        // Ignore inactive requests
         if (!activeRequest)
             return;
 
-        // Ignore wrong location
         if (location != targetLocation)
             return;
-
 
         ShipCargo shipCargo =
             FindObjectOfType<ShipCargo>();
@@ -251,12 +304,10 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
-
         int cargoAmount =
             shipCargo.GetResourceAmount(
                 request.RequestedResources
             );
-
 
         if (cargoAmount >= request.RequestedAmount)
         {
@@ -275,6 +326,9 @@ public class RequestPaper : MonoBehaviour
         }
     }
 
+    // ---------------------------------------------------------
+    // COMPLETE REQUEST
+    // ---------------------------------------------------------
 
     private void CompleteRequest(
         ShipCargo shipCargo
@@ -285,10 +339,16 @@ public class RequestPaper : MonoBehaviour
             request.Title
         );
 
-        // Stop timer
         timerRunning = false;
         activeRequest = false;
 
+        if (audioSource != null &&
+            requestCompletedSound != null)
+        {
+            audioSource.PlayOneShot(
+                requestCompletedSound
+            );
+        }
 
         // Remove requested resources
         shipCargo.AddOrRemoveResource(
@@ -296,32 +356,28 @@ public class RequestPaper : MonoBehaviour
             -request.RequestedAmount
         );
 
-
-        // Give reward
+        // Add reward
         shipCargo.AddOrRemoveResource(
             request.Reward,
             request.RewardAmount
         );
 
-
-        // Remove highlight
         if (targetLocation != null)
         {
             targetLocation.ClearHighlight();
         }
 
-
-        // Remove from corkboard
         if (corkBoard != null)
         {
             corkBoard.RemoveRequest(this);
         }
 
-        soundManager.PlaySFX(soundManager.RequestComplete);
-        // Destroy request
         Destroy(gameObject);
     }
 
+    // ---------------------------------------------------------
+    // REQUEST EXPIRES
+    // ---------------------------------------------------------
 
     private void ExpireRequest()
     {
@@ -332,24 +388,22 @@ public class RequestPaper : MonoBehaviour
 
         activeRequest = false;
 
-
-        // Remove location highlight
         if (targetLocation != null)
         {
             targetLocation.ClearHighlight();
         }
 
-
-        // Remove from corkboard
         if (corkBoard != null)
         {
             corkBoard.RemoveRequest(this);
         }
 
-
-        // Destroy request
         Destroy(gameObject);
     }
+
+    // ---------------------------------------------------------
+    // RESOURCE ICON
+    // ---------------------------------------------------------
 
     private void SetResourceIcon()
     {
@@ -362,7 +416,6 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
-
         if (request == null)
         {
             Debug.LogWarning(
@@ -372,32 +425,25 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
-
-        // Get resource name from request
         string iconName =
             request.RequestedResources;
 
-
-        // Load material from Resources/Icons
         Material iconMaterial =
             Resources.Load<Material>(
                 "ResourceIcons/" + iconName
             );
-
 
         if (iconMaterial == null)
         {
             Debug.LogWarning(
                 "Could not find resource icon: " +
                 iconName +
-                " in Resources/Icons/"
+                " in Resources/ResourceIcons/"
             );
 
             return;
         }
 
-
-        // Apply material to plane
         resourceIcon.material =
             iconMaterial;
     }

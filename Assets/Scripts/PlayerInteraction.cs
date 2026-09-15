@@ -128,10 +128,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             request.AcceptRequest();
 
-            if (requestGenerator != null)
-            {
-                requestGenerator.removeRequest(request);
-            }
 
             return;
         }
