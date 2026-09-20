@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
-public class Book : MonoBehaviour
+public class TutBook : BookBase
 {
-    [Header("Book Canvas")]
+          [Header("Book Canvas")]
     public GameObject bookCanvas;
 
     [Header("Pages")]
@@ -45,7 +45,7 @@ public class Book : MonoBehaviour
         }
     }
 
-    public void OpenBook()
+    public override void OpenBook()
     {
         bookCanvas.SetActive(true);
 

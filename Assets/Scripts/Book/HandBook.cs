@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
-public class GlossaryBook : MonoBehaviour
+public class HandBook : BookBase
 {
     [Header("Book Canvas")]
     public GameObject bookCanvas;
@@ -10,10 +10,13 @@ public class GlossaryBook : MonoBehaviour
     [Header("Pages")]
     public GameObject[] pages;
 
-    [Header("Buttons")]
-    public Button leftPageButton;
-    public Button rightPageButton;
+    [Header("Page Buttons")]
+    public Button IndexPageButton;
+    public Button LocationPageButton;
+    public Button RequestsPageButton;
+    public Button RoutesPageButton;
     public Button exitButton;
+
 
     [Header("Player")]
     public PlayerState playerState;
@@ -22,21 +25,39 @@ public class GlossaryBook : MonoBehaviour
 
     private void Start()
     {
-        // Make sure the book starts closed
+        // Start with the book closed
         if (bookCanvas != null)
         {
             bookCanvas.SetActive(false);
         }
 
-        // Connect buttons
-        if (leftPageButton != null)
+        // Connect page buttons
+        if (IndexPageButton != null)
         {
-            leftPageButton.onClick.AddListener(PreviousPage);
+            IndexPageButton.onClick.AddListener(
+                () => GoToPage(0)
+            );
         }
 
-        if (rightPageButton != null)
+        if (LocationPageButton != null)
         {
-            rightPageButton.onClick.AddListener(NextPage);
+            LocationPageButton.onClick.AddListener(
+                () => GoToPage(1)
+            );
+        }
+
+        if (RequestsPageButton != null)
+        {
+            RequestsPageButton.onClick.AddListener(
+                () => GoToPage(2)
+            );
+        }
+
+        if (RoutesPageButton != null)
+        {
+            RoutesPageButton.onClick.AddListener(
+                () => GoToPage(3)
+            );
         }
 
         if (exitButton != null)
@@ -45,7 +66,7 @@ public class GlossaryBook : MonoBehaviour
         }
     }
 
-    public void OpenBook()
+    public override void OpenBook()
     {
         bookCanvas.SetActive(true);
 
@@ -63,32 +84,27 @@ public class GlossaryBook : MonoBehaviour
 
     public void CloseBook()
     {
-        bookCanvas.SetActive(false);
+        if (bookCanvas != null)
+        {
+            bookCanvas.SetActive(false);
+        }
 
         if (playerState != null)
         {
-            playerState.SetState(
-                PlayerState.State.Gameplay
-            );
+            playerState.SetState(PlayerState.State.Gameplay);
         }
     }
 
-    public void NextPage()
+    // Go directly to a specific page
+    public void GoToPage(int pageNumber)
     {
-        if (currentPage >= pages.Length - 1)
+        // Make sure the page exists
+        if (pageNumber < 0 || pageNumber >= pages.Length)
+        {
             return;
+        }
 
-        currentPage++;
-
-        UpdatePages();
-    }
-
-    public void PreviousPage()
-    {
-        if (currentPage <= 0)
-            return;
-
-        currentPage--;
+        currentPage = pageNumber;
 
         UpdatePages();
     }
@@ -111,17 +127,6 @@ public class GlossaryBook : MonoBehaviour
             pages[currentPage].SetActive(true);
         }
 
-        // Disable buttons at the ends
-        if (leftPageButton != null)
-        {
-            leftPageButton.interactable =
-                currentPage > 0;
-        }
 
-        if (rightPageButton != null)
-        {
-            rightPageButton.interactable =
-                currentPage < pages.Length - 1;
-        }
     }
 }
