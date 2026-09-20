@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 41fc50323bfd13b428b5cfb577877a29, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.98
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 41fc50323bfd13b428b5cfb577877a29, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.077
       objectReference: {fileID: 0}
@@ -90,4 +94,4 @@ MonoBehaviour:
   fuelLiquid: {fileID: 5056710614175971190}
   maximumFuel: 100
   minimumHeight: 0.05
-  maximumHeight: 1
+  maximumHeight: 0.98

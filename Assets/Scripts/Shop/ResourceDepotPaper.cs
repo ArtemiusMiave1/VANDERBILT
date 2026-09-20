@@ -14,6 +14,7 @@ public class ResourceDepotPaper : MonoBehaviour
     public TMP_Text totalText;
     public TMP_Text goldText;
     public TMP_Text remainingGoldText;
+    public TMP_Text purchaseWeight;
     public TMP_Text warningText;
 
     [Header("Purchase")]
@@ -50,12 +51,18 @@ public class ResourceDepotPaper : MonoBehaviour
 
         remainingGoldText.text =
             "AFTER PURCHASE: " + remainingGold + " Gold";
+        purchaseWeight.text = "weight " +  CalculateTotalWeight();
 
 
         // Check whether the player can afford the order
         if (remainingGold < 0)
         {
             warningText.text = "NOT ENOUGH GOLD!";
+            purchaseButton.interactable = false;
+        }
+        else if (CheckOverWeight())
+        {
+            warningText.text = "Over Weight!";
             purchaseButton.interactable = false;
         }
         else
@@ -81,9 +88,33 @@ public class ResourceDepotPaper : MonoBehaviour
         return total;
     }
 
+    public float CalculateTotalWeight()
+    {
+        float tempWeight = 0;
+        foreach (ResourceOrderRow row in orderRows)
+        {
+            if (row == null)
+                continue;
+
+            int amount = row.GetAmount();
+            float resourceWeight = shipCargo.GetResourceWeight(row.resourceType);
+            tempWeight += amount * resourceWeight;
+        }
+        return tempWeight;
+    }
+
+    public bool CheckOverWeight()
+    {
+        if (CalculateTotalWeight() > shipCargo.GetRemainingCargoCapacity())
+            return true;
+        else return false;
+    }
+
 
     public void PurchaseOrder()
     {
+        if (CheckOverWeight()) return;
+        
         if (shipCargo == null)
         {
             Debug.LogError("Ship Cargo has not been assigned!");
