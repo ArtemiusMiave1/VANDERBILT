@@ -557,10 +557,10 @@ MonoBehaviour:
   requestPaperPrefab: {fileID: 4937778293386024193, guid: f51552f02b8282b4680c3f18267839e5, type: 3}
   spawnLocation: {fileID: 2678145755853436121}
   requestsToSpawn: 3
-  spawnDistance: 2
+  spawnInterval: 0.6
   requestLineManager: {fileID: 3560082562944976126}
   automaticSpawning: 1
-  spawnInterval: 45
+  automaticSpawnInterval: 45
   spawn: 0
 --- !u!1 &7366574261125935316
 GameObject:

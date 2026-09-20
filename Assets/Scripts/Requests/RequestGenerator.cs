@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RequestGenerator : MonoBehaviour
@@ -9,86 +10,261 @@ public class RequestGenerator : MonoBehaviour
     [Header("Spawn Settings")]
     public Transform spawnLocation;
 
+    [Tooltip("How many requests to try spawning in one group.")]
     public int requestsToSpawn = 3;
-    public float spawnDistance = 2f;
+
+    [Tooltip("Time between each individual request spawning.")]
+    public float spawnInterval = 5f;
 
     [Header("Request Line")]
     public RequestLineManager requestLineManager;
 
     [Header("Automatic Spawning")]
     public bool automaticSpawning = true;
-    public float spawnInterval = 45f;
+
+    [Tooltip("Time between automatic request groups.")]
+    public float automaticSpawnInterval = 45f;
 
     [Header("Manual Spawn")]
     public bool spawn = false;
 
+    private bool currentlySpawning = false;
+
+
     private void Start()
     {
         if (requestLineManager == null)
-            requestLineManager = FindObjectOfType<RequestLineManager>();
+        {
+            requestLineManager =
+                FindObjectOfType<RequestLineManager>();
+        }
 
-        GenerateRequests();
+        // Spawn the first group when the game starts.
+        StartCoroutine(SpawnRequestGroup());
 
+        // Start automatic spawning.
         if (automaticSpawning)
         {
             InvokeRepeating(
-                nameof(GenerateRequests),
-                spawnInterval,
-                spawnInterval
+                nameof(StartAutomaticSpawn),
+                automaticSpawnInterval,
+                automaticSpawnInterval
             );
         }
     }
 
+
     private void Update()
     {
+        // Manual spawning from the Inspector.
         if (spawn)
         {
             spawn = false;
-            GenerateRequests();
+
+            if (!currentlySpawning)
+            {
+                StartCoroutine(SpawnRequestGroup());
+            }
         }
     }
+
 
     private void OnDestroy()
     {
-        CancelInvoke(nameof(GenerateRequests));
+        CancelInvoke(
+            nameof(StartAutomaticSpawn)
+        );
     }
 
-    public void GenerateRequests()
+
+    private void StartAutomaticSpawn()
     {
-
-        // Spawn the requested number of new requests
-        int availableSlots =
-            requestLineManager.maxRequests -
-            requestLineManager.requests.Count;
-
-        int amountToSpawn =
-            Mathf.Min(requestsToSpawn, availableSlots);
-
-        for (int i = 0; i < amountToSpawn; i++)
+        if (!currentlySpawning)
         {
+            StartCoroutine(SpawnRequestGroup());
+        }
+    }
+
+
+    private IEnumerator SpawnRequestGroup()
+    {
+        if (currentlySpawning)
+            yield break;
+
+        currentlySpawning = true;
+
+        for (int i = 0; i < requestsToSpawn; i++)
+        {
+            if (requestLineManager == null)
+            {
+                Debug.LogError(
+                    "RequestGenerator: RequestLineManager not found!"
+                );
+
+                break;
+            }
+
+            // Stop spawning if the top request line is full.
+            if (!requestLineManager.HasSpace())
+            {
+                Debug.Log(
+                    "Request line is full. Stopping request generation."
+                );
+
+                break;
+            }
+
             Vector3 spawnPoint =
                 spawnLocation.position;
 
-            SpawnAvailableRequest(spawnPoint);
+            SpawnAvailableRequest(
+                spawnPoint
+            );
+
+            // Wait before spawning the next request.
+            if (i < requestsToSpawn - 1)
+            {
+                yield return new WaitForSeconds(
+                    spawnInterval
+                );
+            }
+        }
+
+        currentlySpawning = false;
+    }
+
+
+    public void GenerateRequests()
+    {
+        if (!currentlySpawning)
+        {
+            StartCoroutine(
+                SpawnRequestGroup()
+            );
         }
     }
 
-    private GameObject SpawnAvailableRequest(Vector3 spawnPoint)
+
+    private GameObject SpawnAvailableRequest(
+        Vector3 spawnPoint
+    )
     {
+        // -----------------------------
+        // Check GameDatabase
+        // -----------------------------
+
+        if (GameDatabase.Instance == null)
+        {
+            Debug.LogError(
+                "RequestGenerator: GameDatabase not found!"
+            );
+
+            return null;
+        }
+
+        if (GameDatabase.Instance.Requests.Count == 0)
+        {
+            Debug.LogWarning(
+                "RequestGenerator: No requests loaded!"
+            );
+
+            return null;
+        }
+
+
+        // -----------------------------
+        // Check LocationManager
+        // -----------------------------
+
+        if (LocationManager.Instance == null)
+        {
+            Debug.LogError(
+                "RequestGenerator: LocationManager not found!"
+            );
+
+            return null;
+        }
+
+        if (LocationManager.Instance.locations.Count == 0)
+        {
+            Debug.LogWarning(
+                "RequestGenerator: No locations found!"
+            );
+
+            return null;
+        }
+
+
+        // -----------------------------
+        // Check Spawn Location
+        // -----------------------------
+
+        if (spawnLocation == null)
+        {
+            Debug.LogError(
+                "RequestGenerator: Spawn Location has not been assigned!"
+            );
+
+            return null;
+        }
+
+
+        // -----------------------------
+        // Check Request Prefab
+        // -----------------------------
+
+        if (requestPaperPrefab == null)
+        {
+            Debug.LogError(
+                "RequestGenerator: Request Paper Prefab has not been assigned!"
+            );
+
+            return null;
+        }
+
+
+        // -----------------------------
+        // Check Request Line
+        // -----------------------------
+
+        if (requestLineManager == null)
+        {
+            Debug.LogError(
+                "RequestGenerator: Request Line Manager has not been assigned!"
+            );
+
+            return null;
+        }
+
+
+        // -----------------------------
+        // Find Valid Requests
+        // -----------------------------
+
         List<RequestData> validRequests =
             new List<RequestData>();
 
-        // Find requests that have a matching location
-        foreach (RequestData request in GameDatabase.Instance.Requests)
+        foreach (
+            RequestData request
+            in GameDatabase.Instance.Requests
+        )
         {
+            if (request == null)
+                continue;
+
             List<Location> matchingLocations =
-                FindLocationsForRequest(request);
+                FindLocationsForRequest(
+                    request
+                );
 
             if (matchingLocations.Count > 0)
             {
-                validRequests.Add(request);
+                validRequests.Add(
+                    request
+                );
             }
         }
+
 
         if (validRequests.Count == 0)
         {
@@ -99,7 +275,11 @@ public class RequestGenerator : MonoBehaviour
             return null;
         }
 
-        // Pick a random request
+
+        // -----------------------------
+        // Select Random Request
+        // -----------------------------
+
         RequestData selectedRequest =
             validRequests[
                 Random.Range(
@@ -108,9 +288,15 @@ public class RequestGenerator : MonoBehaviour
                 )
             ];
 
-        // Find locations that can receive this request
+
+        // -----------------------------
+        // Find Target Location
+        // -----------------------------
+
         List<Location> matchingLocationsForRequest =
-            FindLocationsForRequest(selectedRequest);
+            FindLocationsForRequest(
+                selectedRequest
+            );
 
         if (matchingLocationsForRequest.Count == 0)
         {
@@ -122,7 +308,7 @@ public class RequestGenerator : MonoBehaviour
             return null;
         }
 
-        // Pick a random target location
+
         Location targetLocation =
             matchingLocationsForRequest[
                 Random.Range(
@@ -131,7 +317,11 @@ public class RequestGenerator : MonoBehaviour
                 )
             ];
 
-        // Create the request paper
+
+        // -----------------------------
+        // Create Request Paper
+        // -----------------------------
+
         GameObject paper =
             Instantiate(
                 requestPaperPrefab,
@@ -139,6 +329,7 @@ public class RequestGenerator : MonoBehaviour
                 Quaternion.identity,
                 spawnLocation
             );
+
 
         RequestPaper requestPaper =
             paper.GetComponent<RequestPaper>();
@@ -150,29 +341,72 @@ public class RequestGenerator : MonoBehaviour
             );
 
             Destroy(paper);
+
             return null;
         }
 
-        // Give the paper its request data
-        requestPaper.DisplayRequest(selectedRequest);
 
-        // Give it a target location
-        requestPaper.AssignLocation(targetLocation);
+        // -----------------------------
+        // Display Request Information
+        // -----------------------------
 
-        // Add request to target location
-        if (!targetLocation.activeRequests.Contains(requestPaper))
+        requestPaper.DisplayRequest(
+            selectedRequest
+        );
+
+        requestPaper.AssignLocation(
+            targetLocation
+        );
+
+
+        // -----------------------------
+        // Set Estimated Arrival
+        // -----------------------------
+
+        requestPaper.SetEstimatedArrival();
+
+
+        // -----------------------------
+        // Add Request To Location
+        // -----------------------------
+
+        if (
+            !targetLocation.activeRequests.Contains(
+                requestPaper
+            )
+        )
         {
-            targetLocation.activeRequests.Add(requestPaper);
+            targetLocation.activeRequests.Add(
+                requestPaper
+            );
         }
 
+
+        // -----------------------------
+        // Add Request To Top Line
+        // -----------------------------
+
         bool added =
-            requestLineManager.AddNewRequest(paper);
+            requestLineManager.AddNewRequest(
+                paper
+            );
 
         if (!added)
         {
             Destroy(paper);
+
             return null;
         }
+
+
+        // -----------------------------
+        // Debug
+        // -----------------------------
+
+        string locationName =
+            targetLocation.locationType != null
+                ? targetLocation.locationType.Name
+                : "Unknown";
 
         Debug.Log(
             "Generated Request: " +
@@ -180,21 +414,32 @@ public class RequestGenerator : MonoBehaviour
             " → " +
             targetLocation.name +
             " (" +
-            targetLocation.locationType.Name +
+            locationName +
             ")"
         );
 
         return paper;
     }
 
+
     private List<Location> FindLocationsForRequest(
-        RequestData request)
+        RequestData request
+    )
     {
         List<Location> matchingLocations =
             new List<Location>();
 
-        foreach (Location location
-                 in LocationManager.Instance.locations)
+        if (request == null)
+            return matchingLocations;
+
+        if (LocationManager.Instance == null)
+            return matchingLocations;
+
+
+        foreach (
+            Location location
+            in LocationManager.Instance.locations
+        )
         {
             if (location == null)
                 continue;
@@ -202,10 +447,15 @@ public class RequestGenerator : MonoBehaviour
             if (location.locationType == null)
                 continue;
 
-            if (location.locationType.LocationType ==
-                request.LocationType)
+
+            if (
+                location.locationType.LocationType ==
+                request.LocationType
+            )
             {
-                matchingLocations.Add(location);
+                matchingLocations.Add(
+                    location
+                );
             }
         }
 

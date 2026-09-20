@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 6195275554228529175}
   - component: {fileID: 8170607689898278929}
   m_Layer: 0
-  m_Name: timer
+  m_Name: ETA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207,7 +207,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674309122457750433}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -17.502468}
+  m_LocalPosition: {x: 0, y: 0, z: -21.2}
   m_LocalScale: {x: 22.03548, y: 22.035488, z: 22.03548}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -215,7 +215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -62.29063, y: 0.22645551}
+  m_AnchoredPosition: {x: -62.29063, y: 0.2}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &6195275554228529175
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 8.623663, y: 1.7651193, z: 8.651412, w: 0.40083313}
+  m_margin: {x: 8.623663, y: 1.7651193, z: 10.25232, w: 0.40083313}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -1221,7 +1221,7 @@ MonoBehaviour:
   resourceText: {fileID: 7801095227788514840}
   rewardText: {fileID: 762642137107088203}
   dialogueText: {fileID: 8833710120675125863}
-  timerText: {fileID: 8170607689898278929}
+  arrivalTimeText: {fileID: 8170607689898278929}
   locationIcon: {fileID: 9184359031247826158}
   resourceIcon: {fileID: 1370106894101606566}
   targetLocation: {fileID: 0}

@@ -10,8 +10,8 @@ public class RequestPaper : MonoBehaviour
     public TMP_Text rewardText;
     public TMP_Text dialogueText;
 
-    [Header("Timer")]
-    public TMP_Text timerText;
+    [Header("Estimated Arrival")]
+    public TMP_Text arrivalTimeText;
 
     [Header("Icons")]
     public Renderer locationIcon;
@@ -32,8 +32,10 @@ public class RequestPaper : MonoBehaviour
 
     public bool activeRequest = false;
 
-    private float timeRemaining;
-    private bool timerRunning = false;
+    // The actual deadline for this individual request.
+    private int deadlineMinutes;
+
+    private bool deadlineSet = false;
 
     private void Awake()
     {
@@ -42,30 +44,25 @@ public class RequestPaper : MonoBehaviour
 
     private void Update()
     {
-        if (!activeRequest || !timerRunning)
+        if (!activeRequest)
             return;
 
-        timeRemaining -= Time.deltaTime;
+        if (!deadlineSet)
+            return;
 
-        UpdateTimerDisplay();
-
-        if (timeRemaining <= 0f)
-        {
-            timeRemaining = 0f;
-            timerRunning = false;
-
-            ExpireRequest();
-        }
+        CheckDeadline();
     }
+
+    // --------------------------------------------------
+    // DISPLAY REQUEST
+    // --------------------------------------------------
 
     public void DisplayRequest(RequestData data)
     {
         request = data;
 
         titleText.text = data.Title;
-
-        factionText.text =
-            "Faction: " + data.Faction;
+        factionText.text = "Faction: " + data.Faction;
 
         resourceText.text =
             "Requested " +
@@ -82,27 +79,96 @@ public class RequestPaper : MonoBehaviour
         dialogueText.text =
             data.Dialogue;
 
-        timeRemaining =
-            data.TimeLimit;
-
         SetLocationIcon();
         SetResourceIcon();
-        UpdateTimerDisplay();
     }
-
     public void AssignLocation(Location location)
     {
         targetLocation = location;
 
         SetLocationIcon();
     }
+    // --------------------------------------------------
+    // SET DEADLINE
+    // --------------------------------------------------
 
-    // ---------------------------------------------------------
-    // OLD DIRECT ACCEPT METHOD
-    // ---------------------------------------------------------
-    // This can still exist, but with the new pickup system
-    // the player should normally use E to pick up the paper
-    // and E again while looking at the corkboard.
+    public void SetEstimatedArrival()
+    {
+        if (GameClock.Instance == null)
+        {
+            Debug.LogError(
+                "RequestPaper: GameClock not found!"
+            );
+
+            return;
+        }
+
+        int currentTime =
+            GameClock.Instance.GetTotalMinutes();
+
+        // Round UP to the next 15-minute interval.
+        int roundedTime =
+            Mathf.CeilToInt(
+                currentTime / 15f
+            ) * 15;
+
+        // If rounding reaches the next day.
+        roundedTime %= 1440;
+
+        // Add exactly 3 in-game hours.
+        deadlineMinutes =
+            (roundedTime + 180) % 1440;
+
+        deadlineSet = true;
+
+        UpdateArrivalDisplay();
+    }
+
+    // --------------------------------------------------
+    // ARRIVAL DISPLAY
+    // --------------------------------------------------
+
+    private void UpdateArrivalDisplay()
+    {
+        if (arrivalTimeText == null)
+            return;
+
+        if (!deadlineSet)
+        {
+            arrivalTimeText.text =
+                "EST. ARRIVAL: --:--";
+
+            return;
+        }
+
+        int hour =
+            deadlineMinutes / 60;
+
+        int minute =
+            deadlineMinutes % 60;
+
+        string period =
+            hour >= 12 ? "PM" : "AM";
+
+        int displayHour =
+            hour % 12;
+
+        if (displayHour == 0)
+            displayHour = 12;
+
+        arrivalTimeText.text =
+            string.Format(
+                "ETA:\n{0}:{1:00} {2}",
+                displayHour,
+                minute,
+                period
+            );
+    }
+
+    // --------------------------------------------------
+    // ACCEPT REQUEST
+    // --------------------------------------------------
+
     public void AcceptRequest()
     {
         if (activeRequest)
@@ -115,11 +181,6 @@ public class RequestPaper : MonoBehaviour
             request.Title
         );
 
-        timeRemaining =
-            request.TimeLimit;
-
-        timerRunning = true;
-
         if (audioSource != null &&
             requestAcceptedSound != null)
         {
@@ -128,29 +189,12 @@ public class RequestPaper : MonoBehaviour
             );
         }
 
-        UpdateTimerDisplay();
-
         if (targetLocation != null)
-        {
             targetLocation.Highlight();
-        }
 
         if (corkBoard != null)
-        {
             corkBoard.AddRequest(this);
-        }
-        else
-        {
-            Debug.LogWarning(
-                "No CorkBoard found!"
-            );
-        }
-        //soundManager.PlaySFX(soundManager.Request);
     }
-
-    // ---------------------------------------------------------
-    // ACCEPT FROM CORK BOARD
-    // ---------------------------------------------------------
 
     public void AcceptFromBoard()
     {
@@ -164,11 +208,6 @@ public class RequestPaper : MonoBehaviour
             request.Title
         );
 
-        timeRemaining =
-            request.TimeLimit;
-
-        timerRunning = true;
-
         if (audioSource != null &&
             requestAcceptedSound != null)
         {
@@ -177,44 +216,31 @@ public class RequestPaper : MonoBehaviour
             );
         }
 
-        UpdateTimerDisplay();
-
         if (targetLocation != null)
-        {
             targetLocation.Highlight();
+    }
+
+    // --------------------------------------------------
+    // CHECK DEADLINE
+    // --------------------------------------------------
+
+    private void CheckDeadline()
+    {
+        if (GameClock.Instance == null)
+            return;
+
+        int currentTime =
+            GameClock.Instance.GetTotalMinutes();
+
+        if (currentTime == deadlineMinutes)
+        {
+            ExpireRequest();
         }
     }
 
-    // ---------------------------------------------------------
-    // TIMER
-    // ---------------------------------------------------------
-
-    private void UpdateTimerDisplay()
-    {
-        if (timerText == null)
-            return;
-
-        int minutes =
-            Mathf.FloorToInt(
-                timeRemaining / 60f
-            );
-
-        int seconds =
-            Mathf.FloorToInt(
-                timeRemaining % 60f
-            );
-
-        timerText.text =
-            string.Format(
-                "{0:00}:{1:00}",
-                minutes,
-                seconds
-            );
-    }
-
-    // ---------------------------------------------------------
-    // GET REQUEST TITLE
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // REQUEST INFORMATION
+    // --------------------------------------------------
 
     public string GetRequestTitle()
     {
@@ -224,65 +250,9 @@ public class RequestPaper : MonoBehaviour
         return request.Title;
     }
 
-    // ---------------------------------------------------------
-    // LOCATION ICON
-    // ---------------------------------------------------------
-
-    private void SetLocationIcon()
-    {
-        if (targetLocation == null)
-        {
-            Debug.LogWarning(
-                "Request has no target location."
-            );
-
-            return;
-        }
-
-        if (targetLocation.locationType == null)
-        {
-            Debug.LogWarning(
-                "Target location has no LocationType assigned!"
-            );
-
-            return;
-        }
-
-        if (locationIcon == null)
-        {
-            Debug.LogWarning(
-                "Location Icon Renderer has not been assigned!"
-            );
-
-            return;
-        }
-
-        string iconName =
-            targetLocation.locationType.Name;
-
-        Material iconMaterial =
-            Resources.Load<Material>(
-                "Icons/" + iconName
-            );
-
-        if (iconMaterial == null)
-        {
-            Debug.LogError(
-                "Could not find icon material: " +
-                iconName +
-                " in Resources/Icons/"
-            );
-
-            return;
-        }
-
-        locationIcon.material =
-            iconMaterial;
-    }
-
-    // ---------------------------------------------------------
-    // SHIP ARRIVES
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // SHIP ARRIVAL
+    // --------------------------------------------------
 
     public void OnShipArrived(Location location)
     {
@@ -326,9 +296,9 @@ public class RequestPaper : MonoBehaviour
         }
     }
 
-    // ---------------------------------------------------------
+    // --------------------------------------------------
     // COMPLETE REQUEST
-    // ---------------------------------------------------------
+    // --------------------------------------------------
 
     private void CompleteRequest(
         ShipCargo shipCargo
@@ -339,8 +309,8 @@ public class RequestPaper : MonoBehaviour
             request.Title
         );
 
-        timerRunning = false;
         activeRequest = false;
+        deadlineSet = false;
 
         if (audioSource != null &&
             requestCompletedSound != null)
@@ -350,34 +320,28 @@ public class RequestPaper : MonoBehaviour
             );
         }
 
-        // Remove requested resources
         shipCargo.AddOrRemoveResource(
             request.RequestedResources,
             -request.RequestedAmount
         );
 
-        // Add reward
         shipCargo.AddOrRemoveResource(
             request.Reward,
             request.RewardAmount
         );
 
         if (targetLocation != null)
-        {
             targetLocation.ClearHighlight();
-        }
 
         if (corkBoard != null)
-        {
             corkBoard.RemoveRequest(this);
-        }
 
         Destroy(gameObject);
     }
 
-    // ---------------------------------------------------------
-    // REQUEST EXPIRES
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // EXPIRE REQUEST
+    // --------------------------------------------------
 
     private void ExpireRequest()
     {
@@ -387,43 +351,65 @@ public class RequestPaper : MonoBehaviour
         );
 
         activeRequest = false;
+        deadlineSet = false;
 
         if (targetLocation != null)
-        {
             targetLocation.ClearHighlight();
-        }
 
         if (corkBoard != null)
-        {
             corkBoard.RemoveRequest(this);
-        }
 
         Destroy(gameObject);
     }
 
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // LOCATION ICON
+    // --------------------------------------------------
+
+    private void SetLocationIcon()
+    {
+        if (targetLocation == null)
+            return;
+
+        if (targetLocation.locationType == null)
+            return;
+
+        if (locationIcon == null)
+            return;
+
+        string iconName =
+            targetLocation.locationType.Name;
+
+        Material iconMaterial =
+            Resources.Load<Material>(
+                "Icons/" + iconName
+            );
+
+        if (iconMaterial == null)
+        {
+            Debug.LogError(
+                "Could not find icon material: " +
+                iconName
+            );
+
+            return;
+        }
+
+        locationIcon.material =
+            iconMaterial;
+    }
+
+    // --------------------------------------------------
     // RESOURCE ICON
-    // ---------------------------------------------------------
+    // --------------------------------------------------
 
     private void SetResourceIcon()
     {
         if (resourceIcon == null)
-        {
-            Debug.LogWarning(
-                "Resource Icon Renderer has not been assigned!"
-            );
-
             return;
-        }
 
         if (request == null)
-        {
-            Debug.LogWarning(
-                "Cannot set resource icon because request is null."
-            );
-
             return;
-        }
 
         string iconName =
             request.RequestedResources;
@@ -437,8 +423,7 @@ public class RequestPaper : MonoBehaviour
         {
             Debug.LogWarning(
                 "Could not find resource icon: " +
-                iconName +
-                " in Resources/ResourceIcons/"
+                iconName
             );
 
             return;
