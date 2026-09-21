@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 9114668e1859ee84c9556e6a44def912, type: 2}
+    - target: {fileID: -4213260420446266832, guid: 662a94781b6cd3349b30410fcaa00b5b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e2c58bc3f5db8f048b2808cb9c3dc8fa, type: 2}
     - target: {fileID: -2115066914502358491, guid: 662a94781b6cd3349b30410fcaa00b5b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -64,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fuel_system
       objectReference: {fileID: 0}
+    - target: {fileID: 6727663843426465432, guid: 662a94781b6cd3349b30410fcaa00b5b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9114668e1859ee84c9556e6a44def912, type: 2}
     - target: {fileID: 8687365164565110434, guid: 662a94781b6cd3349b30410fcaa00b5b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
