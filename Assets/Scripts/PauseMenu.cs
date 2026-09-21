@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
 
     public GameObject pauseMenuUI;
+    public GameObject settingsMenuUI;
 
     void Update()
     {
@@ -28,11 +29,12 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
+        settingsMenuUI.SetActive(false);
 
         Time.timeScale = 1f;
         GameIsPaused = false;
 
-        // Hide and lock the cursor when returning to the game
+        // Hide and lock cursor during gameplay
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -40,21 +42,41 @@ public class PauseMenu : MonoBehaviour
     void Pause()
     {
         pauseMenuUI.SetActive(true);
+        settingsMenuUI.SetActive(false);
 
         Time.timeScale = 0f;
         GameIsPaused = true;
 
-        // Show and unlock the cursor while paused
+        // Show and unlock cursor while paused
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    // Called by the Settings button
+    public void OpenSettings()
+    {
+        pauseMenuUI.SetActive(false);
+        settingsMenuUI.SetActive(true);
+
+        // Make sure cursor stays available
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    // Called by the Back button in Settings
+    public void CloseSettings()
+    {
+        settingsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
     public void LoadMenu()
     {
-        // Reset time before changing scenes
         Time.timeScale = 1f;
 
-        // Make sure the cursor is available in the menu
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
