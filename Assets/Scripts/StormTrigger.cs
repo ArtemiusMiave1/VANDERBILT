@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StormTrigger : MonoBehaviour
@@ -10,15 +11,19 @@ public class StormTrigger : MonoBehaviour
     float cloudintense;
     float thunderlerp;
     Color colorlarp;
+    Material skyboxreal;
 
 
     public float cloudintensity;
-    public bool togglestorm = false;
+    bool togglestorm = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         //cloudintensity = skybox.GetFloat("_CloudIntensity");
+        Material skyboxreal = RenderSettings.Instantiate(skybox);
+        RenderSettings.skybox = skyboxreal;
+        skybox = skyboxreal;
 
     }
 
