@@ -161,7 +161,7 @@ MonoBehaviour:
   shipMovement: {fileID: 3055191488580099447}
   route: []
   routeLine: {fileID: 4302954418759944234}
-  routeLineHeightOffset: 0.05
+  routeLineHeightOffset: 0.04
   mapObject: {fileID: 9215336876780299511}
   mapLayer:
     serializedVersion: 2
@@ -676,7 +676,7 @@ LineRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 4
+    numCornerVertices: 2
     numCapVertices: 0
     alignment: 0
     textureMode: 1
@@ -1402,7 +1402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1478060945602702383, guid: 44c8569c890a73b4abed097e22b0f061, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.02199608
+      value: -1.138
       objectReference: {fileID: 0}
     - target: {fileID: 1478060945602702383, guid: 44c8569c890a73b4abed097e22b0f061, type: 3}
       propertyPath: m_LocalPosition.z

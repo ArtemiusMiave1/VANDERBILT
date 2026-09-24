@@ -306,7 +306,7 @@ public class RequestPaper : MonoBehaviour
 
         arrivalTimeText.text =
             string.Format(
-                "EST. ARRIVAL: {0}:{1:00} {2}",
+                "ETA: {0}:{1:00} {2}",
                 displayHour,
                 minute,
                 period
