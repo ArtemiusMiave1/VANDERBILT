@@ -1216,20 +1216,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0747733616f7934bbc5d6fd7ea8741d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RequestPaper
+  requestData:
+    Title: 
+    Faction: 
+    RequestedResources: 
+    RequestedAmount: 0
+    Reward: 
+    RewardAmount: 0
+    TimeLimit: 0
+    Dialogue: 
+    Consequences: 
+    ConsequencesAmount: 
+    Completed: 0
+    Repeatable: 0
+    LocationType: 
+    Unlockables: 
   titleText: {fileID: 1906247792804513488}
   factionText: {fileID: 2884393635271949404}
   resourceText: {fileID: 7801095227788514840}
   rewardText: {fileID: 762642137107088203}
   dialogueText: {fileID: 8833710120675125863}
   arrivalTimeText: {fileID: 8170607689898278929}
-  locationIcon: {fileID: 9184359031247826158}
-  resourceIcon: {fileID: 1370106894101606566}
+  destinationText: {fileID: 0}
   targetLocation: {fileID: 0}
-  corkBoard: {fileID: 0}
+  activeRequest: 0
+  completed: 0
+  acceptedFromBoard: 0
   audioSource: {fileID: 0}
   requestAcceptedSound: {fileID: 0}
   requestCompletedSound: {fileID: 0}
-  activeRequest: 0
 --- !u!65 &3693382856378918346
 BoxCollider:
   m_ObjectHideFlags: 0

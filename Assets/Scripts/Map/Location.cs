@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Location : MonoBehaviour
@@ -7,44 +8,54 @@ public class Location : MonoBehaviour
     public List<RouteConnection> connections =
         new List<RouteConnection>();
 
-
     [Header("Requests")]
     public List<RequestPaper> activeRequests =
         new List<RequestPaper>();
 
-
-    [Header("Location Type")]
+    [Header("Location Data")]
     public LocationData locationType;
 
+    [Header("Generated Map ID")]
+    [Tooltip("Examples: A1, A2, B1, F3, ResourceDepot, Vanderbilt")]
+    public string locationID;
 
-    [Header("Visual")]
-    public Renderer locationRenderer;
+    [Header("District Visual")]
+    [Tooltip("TextMeshPro used to display A1, B2, F3, etc.")]
+    public TMP_Text districtText;
+
+    [Header("Non-District Visual")]
+    [Tooltip("Plane/Renderer used for ResourceDepot, Vanderbilt, etc.")]
+    public Renderer iconPlane;
+
+    [Header("Material")]
+    public Material locationMaterial;
 
 
-    private Material locationMaterial;
-
+    // --------------------------------------------------
+    // AWAKE
+    // --------------------------------------------------
 
     private void Awake()
     {
-        // Automatically find the renderer on this object
-        if (locationRenderer == null)
+        // If no icon plane was assigned,
+        // try to find a Renderer on this object.
+        if (iconPlane == null)
         {
-            locationRenderer = GetComponent<Renderer>();
-        }
-
-
-        // Create a material instance so changing this
-        // location doesn't change every other location.
-        if (locationRenderer != null)
-        {
-            locationMaterial = locationRenderer.material;
+            iconPlane =
+                GetComponent<Renderer>();
         }
     }
 
 
-    public void SetLocationType(LocationData type)
+    // --------------------------------------------------
+    // SET LOCATION DATA
+    // --------------------------------------------------
+
+    public void SetLocationType(
+        LocationData type)
     {
         locationType = type;
+
         if (locationType == null)
         {
             Debug.LogWarning(
@@ -55,30 +66,170 @@ public class Location : MonoBehaviour
             return;
         }
 
-
-        SetLocationIcon();
+        SetLocationVisual();
     }
 
 
-    private void SetLocationIcon()
+    // --------------------------------------------------
+    // SET LOCATION ID
+    // --------------------------------------------------
+
+    public void SetLocationID(
+        string newID)
     {
-        if (locationRenderer == null)
+        locationID = newID;
+
+        // Make the GameObject name match
+        // the generated location ID.
+        gameObject.name = locationID;
+
+        // Update visual after the ID has been generated.
+        SetLocationVisual();
+    }
+
+
+    // --------------------------------------------------
+    // GET LOCATION ID
+    // --------------------------------------------------
+
+    public string GetLocationID()
+    {
+        return locationID;
+    }
+
+
+    // --------------------------------------------------
+    // GET LOCATION TYPE
+    // --------------------------------------------------
+
+    public string GetLocationType()
+    {
+        if (locationType == null)
+            return "";
+
+        return locationType.LocationType;
+    }
+
+
+    // --------------------------------------------------
+    // GET DISTRICT TYPE
+    // --------------------------------------------------
+
+    public string GetDistrictType()
+    {
+        if (locationType == null)
+            return "";
+
+        return locationType.DistrictType;
+    }
+
+
+    // --------------------------------------------------
+    // IS DISTRICT
+    // --------------------------------------------------
+
+    public bool IsDistrict()
+    {
+        if (locationType == null)
+            return false;
+
+        return locationType.District;
+    }
+
+
+    // --------------------------------------------------
+    // SET LOCATION VISUAL
+    // --------------------------------------------------
+
+    private void SetLocationVisual()
+    {
+        if (locationType == null)
+        {
+            return;
+        }
+
+
+        // ----------------------------------------------
+        // DISTRICT LOCATION
+        // ----------------------------------------------
+
+        if (locationType.District)
+        {
+            SetDistrictVisual();
+        }
+
+
+        // ----------------------------------------------
+        // NON-DISTRICT LOCATION
+        // ----------------------------------------------
+
+        else
+        {
+            SetNonDistrictVisual();
+        }
+    }
+
+
+    // --------------------------------------------------
+    // DISTRICT VISUAL
+    // --------------------------------------------------
+
+    private void SetDistrictVisual()
+    {
+        // Show the TextMeshPro.
+        if (districtText != null)
+        {
+            districtText.gameObject.SetActive(true);
+
+            districtText.text =
+                locationID;
+        }
+
+
+        // Hide the icon plane.
+        if (iconPlane != null)
+        {
+            iconPlane.gameObject.SetActive(false);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // NON-DISTRICT VISUAL
+    // --------------------------------------------------
+
+    private void SetNonDistrictVisual()
+    {
+        // Hide the district text.
+        if (districtText != null)
+        {
+            districtText.gameObject.SetActive(false);
+        }
+
+
+        // Show the icon plane.
+        if (iconPlane == null)
         {
             Debug.LogError(
                 gameObject.name +
-                " has no Renderer assigned."
+                " has no Icon Plane Renderer assigned."
             );
 
             return;
         }
 
 
-        // LocationData name must match the PNG name
-        string iconName = locationType.Name;
+        iconPlane.gameObject.SetActive(true);
 
 
-        // Load PNG from:
-        // Assets/Resources/Icons/
+        // ----------------------------------------------
+        // LOAD ICON
+        // ----------------------------------------------
+
+        string iconName =
+            locationType.LocationType;
+
+
         Texture2D icon =
             Resources.Load<Texture2D>(
                 "Icons/" + iconName
@@ -97,39 +248,93 @@ public class Location : MonoBehaviour
         }
 
 
-        // Make sure we have a material
+        // ----------------------------------------------
+        // GET MATERIAL
+        // ----------------------------------------------
+
         if (locationMaterial == null)
         {
-            locationMaterial = locationRenderer.material;
+            locationMaterial =
+                iconPlane.material;
         }
 
 
-        // Put PNG onto the material
-        locationMaterial.mainTexture = icon;
+        if (locationMaterial == null)
+        {
+            Debug.LogError(
+                gameObject.name +
+                " has no material for the icon plane."
+            );
+
+            return;
+        }
 
 
-        Debug.Log(
-            gameObject.name +
-            " assigned icon: " +
-            iconName
-        );
+        // ----------------------------------------------
+        // SET ICON
+        // ----------------------------------------------
+
+        locationMaterial.mainTexture =
+            icon;
     }
 
+
+    // --------------------------------------------------
+    // HIGHLIGHT
+    // --------------------------------------------------
 
     public void Highlight()
     {
-        if (locationRenderer != null)
+        if (iconPlane != null)
         {
-            locationRenderer.material.color = Color.yellow;
+            iconPlane.material.color =
+                Color.yellow;
+        }
+
+        if (districtText != null)
+        {
+            districtText.color =
+                Color.yellow;
         }
     }
 
 
+    // --------------------------------------------------
+    // CLEAR HIGHLIGHT
+    // --------------------------------------------------
+
     public void ClearHighlight()
     {
-        if (locationRenderer != null)
+        if (iconPlane != null)
         {
-            locationRenderer.material.color = Color.white;
+            iconPlane.material.color =
+                Color.white;
         }
+
+        if (districtText != null)
+        {
+            districtText.color =
+                Color.white;
+        }
+    }
+
+
+    // --------------------------------------------------
+    // GET DISPLAY NAME
+    // --------------------------------------------------
+
+    public string GetDisplayName()
+    {
+        if (string.IsNullOrEmpty(locationID))
+        {
+            if (locationType != null)
+            {
+                return locationType.LocationType;
+            }
+
+            return gameObject.name;
+        }
+
+        return locationID;
     }
 }

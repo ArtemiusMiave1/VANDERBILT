@@ -5,83 +5,82 @@ public class LocationManager : MonoBehaviour
 {
     public static LocationManager Instance;
 
-    [Header("Connection Settings")]
-    public float connectionDistance = 10f;
-
     [Header("Locations")]
-    public List<Location> locations = new List<Location>();
+    public List<Location> locations =
+        new List<Location>();
 
-    [Header("Routes")]
-    public List<RouteConnection> routes = new List<RouteConnection>();
+    [Header("Connections")]
+    [Tooltip("Maximum distance between locations for a connection.")]
+    public float connectionDistance = 20f;
 
-    [Header("Location Height")]
-    public float locationHeight = 0.5f;
+    [Tooltip("Automatically generate connections when requested.")]
+    public bool generateConnectionsOnStart = false;
 
-    [Header("Map Height")]
-    public Transform mapObject;
+    [Header("Route Danger")]
+    [Range(0f, 1f)]
+    [Tooltip("Chance of a route being dangerous.")]
+    public float dangerousRouteChance = 0.15f;
 
-    [Header("Route Line Prefabs")]
-    public GameObject normalRoutePrefab;
-    public GameObject dangerousRoutePrefab;
-    public GameObject veryDangerousRoutePrefab;
+    [Range(0f, 1f)]
+    [Tooltip("Chance of a route being very dangerous.")]
+    public float veryDangerousRouteChance = 0.05f;
 
-    [Header("Route Line Parent")]
-    public Transform routeLineParent;
 
+    // --------------------------------------------------
+    // AWAKE
+    // --------------------------------------------------
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
     }
 
 
+    // --------------------------------------------------
+    // START
+    // --------------------------------------------------
+
     private void Start()
     {
-        CreateConnections();
+        if (generateConnectionsOnStart)
+        {
+            GenerateConnections();
+        }
     }
 
 
-    public void CreateConnections()
+    // --------------------------------------------------
+    // GENERATE CONNECTIONS
+    // --------------------------------------------------
+
+    public void GenerateConnections()
     {
-        Location[] foundLocations =
-            FindObjectsOfType<Location>();
+        ClearConnections();
 
-        locations.Clear();
-
-        foreach (Location location in foundLocations)
+        if (locations == null || locations.Count == 0)
         {
-            if (location != null)
-            {
-                locations.Add(location);
+            Debug.LogWarning(
+                "LocationManager: No locations found."
+            );
 
-                // Raise location above the board
-                Vector3 position =
-                    location.transform.position;
-
-                position.y = locationHeight;
-
-                location.transform.position =
-                    position;
-            }
+            return;
         }
 
+        int connectionCount = 0;
 
-        routes.Clear();
-
-
-        // Clear old connections
-        foreach (Location location in locations)
-        {
-            if (location != null)
-                location.connections.Clear();
-        }
-
-
-        // Create connections
         for (int i = 0; i < locations.Count; i++)
         {
             Location locationA =
                 locations[i];
+
+            if (locationA == null)
+                continue;
 
 
             for (int j = i + 1; j < locations.Count; j++)
@@ -89,94 +88,89 @@ public class LocationManager : MonoBehaviour
                 Location locationB =
                     locations[j];
 
+                if (locationB == null)
+                    continue;
+
+
+                // ------------------------------------------
+                // CALCULATE X/Z DISTANCE
+                // ------------------------------------------
+
+                Vector2 positionA =
+                    new Vector2(
+                        locationA.transform.position.x,
+                        locationA.transform.position.z
+                    );
+
+                Vector2 positionB =
+                    new Vector2(
+                        locationB.transform.position.x,
+                        locationB.transform.position.z
+                    );
 
                 float distance =
-                    Vector3.Distance(
-                        locationA.transform.position,
-                        locationB.transform.position
+                    Vector2.Distance(
+                        positionA,
+                        positionB
                     );
 
 
-                if (distance <= connectionDistance)
-                {
-                    RouteConnection route =
-                        new RouteConnection();
+                // ------------------------------------------
+                // CHECK CONNECTION DISTANCE
+                // ------------------------------------------
+
+                if (distance > connectionDistance)
+                    continue;
 
 
-                    route.locationA =
-                        locationA;
+                // ------------------------------------------
+                // CREATE ROUTE
+                // ------------------------------------------
 
-                    route.locationB =
-                        locationB;
+                RouteConnection route =
+                    new RouteConnection();
 
-                    route.distance =
-                        distance;
+                route.locationA =
+                    locationA;
 
+                route.locationB =
+                    locationB;
 
-                    // =========================================
-                    // RANDOM DANGER
-                    // =========================================
+                route.distance =
+                    distance;
 
-                    float dangerRoll =
-                        Random.value;
+                route.dangerLevel =
+                    GenerateDangerLevel();
 
+                route.fuelCost =
+                    CalculateFuelCost(
+                        distance
+                    );
 
-                    if (dangerRoll < 0.05f)
-                    {
-                        // 5% Very Dangerous
-                        route.dangerLevel = 2;
-                    }
-                    else if (dangerRoll < 0.20f)
-                    {
-                        // 15% Dangerous
-                        route.dangerLevel = 1;
-                    }
-                    else
-                    {
-                        // 80% Safe
-                        route.dangerLevel = 0;
-                    }
+                route.blocked =
+                    false;
 
 
-                    // =========================================
-                    // FUEL
-                    // =========================================
+                // ------------------------------------------
+                // ADD TO BOTH LOCATIONS
+                // ------------------------------------------
 
-                    route.fuelCost =
-                        Mathf.Max(
-                            1f,
-                            Mathf.Ceil(
-                                distance / 10f
-                            )
-                        );
+                locationA.connections.Add(
+                    route
+                );
 
+                locationB.connections.Add(
+                    route
+                );
 
-                    route.blocked = false;
-
-
-                    // =========================================
-                    // ADD ROUTE
-                    // =========================================
-
-                    routes.Add(route);
-
-                    locationA.connections.Add(route);
-                    locationB.connections.Add(route);
-
-
-                    // =========================================
-                    // CREATE VISUAL ROUTE
-                    // =========================================
-
-                    CreateRouteLine(route);
-                }
+                connectionCount++;
             }
         }
 
 
         Debug.Log(
-            "Created " +
-            routes.Count +
+            "LocationManager: Generated " +
+            connectionCount +
             " routes between " +
             locations.Count +
             " locations."
@@ -184,78 +178,297 @@ public class LocationManager : MonoBehaviour
     }
 
 
-    // =========================================================
-    // CREATE ROUTE LINE
-    // =========================================================
+    // --------------------------------------------------
+    // GENERATE DANGER LEVEL
+    // --------------------------------------------------
 
-    
-    private void CreateRouteLine(RouteConnection route)
-{
-    if (route == null)
-        return;
-
-    GameObject selectedPrefab = null;
-
-    switch (route.dangerLevel)
+    private int GenerateDangerLevel()
     {
-        case 0:
-            selectedPrefab = normalRoutePrefab;
-            break;
+        float roll =
+            Random.value;
 
-        case 1:
-            selectedPrefab = dangerousRoutePrefab;
-            break;
 
-        case 2:
-            selectedPrefab = veryDangerousRoutePrefab;
-            break;
+        // Very dangerous.
+        if (
+            roll <
+            veryDangerousRouteChance
+        )
+        {
+            return 2;
+        }
+
+
+        // Dangerous.
+        if (
+            roll <
+            veryDangerousRouteChance +
+            dangerousRouteChance
+        )
+        {
+            return 1;
+        }
+
+
+        // Safe.
+        return 0;
     }
 
-    if (selectedPrefab == null)
+
+    // --------------------------------------------------
+    // CALCULATE FUEL COST
+    // --------------------------------------------------
+
+    private float CalculateFuelCost(
+        float distance)
     {
-        Debug.LogWarning(
-            "No route prefab assigned for danger level " +
-            route.dangerLevel
+        return distance;
+    }
+
+
+    // --------------------------------------------------
+    // CLEAR CONNECTIONS
+    // --------------------------------------------------
+
+    public void ClearConnections()
+    {
+        foreach (
+            Location location
+            in locations
+        )
+        {
+            if (location == null)
+                continue;
+
+            if (location.connections == null)
+            {
+                location.connections =
+                    new List<RouteConnection>();
+
+                continue;
+            }
+
+            location.connections.Clear();
+        }
+    }
+
+
+    // --------------------------------------------------
+    // ADD LOCATION
+    // --------------------------------------------------
+
+    public void AddLocation(
+        Location location)
+    {
+        if (location == null)
+            return;
+
+        if (locations.Contains(location))
+            return;
+
+        locations.Add(
+            location
         );
-
-        return;
     }
 
-    GameObject lineObject = Instantiate(
-        selectedPrefab,
-        Vector3.zero,
-        Quaternion.identity
-    );
 
-    if (routeLineParent != null)
+    // --------------------------------------------------
+    // REMOVE LOCATION
+    // --------------------------------------------------
+
+    public void RemoveLocation(
+        Location location)
     {
-        lineObject.transform.SetParent(
-            routeLineParent,
-            false
+        if (location == null)
+            return;
+
+        locations.Remove(
+            location
         );
     }
 
-    RouteLine routeLine =
-        lineObject.GetComponent<RouteLine>();
 
-    if (routeLine == null)
+    // --------------------------------------------------
+    // GET LOCATION BY ID
+    // --------------------------------------------------
+
+    public Location GetLocationByID(
+        string locationID)
     {
-        Debug.LogError(
-            "Route prefab is missing RouteLine!"
-        );
+        if (string.IsNullOrEmpty(locationID))
+            return null;
 
-        Destroy(lineObject);
-        return;
+
+        foreach (
+            Location location
+            in locations
+        )
+        {
+            if (location == null)
+                continue;
+
+            if (
+                location.locationID ==
+                locationID
+            )
+            {
+                return location;
+            }
+        }
+
+
+        return null;
     }
 
-    // Use the map object's height
-    if (mapObject != null)
+
+    // --------------------------------------------------
+    // GET LOCATIONS BY DISTRICT
+    // --------------------------------------------------
+
+    public List<Location> GetLocationsByDistrict(
+        string districtType)
     {
+        List<Location> results =
+            new List<Location>();
+
+
+        if (string.IsNullOrEmpty(districtType))
+            return results;
+
+
+        foreach (
+            Location location
+            in locations
+        )
+        {
+            if (location == null)
+                continue;
+
+            if (location.locationType == null)
+                continue;
+
+
+            if (
+                location.locationType.District &&
+                location.locationType.DistrictType ==
+                districtType
+            )
+            {
+                results.Add(
+                    location
+                );
+            }
+        }
+
+
+        return results;
     }
 
-    routeLine.Setup(
-        route.locationA,
-        route.locationB
-    );
-}
+
+    // --------------------------------------------------
+    // GET LOCATIONS BY TYPE
+    // --------------------------------------------------
+
+    public List<Location> GetLocationsByType(
+        string locationType)
+    {
+        List<Location> results =
+            new List<Location>();
+
+
+        if (string.IsNullOrEmpty(locationType))
+            return results;
+
+
+        foreach (
+            Location location
+            in locations
+        )
+        {
+            if (location == null)
+                continue;
+
+            if (location.locationType == null)
+                continue;
+
+
+            if (
+                location.locationType.LocationType ==
+                locationType
+            )
+            {
+                results.Add(
+                    location
+                );
+            }
+        }
+
+
+        return results;
+    }
+
+
+    // --------------------------------------------------
+    // FIND ROUTE CONNECTION
+    // --------------------------------------------------
+
+    public RouteConnection GetConnection(
+        Location locationA,
+        Location locationB)
+    {
+        if (
+            locationA == null ||
+            locationB == null
+        )
+        {
+            return null;
+        }
+
+
+        foreach (
+            RouteConnection connection
+            in locationA.connections
+        )
+        {
+            if (connection == null)
+                continue;
+
+
+            if (
+                (
+                    connection.locationA ==
+                    locationA &&
+                    connection.locationB ==
+                    locationB
+                )
+                ||
+                (
+                    connection.locationA ==
+                    locationB &&
+                    connection.locationB ==
+                    locationA
+                )
+            )
+            {
+                return connection;
+            }
+        }
+
+
+        return null;
+    }
+
+
+    // --------------------------------------------------
+    // CHECK IF CONNECTED
+    // --------------------------------------------------
+
+    public bool AreLocationsConnected(
+        Location locationA,
+        Location locationB)
+    {
+        return GetConnection(
+            locationA,
+            locationB
+        ) != null;
+    }
 }

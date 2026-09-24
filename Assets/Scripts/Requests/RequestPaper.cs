@@ -3,93 +3,220 @@ using UnityEngine;
 
 public class RequestPaper : MonoBehaviour
 {
-    [Header("UI Text")]
+    [Header("Request Data")]
+    public RequestData requestData;
+
+    [Header("UI")]
     public TMP_Text titleText;
     public TMP_Text factionText;
     public TMP_Text resourceText;
     public TMP_Text rewardText;
     public TMP_Text dialogueText;
-
-    [Header("Estimated Arrival")]
     public TMP_Text arrivalTimeText;
+    public TMP_Text destinationText;
 
-    [Header("Icons")]
-    public Renderer locationIcon;
-    public Renderer resourceIcon;
-
-    [Header("Request Location")]
+    [Header("Request Destination")]
     public Location targetLocation;
 
-    [Header("Cork Board")]
-    public CorkBoard corkBoard;
+    [Header("Request State")]
+    public bool activeRequest = false;
+    public bool completed = false;
+    public bool acceptedFromBoard = false;
+
+    [Header("Deadline")]
+    [Tooltip("Deadline in total GameClock minutes.")]
+    private int deadlineMinutes;
+
+    private bool deadlineSet = false;
 
     [Header("Sound")]
     public AudioSource audioSource;
     public AudioClip requestAcceptedSound;
     public AudioClip requestCompletedSound;
 
-    private RequestData request;
+    // Visual indicator belonging to the assigned location
+    private RequestVisualIndicator requestVisual;
 
-    public bool activeRequest = false;
-
-    // The actual deadline for this individual request.
-    private int deadlineMinutes;
-
-    private bool deadlineSet = false;
-
-    private void Awake()
-    {
-        corkBoard = FindObjectOfType<CorkBoard>();
-    }
-
-    private void Update()
-    {
-        if (!activeRequest)
-            return;
-
-        if (!deadlineSet)
-            return;
-
-        CheckDeadline();
-    }
 
     // --------------------------------------------------
     // DISPLAY REQUEST
     // --------------------------------------------------
 
-    public void DisplayRequest(RequestData data)
+    public void DisplayRequest(
+        RequestData data)
     {
-        request = data;
+        if (data == null)
+        {
+            Debug.LogError(
+                "RequestPaper: RequestData is null!"
+            );
 
-        titleText.text = data.Title;
-        factionText.text = "Faction: " + data.Faction;
+            return;
+        }
 
-        resourceText.text =
-            "Requested " +
-            data.RequestedResources +
-            ": " +
-            data.RequestedAmount;
+        requestData = data;
 
-        rewardText.text =
-            "Reward: " +
-            data.Reward +
-            " x" +
-            data.RewardAmount;
+        completed = false;
+        activeRequest = false;
+        acceptedFromBoard = false;
 
-        dialogueText.text =
-            data.Dialogue;
+        requestVisual = null;
 
-        SetLocationIcon();
-        SetResourceIcon();
+
+        // ----------------------------------------------
+        // TITLE
+        // ----------------------------------------------
+
+        if (titleText != null)
+        {
+            titleText.text =
+                data.Title;
+        }
+
+
+        // ----------------------------------------------
+        // FACTION
+        // ----------------------------------------------
+
+        if (factionText != null)
+        {
+            factionText.text =
+                data.Faction;
+        }
+
+
+        // ----------------------------------------------
+        // RESOURCE
+        // ----------------------------------------------
+
+        if (resourceText != null)
+        {
+            resourceText.text =
+                data.RequestedResources +
+                " x " +
+                data.RequestedAmount;
+        }
+
+
+        // ----------------------------------------------
+        // REWARD
+        // ----------------------------------------------
+
+        if (rewardText != null)
+        {
+            rewardText.text =
+                "REWARD: " +
+                data.Reward +
+                " x " +
+                data.RewardAmount;
+        }
+
+
+        // ----------------------------------------------
+        // DIALOGUE
+        // ----------------------------------------------
+
+        if (dialogueText != null)
+        {
+            dialogueText.text =
+                data.Dialogue;
+        }
+
+
+        // ----------------------------------------------
+        // DESTINATION
+        // ----------------------------------------------
+
+        UpdateDestinationDisplay();
+
+
+        // ----------------------------------------------
+        // ARRIVAL TIME
+        // ----------------------------------------------
+
+        deadlineSet = false;
+
+        UpdateArrivalDisplay();
     }
-    public void AssignLocation(Location location)
-    {
-        targetLocation = location;
 
-        SetLocationIcon();
-    }
+
     // --------------------------------------------------
-    // SET DEADLINE
+    // ASSIGN LOCATION
+    // --------------------------------------------------
+
+    public void AssignLocation(
+        Location location)
+    {
+        if (location == null)
+        {
+            Debug.LogWarning(
+                "RequestPaper: Tried to assign a null location."
+            );
+
+            return;
+        }
+
+        targetLocation =
+            location;
+
+
+        // ----------------------------------------------
+        // GET VISUAL FROM LOCATION
+        // ----------------------------------------------
+
+        requestVisual =
+            targetLocation.GetComponentInChildren<RequestVisualIndicator>(
+                true
+            );
+
+
+        if (requestVisual == null)
+        {
+            Debug.LogWarning(
+                "RequestPaper: No RequestVisualIndicator " +
+                "found on location " +
+                targetLocation.GetDisplayName()
+            );
+        }
+
+
+        UpdateDestinationDisplay();
+
+
+        Debug.Log(
+            "Request assigned to " +
+            location.GetDisplayName()
+        );
+    }
+
+
+    // --------------------------------------------------
+    // DESTINATION DISPLAY
+    // --------------------------------------------------
+
+    private void UpdateDestinationDisplay()
+    {
+        if (destinationText == null)
+            return;
+
+
+        if (targetLocation == null)
+        {
+            destinationText.text =
+                "DESTINATION: --";
+
+            return;
+        }
+
+
+        destinationText.text =
+            "DESTINATION: " +
+            targetLocation.GetDisplayName();
+    }
+
+
+    // --------------------------------------------------
+    // SET ESTIMATED ARRIVAL
     // --------------------------------------------------
 
     public void SetEstimatedArrival()
@@ -103,35 +230,47 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
+
         int currentTime =
             GameClock.Instance.GetTotalMinutes();
 
-        // Round UP to the next 15-minute interval.
+
+        // ----------------------------------------------
+        // ROUND UP TO NEXT 15 MINUTES
+        // ----------------------------------------------
+
         int roundedTime =
             Mathf.CeilToInt(
                 currentTime / 15f
             ) * 15;
 
-        // If rounding reaches the next day.
+
         roundedTime %= 1440;
 
-        // Add exactly 3 in-game hours.
+
+        // ----------------------------------------------
+        // ADD 3 GAME HOURS
+        // ----------------------------------------------
+
         deadlineMinutes =
             (roundedTime + 180) % 1440;
 
         deadlineSet = true;
 
+
         UpdateArrivalDisplay();
     }
 
+
     // --------------------------------------------------
-    // ARRIVAL DISPLAY
+    // UPDATE ARRIVAL DISPLAY
     // --------------------------------------------------
 
     private void UpdateArrivalDisplay()
     {
         if (arrivalTimeText == null)
             return;
+
 
         if (!deadlineSet)
         {
@@ -141,84 +280,55 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
+
         int hour =
             deadlineMinutes / 60;
 
         int minute =
             deadlineMinutes % 60;
 
+
         string period =
-            hour >= 12 ? "PM" : "AM";
+            hour >= 12
+                ? "PM"
+                : "AM";
+
 
         int displayHour =
             hour % 12;
 
+
         if (displayHour == 0)
+        {
             displayHour = 12;
+        }
+
 
         arrivalTimeText.text =
             string.Format(
-                "ETA:\n{0}:{1:00} {2}",
+                "EST. ARRIVAL: {0}:{1:00} {2}",
                 displayHour,
                 minute,
                 period
             );
     }
 
+
     // --------------------------------------------------
-    // ACCEPT REQUEST
+    // UPDATE DEADLINE
     // --------------------------------------------------
 
-    public void AcceptRequest()
+    private void Update()
     {
-        if (activeRequest)
+        if (!deadlineSet)
             return;
 
-        activeRequest = true;
-
-        Debug.Log(
-            "Accepted Request: " +
-            request.Title
-        );
-
-        if (audioSource != null &&
-            requestAcceptedSound != null)
-        {
-            audioSource.PlayOneShot(
-                requestAcceptedSound
-            );
-        }
-
-        if (targetLocation != null)
-            targetLocation.Highlight();
-
-        if (corkBoard != null)
-            corkBoard.AddRequest(this);
-    }
-
-    public void AcceptFromBoard()
-    {
-        if (activeRequest)
+        if (completed)
             return;
 
-        activeRequest = true;
-
-        Debug.Log(
-            "Accepted Request: " +
-            request.Title
-        );
-
-        if (audioSource != null &&
-            requestAcceptedSound != null)
-        {
-            audioSource.PlayOneShot(
-                requestAcceptedSound
-            );
-        }
-
-        if (targetLocation != null)
-            targetLocation.Highlight();
+        CheckDeadline();
     }
+
 
     // --------------------------------------------------
     // CHECK DEADLINE
@@ -229,207 +339,262 @@ public class RequestPaper : MonoBehaviour
         if (GameClock.Instance == null)
             return;
 
+
         int currentTime =
             GameClock.Instance.GetTotalMinutes();
 
-        if (currentTime == deadlineMinutes)
+
+        int minutesUntilDeadline =
+            (deadlineMinutes - currentTime + 1440)
+            % 1440;
+
+
+        if (minutesUntilDeadline == 0)
         {
-            ExpireRequest();
+            DeadlineReached();
         }
     }
 
+
     // --------------------------------------------------
-    // REQUEST INFORMATION
+    // DEADLINE REACHED
     // --------------------------------------------------
 
-    public string GetRequestTitle()
+    private void DeadlineReached()
     {
-        if (request == null)
-            return "Unknown Request";
+        if (completed)
+            return;
 
-        return request.Title;
+
+        Debug.Log(
+            "Request deadline reached: " +
+            GetRequestTitle()
+        );
+
+        // Add failure/consequence system here later.
     }
 
+
     // --------------------------------------------------
-    // SHIP ARRIVAL
+    // ACCEPT REQUEST
     // --------------------------------------------------
 
-    public void OnShipArrived(Location location)
+    public void AcceptRequest()
     {
-        if (!activeRequest)
+        if (completed)
             return;
 
-        if (location != targetLocation)
-            return;
 
-        ShipCargo shipCargo =
-            FindObjectOfType<ShipCargo>();
+        activeRequest = true;
 
-        if (shipCargo == null)
+
+        // Turn on visual at destination
+        if (requestVisual != null)
         {
-            Debug.LogError(
-                "No ShipCargo found in the scene!"
-            );
-
-            return;
+            requestVisual.SetActive();
         }
 
-        int cargoAmount =
-            shipCargo.GetResourceAmount(
-                request.RequestedResources
-            );
 
-        if (cargoAmount >= request.RequestedAmount)
+        if (audioSource != null &&
+            requestAcceptedSound != null)
         {
-            CompleteRequest(shipCargo);
-        }
-        else
-        {
-            Debug.Log(
-                "Not enough " +
-                request.RequestedResources +
-                "! Required: " +
-                request.RequestedAmount +
-                ", Have: " +
-                cargoAmount
+            audioSource.PlayOneShot(
+                requestAcceptedSound
             );
         }
+
+
+        Debug.Log(
+            "Request accepted: " +
+            GetRequestTitle()
+        );
     }
+
+
+    // --------------------------------------------------
+    // ACCEPT FROM CORKBOARD
+    // --------------------------------------------------
+
+    public void AcceptFromBoard()
+    {
+        if (completed)
+            return;
+
+
+        acceptedFromBoard = true;
+        activeRequest = true;
+
+
+        // Turn on visual at destination
+        if (requestVisual != null)
+        {
+            requestVisual.SetActive();
+        }
+
+
+        if (audioSource != null &&
+            requestAcceptedSound != null)
+        {
+            audioSource.PlayOneShot(
+                requestAcceptedSound
+            );
+        }
+
+
+        Debug.Log(
+            "Request accepted from corkboard: " +
+            GetRequestTitle()
+        );
+    }
+
+
+    // --------------------------------------------------
+    // SHIP ARRIVES
+    // --------------------------------------------------
+
+    public void OnShipArrived(
+        Location arrivedLocation)
+    {
+        if (arrivedLocation == null)
+            return;
+
+
+        if (targetLocation != arrivedLocation)
+            return;
+
+
+        if (completed)
+            return;
+
+
+        CompleteRequest();
+    }
+
 
     // --------------------------------------------------
     // COMPLETE REQUEST
     // --------------------------------------------------
 
-    private void CompleteRequest(
-        ShipCargo shipCargo
-    )
+    public void CompleteRequest()
     {
-        Debug.Log(
-            "Completed Request: " +
-            request.Title
-        );
+        if (completed)
+            return;
 
+
+        completed = true;
         activeRequest = false;
-        deadlineSet = false;
 
-        if (audioSource != null &&
-            requestCompletedSound != null)
+
+        // Turn off visual at destination
+        if (requestVisual != null)
+        {
+            requestVisual.SetInactive();
+        }
+
+
+        // Remove from location's active requests.
+        if (targetLocation != null)
+        {
+            if (
+                targetLocation.activeRequests != null &&
+                targetLocation.activeRequests.Contains(
+                    this
+                )
+            )
+            {
+                targetLocation.activeRequests.Remove(
+                    this
+                );
+            }
+
+
+            targetLocation.ClearHighlight();
+        }
+
+
+        // Play completion sound.
+        if (
+            audioSource != null &&
+            requestCompletedSound != null
+        )
         {
             audioSource.PlayOneShot(
                 requestCompletedSound
             );
         }
 
-        shipCargo.AddOrRemoveResource(
-            request.RequestedResources,
-            -request.RequestedAmount
-        );
 
-        shipCargo.AddOrRemoveResource(
-            request.Reward,
-            request.RewardAmount
-        );
-
-        if (targetLocation != null)
-            targetLocation.ClearHighlight();
-
-        if (corkBoard != null)
-            corkBoard.RemoveRequest(this);
-
-        Destroy(gameObject);
-    }
-
-    // --------------------------------------------------
-    // EXPIRE REQUEST
-    // --------------------------------------------------
-
-    private void ExpireRequest()
-    {
         Debug.Log(
-            "Request expired: " +
-            request.Title
+            "Request completed: " +
+            GetRequestTitle()
         );
-
-        activeRequest = false;
-        deadlineSet = false;
-
-        if (targetLocation != null)
-            targetLocation.ClearHighlight();
-
-        if (corkBoard != null)
-            corkBoard.RemoveRequest(this);
-
-        Destroy(gameObject);
     }
 
+
     // --------------------------------------------------
-    // LOCATION ICON
+    // GET REQUEST TITLE
     // --------------------------------------------------
 
-    private void SetLocationIcon()
+    public string GetRequestTitle()
+    {
+        if (requestData == null)
+            return gameObject.name;
+
+
+        return requestData.Title;
+    }
+
+
+    // --------------------------------------------------
+    // GET TARGET LOCATION
+    // --------------------------------------------------
+
+    public Location GetTargetLocation()
+    {
+        return targetLocation;
+    }
+
+
+    // --------------------------------------------------
+    // GET DESTINATION ID
+    // --------------------------------------------------
+
+    public string GetDestinationID()
     {
         if (targetLocation == null)
-            return;
+            return "";
 
-        if (targetLocation.locationType == null)
-            return;
 
-        if (locationIcon == null)
-            return;
-
-        string iconName =
-            targetLocation.locationType.Name;
-
-        Material iconMaterial =
-            Resources.Load<Material>(
-                "Icons/" + iconName
-            );
-
-        if (iconMaterial == null)
-        {
-            Debug.LogError(
-                "Could not find icon material: " +
-                iconName
-            );
-
-            return;
-        }
-
-        locationIcon.material =
-            iconMaterial;
+        return targetLocation.GetDisplayName();
     }
 
+
     // --------------------------------------------------
-    // RESOURCE ICON
+    // GET DEADLINE
     // --------------------------------------------------
 
-    private void SetResourceIcon()
+    public int GetDeadlineMinutes()
     {
-        if (resourceIcon == null)
-            return;
+        return deadlineMinutes;
+    }
 
-        if (request == null)
-            return;
 
-        string iconName =
-            request.RequestedResources;
+    // --------------------------------------------------
+    // IS COMPLETE
+    // --------------------------------------------------
 
-        Material iconMaterial =
-            Resources.Load<Material>(
-                "ResourceIcons/" + iconName
-            );
+    public bool IsCompleted()
+    {
+        return completed;
+    }
 
-        if (iconMaterial == null)
-        {
-            Debug.LogWarning(
-                "Could not find resource icon: " +
-                iconName
-            );
 
-            return;
-        }
+    // --------------------------------------------------
+    // IS ACTIVE
+    // --------------------------------------------------
 
-        resourceIcon.material =
-            iconMaterial;
+    public bool IsActive()
+    {
+        return activeRequest;
     }
 }

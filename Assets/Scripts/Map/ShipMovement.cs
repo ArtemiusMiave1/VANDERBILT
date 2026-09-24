@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipMovement : MonoBehaviour
@@ -14,24 +13,8 @@ public class ShipMovement : MonoBehaviour
     public Location currentLocation;
     public Location targetLocation;
 
-    [Header("Route")]
-    public List<Location> route = new List<Location>();
-
-    [Header("Route String Height")]
-    public float routeLineHeightOffset = 0.5f;
-
-    [Header("Route Danger")]
-    public RouteDangerSystem routeDangerSystem;
-
-    [Header("Route Line")]
-    public LineRenderer routeLine;
-
-    [Header("Route Preview")]
-    public Camera mapCamera;
-
-    public LayerMask mapPlaneLayer;
-
-    public float routeLineHeight = 0.2f;
+    [Header("Route System")]
+    public ShipRouteSystem shipRouteSystem;
 
     [Header("Resource Depot UI")]
     public GameObject resourceDepotPaper;
@@ -40,57 +23,83 @@ public class ShipMovement : MonoBehaviour
     public int fuelPerLocation = 5;
 
     [Header("Cargo Weight")]
-    public float maximumCargoWeight = 2500f;
+    public float maximumCargoWeight = 750f;
+
+    [Tooltip("Lowest speed multiplier when cargo is at maximum weight.")]
+    [Range(0f, 1f)]
     public float minimumSpeedMultiplier = 0.25f;
 
     private ShipCargo shipCargo;
 
     private bool moving = false;
 
-    SoundManager soundManager;
 
-    private void Awake()
-    {
-        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
-    }
-
+    // =========================================================
+    // START
+    // =========================================================
 
     private void Start()
     {
-        shipCargo = FindObjectOfType<ShipCargo>();
+        shipCargo =
+            FindObjectOfType<ShipCargo>();
 
         if (shipCargo == null)
         {
-            Debug.LogError("ShipCargo not found!");
+            Debug.LogError(
+                "ShipMovement: ShipCargo not found!"
+            );
         }
 
-        if (mapCamera == null)
+
+        if (shipRouteSystem == null)
         {
-            mapCamera = Camera.main;
+            shipRouteSystem =
+                GetComponent<ShipRouteSystem>();
         }
 
-        currentSpeed = speed;
+
+        if (shipRouteSystem == null)
+        {
+            shipRouteSystem =
+                FindObjectOfType<ShipRouteSystem>();
+        }
+
+
+        if (shipRouteSystem == null)
+        {
+            Debug.LogError(
+                "ShipMovement: ShipRouteSystem not found!"
+            );
+        }
+
+
+        currentSpeed =
+            speed;
+
 
         UpdateResourceDepotPaper();
-        UpdateRouteLine();
     }
 
+
+    // =========================================================
+    // UPDATE
+    // =========================================================
 
     private void Update()
     {
-        // =====================================================
-        // MOVEMENT
-        // =====================================================
+        if (!moving)
+            return;
 
-        if (moving && targetLocation != null)
+
+        if (targetLocation == null)
         {
-            UpdateMovement();
+            moving = false;
+            return;
         }
-    }
 
-    // =========================================================
-    // START ROUTE PLACEMENT
-    // =========================================================
+
+        UpdateMovement();
+    }
 
 
     // =========================================================
@@ -99,163 +108,291 @@ public class ShipMovement : MonoBehaviour
 
     private void UpdateMovement()
     {
-        // Check fuel
-        if (shipCargo == null ||
-            shipCargo.GetResourceAmount("fuel") <= 0)
+        // -----------------------------------------------
+        // CHECK FUEL
+        // -----------------------------------------------
+
+        if (
+            shipCargo == null ||
+            shipCargo.GetResourceAmount("fuel") <= 0
+        )
         {
             moving = false;
             targetLocation = null;
 
-            Debug.Log("Ship has run out of fuel!");
-
-            UpdateRouteLine();
+            //Debug.Log(
+            //    "Ship has run out of fuel!"
+            //);
 
             return;
         }
 
 
-        // Update cargo weight and speed
+        // -----------------------------------------------
+        // UPDATE CARGO WEIGHT
+        // -----------------------------------------------
+
         currentCargoWeight =
             shipCargo.GetTotalWeight();
+
+
+        // -----------------------------------------------
+        // UPDATE SPEED
+        // -----------------------------------------------
 
         currentSpeed =
             GetCurrentSpeed();
 
 
-        // Move towards target
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            targetLocation.transform.position,
-            currentSpeed * Time.deltaTime
-        );
+        // -----------------------------------------------
+        // MOVE TOWARDS TARGET
+        // -----------------------------------------------
+
+        transform.position =
+            Vector3.MoveTowards(
+                transform.position,
+                targetLocation.transform.position,
+                currentSpeed *
+                Time.deltaTime
+            );
 
 
-        // Check if arrived
-        if (Vector3.Distance(
-            transform.position,
-            targetLocation.transform.position
-        ) < 0.05f)
+        // -----------------------------------------------
+        // CHECK ARRIVAL
+        // -----------------------------------------------
+
+        if (
+            Vector3.Distance(
+                transform.position,
+                targetLocation.transform.position
+            ) < 0.05f
+        )
         {
             transform.position =
                 targetLocation.transform.position;
-
+            print("Ship has arrived at " + targetLocation.GetDisplayName());
             ArriveAtLocation();
         }
     }
 
 
+    // =========================================================
+    // ARRIVE AT LOCATION
+    // =========================================================
+
     private void ArriveAtLocation()
     {
-        Location previousLocation = currentLocation;
-
-        currentLocation = targetLocation;
-
-        //Debug.Log(
-        //    "Arrived at " +
-        //    currentLocation.name
-        //);
+        Location previousLocation =
+            currentLocation;
 
 
-        // CHECK ROUTE DANGER
-        RouteConnection completedRoute =
-            GetRouteConnection(
-                previousLocation,
-                currentLocation
-            );
+        // -----------------------------------------------
+        // UPDATE CURRENT LOCATION
+        // -----------------------------------------------
 
-        if (routeDangerSystem != null)
-        {
-            routeDangerSystem.CheckRouteDanger(
-                completedRoute
-            );
-        }
+        currentLocation =
+            targetLocation;
 
 
-        // USE FUEL
-        if (shipCargo != null)
-        {
-            shipCargo.AddOrRemoveResource(
-                "fuel",
-                -fuelPerLocation
-            );
+        // -----------------------------------------------
+        // CONSUME FUEL
+        // -----------------------------------------------
 
-            //Debug.Log(
-            //    "Used " +
-            //    fuelPerLocation +
-            //    " fuel. Remaining fuel: " +
-            //    shipCargo.GetResourceAmount("fuel")
-            //);
-        }
+        ConsumeFuel();
 
+
+        // -----------------------------------------------
+        // UPDATE RESOURCE DEPOT
+        // -----------------------------------------------
 
         UpdateResourceDepotPaper();
 
 
-        // CHECK REQUESTS AT THIS LOCATION
-        if (currentLocation.activeRequests != null)
-        {
-            List<RequestPaper> requestsAtLocation =
-                new List<RequestPaper>(
-                    currentLocation.activeRequests
-                );
+        // -----------------------------------------------
+        // COMPLETE REQUESTS
+        // -----------------------------------------------
 
-            foreach (RequestPaper request in requestsAtLocation)
+        if (
+            currentLocation.activeRequests != null
+        )
+        {
+            RequestPaper[] requestsAtLocation =
+                currentLocation.activeRequests.ToArray();
+
+
+            foreach (
+                RequestPaper request
+                in requestsAtLocation
+            )
             {
                 if (request != null)
-                    request.OnShipArrived(currentLocation);
+                {
+                    request.OnShipArrived(
+                        currentLocation
+                    );
+                }
             }
         }
 
 
-        // Remove location we just arrived at
-        if (route.Count > 0)
-            route.RemoveAt(0);
+        // -----------------------------------------------
+        // TELL ROUTE SYSTEM WE ARRIVED
+        // -----------------------------------------------
 
-
-        UpdateRouteLine();
-
-
-        // Continue to next location
-        if (route.Count > 0)
+        if (shipRouteSystem != null)
         {
-            targetLocation = route[0];
+            shipRouteSystem.OnArrivedAtLocation(
+                currentLocation
+            );
 
-            //Debug.Log(
-            //    "Travelling to " +
-            //    targetLocation.name
-            //);
+
+            // Get the next location in the route.
+
+            targetLocation =
+                shipRouteSystem.GetNextLocation();
         }
         else
         {
             targetLocation = null;
+        }
+
+
+        // -----------------------------------------------
+        // CONTINUE OR FINISH ROUTE
+        // -----------------------------------------------
+
+        if (targetLocation != null)
+        {
+            moving = true;
+
+
+            Debug.Log(
+                "Continuing route to " +
+                targetLocation.GetDisplayName()
+            );
+        }
+        else
+        {
             moving = false;
 
-            //Debug.Log("Route complete.");
 
-            UpdateRouteLine();
+            Debug.Log(
+                "Ship route complete."
+            );
         }
     }
 
 
     // =========================================================
-    // RESOURCE DEPOT
+    // CONSUME FUEL
+    // =========================================================
+
+    private void ConsumeFuel()
+    {
+        if (shipCargo == null)
+            return;
+
+
+        shipCargo.AddOrRemoveResource(
+            "fuel",
+            -fuelPerLocation
+        );
+
+
+        Debug.Log(
+            "Fuel consumed: " +
+            fuelPerLocation
+        );
+    }
+
+
+    // =========================================================
+    // START ROUTE
+    // =========================================================
+
+    public void StartRoute()
+    {
+        if (shipRouteSystem == null)
+        {
+            Debug.LogError(
+                "ShipMovement: ShipRouteSystem not found!"
+            );
+
+            return;
+        }
+
+
+        if (moving)
+        {
+            Debug.Log(
+                "Ship is already moving."
+            );
+
+            return;
+        }
+
+
+        targetLocation =
+            shipRouteSystem.GetNextLocation();
+
+
+        if (targetLocation == null)
+        {
+            Debug.Log(
+                "Ship route is empty."
+            );
+
+            moving = false;
+
+            return;
+        }
+
+
+        moving = true;
+
+
+        Debug.Log(
+            "Ship starting route to " +
+            targetLocation.GetDisplayName()
+        );
+    }
+
+
+    // =========================================================
+    // STOP MOVEMENT
+    // =========================================================
+
+    public void StopMovement()
+    {
+        moving = false;
+
+        targetLocation = null;
+
+
+        Debug.Log(
+            "Ship movement stopped."
+        );
+    }
+
+
+    // =========================================================
+    // RESOURCE DEPOT PAPER
     // =========================================================
 
     private void UpdateResourceDepotPaper()
     {
         if (resourceDepotPaper == null)
-        {
             return;
-        }
 
 
-        if (currentLocation != null &&
+        if (
+            currentLocation != null &&
             currentLocation.locationType != null &&
             currentLocation.locationType.LocationType ==
-            "ResourceDepot")
+            "ResourceDepot"
+        )
         {
             resourceDepotPaper.SetActive(true);
-            soundManager.PlaySFX(soundManager.FaxPrint);
         }
         else
         {
@@ -265,525 +402,7 @@ public class ShipMovement : MonoBehaviour
 
 
     // =========================================================
-    // ROUTE CONNECTION
-    // =========================================================
-
-    private RouteConnection GetRouteConnection(
-        Location locationA,
-        Location locationB)
-    {
-        if (locationA == null || locationB == null)
-            return null;
-
-
-        foreach (RouteConnection connection
-                 in locationA.connections)
-        {
-            if (connection == null)
-                continue;
-
-
-            if (connection.locationA == locationA &&
-                connection.locationB == locationB)
-            {
-                return connection;
-            }
-
-
-            if (connection.locationA == locationB &&
-                connection.locationB == locationA)
-            {
-                return connection;
-            }
-        }
-
-
-        return null;
-    }
-
-
-    // =========================================================
-    // ADD LOCATION TO ROUTE
-    // =========================================================
-
-    public void AddToRoute(Location destination)
-    {
-        if (destination == null)
-            return;
-
-
-        if (destination == currentLocation)
-        {
-            //Debug.Log(
-            //    "Already at " +
-            //    destination.name
-            //);
-
-            return;
-        }
-
-
-        if (route.Contains(destination))
-        {
-            //Debug.Log(
-            //    destination.name +
-            //    " is already in the route."
-            //);
-
-            return;
-        }
-
-
-        Location previousLocation;
-
-
-        if (route.Count > 0)
-        {
-            previousLocation =
-                route[route.Count - 1];
-        }
-        else
-        {
-            previousLocation =
-                currentLocation;
-        }
-
-
-        RouteConnection connection =
-            GetRouteConnection(
-                previousLocation,
-                destination
-            );
-
-
-        if (connection == null)
-        {
-            Debug.Log(
-                destination.name +
-                " is not connected to " +
-                previousLocation.name
-            );
-
-            return;
-        }
-
-
-        if (connection.blocked)
-        {
-            Debug.Log(
-                "Route from " +
-                previousLocation.name +
-                " to " +
-                destination.name +
-                " is BLOCKED!"
-            );
-
-            return;
-        }
-
-
-        if (!HasEnoughFuel())
-            return;
-
-
-        route.Add(destination);
-
-
-        //Debug.Log(
-        //    "Added " +
-        //    destination.name +
-        //    " to route."
-        //);
-
-
-        Debug.Log(
-            "Route danger level: " +
-            connection.dangerLevel
-        );
-
-
-        UpdateRouteLine();
-
-
-        if (!moving)
-        {
-            targetLocation = route[0];
-
-            moving = true;
-
-
-            //Debug.Log(
-            //    "Ship travelling to " +
-            //    targetLocation.name
-            //);
-        }
-    }
-
-
-    // =========================================================
-    // FUEL
-    // =========================================================
-
-    private bool HasEnoughFuel()
-    {
-        if (shipCargo == null)
-            return false;
-
-
-        int currentFuel =
-            shipCargo.GetResourceAmount("fuel");
-
-
-        if (currentFuel < fuelPerLocation)
-        {
-            //Debug.Log(
-            //    "Not enough fuel! " +
-            //    "Required: " +
-            //    fuelPerLocation +
-            //    " | Have: " +
-            //    currentFuel
-            //);
-
-            return false;
-        }
-
-
-        return true;
-    }
-
-
-    // =========================================================
-    // CLEAR ROUTE
-    // =========================================================
-
-    public void ClearRoute()
-    {
-        route.Clear();
-
-        targetLocation = null;
-        moving = false;
-
-        if (routeLine != null)
-        {
-            routeLine.positionCount = 0;
-        }
-
-        Debug.Log("Route cleared.");
-    }
-
-    // =========================================================
-    // ROUTE LINE
-    // =========================================================
-
-    public void UpdateRouteLine()
-    {
-        if (routeLine == null)
-            return;
-
-        if (currentLocation == null)
-            return;
-
-        routeLine.useWorldSpace = true;
-
-        routeLine.positionCount = route.Count + 1;
-
-        // Start at current location
-        Vector3 startPosition =
-            currentLocation.transform.position;
-
-        startPosition.y += routeLineHeightOffset;
-
-        routeLine.SetPosition(
-            0,
-            startPosition
-        );
-
-        // Draw the route string above the map
-        for (int i = 0; i < route.Count; i++)
-        {
-            Vector3 position =
-                route[i].transform.position;
-
-            position.y += routeLineHeightOffset;
-
-            routeLine.SetPosition(
-                i + 1,
-                position
-            );
-        }
-    }
-
-
-    // =========================================================
-    // ROUTE PREVIEW
-    // =========================================================
-
-    private void UpdateRoutePreview()
-    {
-        if (routeLine == null)
-            return;
-
-
-        if (mapCamera == null)
-            return;
-
-
-        // We need somewhere to start the preview from
-        if (currentLocation == null)
-            return;
-
-
-        Vector3 startPosition;
-
-
-        // If there are locations already selected,
-        // start from the most recently selected one
-        if (route.Count > 0)
-        {
-            startPosition =
-                route[route.Count - 1].transform.position;
-        }
-        else
-        {
-            startPosition =
-                currentLocation.transform.position;
-        }
-
-
-        // Raycast from the mouse
-        Ray ray =
-            mapCamera.ScreenPointToRay(
-                Input.mousePosition
-            );
-
-
-        RaycastHit hit;
-
-
-        if (Physics.Raycast(
-            ray,
-            out hit,
-            1000f,
-            mapPlaneLayer
-        ))
-        {
-            Vector3 mousePosition =
-                hit.point;
-
-
-            // Raise line above the map
-            mousePosition.y +=
-                routeLineHeight;
-
-
-            // Existing route + temporary mouse point
-            routeLine.positionCount =
-                route.Count + 2;
-
-
-            // Current location
-            routeLine.SetPosition(
-                0,
-                currentLocation.transform.position
-            );
-
-
-            // Existing route locations
-            for (int i = 0; i < route.Count; i++)
-            {
-                routeLine.SetPosition(
-                    i + 1,
-                    route[i].transform.position
-                );
-            }
-
-
-            // Mouse preview point
-            routeLine.SetPosition(
-                route.Count + 1,
-                mousePosition
-            );
-        }
-    }
-
-
-    private void RemoveRoutePreview()
-    {
-        if (routeLine == null)
-            return;
-
-
-        // Return to normal route line
-        UpdateRouteLine();
-    }
-
-
-    // =========================================================
-    // CLICK LOCATION
-    // =========================================================
-
-    public void HandleRouteLocation(Location location, bool rightClick = false)
-    {
-        if (location == null)
-            return;
-
-
-        // =====================================================
-        // RIGHT CLICK
-        // ONLY REMOVE THE END OF THE ROUTE
-        // =====================================================
-
-        if (rightClick)
-        {
-            // Nothing to remove
-            if (route.Count == 0)
-                return;
-
-            // Only allow removing the LAST location
-            if (route[route.Count - 1] != location)
-            {
-                Debug.Log(
-                    "Can only remove the end location of the route."
-                );
-
-                return;
-            }
-
-            route.RemoveAt(route.Count - 1);
-
-            Debug.Log(
-                "Removed " +
-                location.name +
-                " from route."
-            );
-
-
-            // Update movement
-            if (route.Count > 0)
-            {
-                if (moving)
-                {
-                    targetLocation = route[0];
-                }
-            }
-            else
-            {
-                targetLocation = null;
-                moving = false;
-            }
-
-            UpdateRouteLine();
-
-            return;
-        }
-
-
-        // =====================================================
-        // LEFT CLICK
-        // ADD LOCATION TO ROUTE
-        // =====================================================
-
-        if (location == currentLocation)
-            return;
-
-        // Don't allow duplicate locations
-        if (route.Contains(location))
-            return;
-
-
-        // Find the previous location
-        Location previousLocation;
-
-        if (route.Count > 0)
-        {
-            previousLocation =
-                route[route.Count - 1];
-        }
-        else
-        {
-            previousLocation =
-                currentLocation;
-        }
-
-
-        // =====================================================
-        // CHECK CONNECTION
-        // =====================================================
-
-        RouteConnection connection =
-            GetRouteConnection(
-                previousLocation,
-                location
-            );
-
-        if (connection == null)
-        {
-            Debug.Log(
-                location.name +
-                " is not connected to " +
-                previousLocation.name
-            );
-
-            return;
-        }
-
-
-        // =====================================================
-        // CHECK BLOCKED
-        // =====================================================
-
-        if (connection.blocked)
-        {
-            Debug.Log(
-                "Route to " +
-                location.name +
-                " is blocked!"
-            );
-
-            return;
-        }
-
-
-        // =====================================================
-        // ADD LOCATION
-        // =====================================================
-
-        route.Add(location);
-
-        Debug.Log(
-            "Added " +
-            location.name +
-            " to route."
-        );
-
-        Debug.Log(
-            "Route contains " +
-            route.Count +
-            " locations."
-        );
-
-
-        // =====================================================
-        // UPDATE ROUTE LINE
-        // =====================================================
-
-        UpdateRouteLine();
-
-
-        // =====================================================
-        // START MOVEMENT
-        // =====================================================
-
-        if (!moving)
-        {
-            targetLocation = route[0];
-            moving = true;
-        }
-    }
-
-
-    // =========================================================
-    // CARGO WEIGHT / SPEED
+    // CALCULATE CURRENT SPEED
     // =========================================================
 
     private float GetCurrentSpeed()
@@ -796,14 +415,22 @@ public class ShipMovement : MonoBehaviour
             shipCargo.GetTotalWeight();
 
 
+        // Convert cargo weight into a value
+        // between 0 and 1.
+
         float weightPercentage =
             currentCargoWeight /
             maximumCargoWeight;
 
 
         weightPercentage =
-            Mathf.Clamp01(weightPercentage);
+            Mathf.Clamp01(
+                weightPercentage
+            );
 
+
+        // Empty cargo = 1x speed
+        // Full cargo = minimumSpeedMultiplier
 
         float speedMultiplier =
             Mathf.Lerp(
@@ -813,6 +440,34 @@ public class ShipMovement : MonoBehaviour
             );
 
 
-        return speed * speedMultiplier;
+        return speed *
+               speedMultiplier;
+    }
+
+
+    // =========================================================
+    // PUBLIC INFORMATION
+    // =========================================================
+
+    public bool IsMoving()
+    {
+        return moving;
+    }
+
+
+    public Location GetCurrentLocation()
+    {
+        return currentLocation;
+    }
+
+
+    public Location GetTargetLocation()
+    {
+        return targetLocation;
+    }
+
+    public float GetCurrentCargoWeight()
+    {
+        return currentCargoWeight;
     }
 }
