@@ -114,7 +114,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _CloudDensity: 0.658
-    - _CloudIntensity: 1
+    - _CloudIntensity: 0.89
     - _CloudScale: -27.5
     - _CloudScatter: 0.559
     - _Cull: 2
@@ -145,7 +145,7 @@ Material:
     - _SunSize: 0.04
     - _SunSizeConvergence: 5
     - _Surface: 0
-    - _ThunderToggle: 1
+    - _ThunderToggle: 0
     - _TimeOften: 0.05
     - _UVSec: 0
     - _WorkflowMode: 1
@@ -154,9 +154,9 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorBright: {r: 0.240833, g: 0.2774992, b: 0.2830189, a: 1}
+    - _ColorBright: {r: 0.2055891, g: 0.5685202, b: 0.6226414, a: 1}
     - _ColorClouds: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorDark: {r: 0.240833, g: 0.2774992, b: 0.2830189, a: 1}
+    - _ColorDark: {r: 0.2055891, g: 0.5685202, b: 0.6226414, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FanSpeed: {r: 0.2, g: 0.2, b: 0, a: 0}
     - _GroundColor: {r: 0.36899996, g: 0.34899998, b: 0.34099993, a: 1}

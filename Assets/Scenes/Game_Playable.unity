@@ -460,7 +460,6 @@ MonoBehaviour:
   Toggle: 0
   ShaderDuration: 2
   cloudintensity: 0
-  togglestorm: 0
 --- !u!4 &990913736
 Transform:
   m_ObjectHideFlags: 0
@@ -1125,6 +1124,9 @@ PrefabInstance:
       insertIndex: 13
       addedObject: {fileID: 229870539}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5264184574140980801, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 2178098009315747318, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
