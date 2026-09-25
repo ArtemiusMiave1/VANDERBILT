@@ -3264,6 +3264,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9161726026980055430}
     m_Modifications:
+    - target: {fileID: 5646908344252476874, guid: 7851ed088ad988345a0a5dcb9b3f6a4f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 61f3de5bd54e20e4e8b6ddfeff1540d4, type: 2}
     - target: {fileID: 6151113658382683167, guid: 7851ed088ad988345a0a5dcb9b3f6a4f, type: 3}
       propertyPath: m_Name
       value: ControlPanel_Chair
