@@ -539,7 +539,7 @@ Transform:
   m_GameObject: {fileID: 3181134954245172168}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.1685, y: -0.1254, z: -0}
+  m_LocalPosition: {x: -0.1685, y: -0.1254, z: 0.0023}
   m_LocalScale: {x: 0.010490695, y: 0.010490693, z: 0.010490695}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -578,7 +578,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c5821bd228cdb1647927a56398c34b13, type: 2}
+  - {fileID: 2100000, guid: 1d6b870e27493fa40b8e39dfd8597b95, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -650,7 +650,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3329355607069336274}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 36.612644}
+  m_LocalPosition: {x: 0, y: 0, z: 36.6}
   m_LocalScale: {x: 22.03548, y: 22.035488, z: 22.03548}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -658,7 +658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -26.521057, y: 0.22646026}
+  m_AnchoredPosition: {x: -26.521057, y: 0}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2215124089257772712
@@ -833,7 +833,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3865829635116388864}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 36.612644}
+  m_LocalPosition: {x: 0, y: 0, z: 36.6}
   m_LocalScale: {x: 22.03548, y: 22.035488, z: 22.03548}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -841,7 +841,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -26.521057, y: 0.22646026}
+  m_AnchoredPosition: {x: -26.521057, y: -0.1}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8540045976709087251
@@ -1421,10 +1421,12 @@ MonoBehaviour:
   dialogueText: {fileID: 8833710120675125863}
   arrivalTimeText: {fileID: 8170607689898278929}
   destinationText: {fileID: 2022183882410524347}
+  deliveredStamp: {fileID: 3181134954245172168}
   targetLocation: {fileID: 0}
   activeRequest: 0
   completed: 0
   acceptedFromBoard: 0
+  pendingGold: 0
   audioSource: {fileID: 0}
   requestAcceptedSound: {fileID: 0}
   requestCompletedSound: {fileID: 0}
