@@ -1357,7 +1357,9 @@ MonoBehaviour:
   sensitivityValueText: {fileID: 682489760864700050}
   pauseMenuUI: {fileID: 884854427483808774}
   settingsMenuUI: {fileID: 1622366820534192483}
-  mouseLookScripts: []
+  mouseLookScripts:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &5906706318645582472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6440733306517311706, guid: 8dfcf44ba9e7817488a4797e5f5be00d, type: 3}

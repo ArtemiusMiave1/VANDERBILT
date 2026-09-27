@@ -877,6 +877,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2490473153074066864, guid: 7e3db3b0965d14047922c5dcd6e64a57, type: 3}
+      propertyPath: 'mouseLookScripts.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8931616166003584734}
+    - target: {fileID: 2490473153074066864, guid: 7e3db3b0965d14047922c5dcd6e64a57, type: 3}
+      propertyPath: 'mouseLookScripts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8931616166003584728}
     - target: {fileID: 4607636833758644207, guid: 7e3db3b0965d14047922c5dcd6e64a57, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
