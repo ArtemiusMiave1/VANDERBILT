@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject pauseMenuUI;
     public GameObject settingsMenuUI;
+    public GameObject controlsMenuUI;
 
     void Update()
     {
@@ -30,6 +31,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         settingsMenuUI.SetActive(false);
+        controlsMenuUI.SetActive(false);
 
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -43,6 +45,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(true);
         settingsMenuUI.SetActive(false);
+        controlsMenuUI.SetActive(false);
 
         Time.timeScale = 0f;
         GameIsPaused = true;
@@ -57,6 +60,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         settingsMenuUI.SetActive(true);
+        controlsMenuUI.SetActive(false);
 
         // Make sure cursor stays available
         Cursor.visible = true;
@@ -64,8 +68,32 @@ public class PauseMenu : MonoBehaviour
     }
 
     // Called by the Back button in Settings
-    public void CloseSettings()
+    //public void CloseSettings()
+   // {
+    //    settingsMenuUI.SetActive(false);
+     //   controlsMenuUI.SetActive(false);
+    //    pauseMenuUI.SetActive(true);
+//
+    //    Cursor.visible = true;
+     //   Cursor.lockState = CursorLockMode.None;
+   // }
+
+    // Called by the Controls button
+    public void OpenControls()
     {
+        pauseMenuUI.SetActive(false);
+        settingsMenuUI.SetActive(false);
+        controlsMenuUI.SetActive(true);
+
+        // Make sure cursor stays available
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    // Called by the Back button in Controls
+    public void CloseControls()
+    {
+        controlsMenuUI.SetActive(false);
         settingsMenuUI.SetActive(false);
         pauseMenuUI.SetActive(true);
 
