@@ -873,6 +873,14 @@ PrefabInstance:
       propertyPath: playerState
       value: 
       objectReference: {fileID: 5153473159633507531}
+    - target: {fileID: 1054875318559232054, guid: 7e3db3b0965d14047922c5dcd6e64a57, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4607636833758644207, guid: 7e3db3b0965d14047922c5dcd6e64a57, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6665542138839644028, guid: 7e3db3b0965d14047922c5dcd6e64a57, type: 3}
       propertyPath: m_Name
       value: Canvas
