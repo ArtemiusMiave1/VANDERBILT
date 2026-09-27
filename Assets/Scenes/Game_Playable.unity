@@ -1014,9 +1014,17 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
+    - target: {fileID: 1597001114547539235, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1989504337605467292, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: m_LocalPosition.y
       value: 2.169
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845015781920348922, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3271361826690844679, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1105,6 +1113,14 @@ PrefabInstance:
     - target: {fileID: 6943408924321513564, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: interactionDistance
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794243488743453267, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842736619860078011, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8931616165995300340, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: m_Enabled
