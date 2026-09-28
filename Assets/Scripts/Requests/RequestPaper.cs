@@ -14,6 +14,8 @@ public class RequestPaper : MonoBehaviour
     public TMP_Text dialogueText;
     public TMP_Text arrivalTimeText;
     public TMP_Text destinationText;
+    public TMP_Text requirementText;
+    public TMP_Text conditionText;
 
     [Header("Delivered Stamp")]
     [Tooltip("Image/GameObject shown when the request is successfully delivered.")]
@@ -102,13 +104,18 @@ public class RequestPaper : MonoBehaviour
         // -----------------------------------------------------
 
         requirement =
-            data.requirement;
+            data.Requirement;
+
+        requirementText.text =
+            "REQUIREMENT: " +
+            requirement.ToString().ToUpper();
 
         // Every newly generated fragile request
         // starts in a safe condition.
         fragileCondition =
             FragileCondition.Safe;
 
+        UpdateConditionDisplay();
 
         if (deliveredStamp != null)
         {
@@ -228,6 +235,7 @@ public class RequestPaper : MonoBehaviour
         int currentTime =
             GameClock.Instance.GetTotalMinutes();
 
+        // Round current time up to nearest 15 minutes.
         int roundedTime =
             Mathf.CeilToInt(
                 currentTime / 15f
@@ -235,12 +243,43 @@ public class RequestPaper : MonoBehaviour
 
         roundedTime %= 1440;
 
+
+        // -----------------------------------------------------
+        // DELIVERY TIME
+        // -----------------------------------------------------
+
+        int deliveryTime = 180;
+
+
+        // Urgent deliveries only have 1 hour.
+        if (
+            requirement ==
+            RequestRequirement.UrgentDelivery
+        )
+        {
+            deliveryTime = 60;
+        }
+
+
+        // -----------------------------------------------------
+        // SET DEADLINE
+        // -----------------------------------------------------
+
         deadlineMinutes =
-            (roundedTime + 180) % 1440;
+            (roundedTime + deliveryTime)
+            % 1440;
 
         deadlineSet = true;
 
         UpdateArrivalDisplay();
+
+
+        Debug.Log(
+            GetRequestTitle() +
+            " deadline set to " +
+            deliveryTime +
+            " minutes."
+        );
     }
 
 
@@ -276,7 +315,7 @@ public class RequestPaper : MonoBehaviour
 
         arrivalTimeText.text =
             string.Format(
-                "EST. ARRIVAL: {0}:{1:00} {2}",
+                "ETA: {0}:{1:00} {2}",
                 displayHour,
                 minute,
                 period
@@ -421,13 +460,12 @@ public class RequestPaper : MonoBehaviour
         if (!IsFragile())
             return;
 
-        // Don't damage requests that aren't
-        // currently being transported.
+        // Only requests currently being transported
+        // can be damaged.
         if (!activeRequest)
             return;
 
-        // Completed requests can no longer
-        // be damaged.
+        // Completed requests cannot be damaged.
         if (completed)
             return;
 
@@ -443,6 +481,8 @@ public class RequestPaper : MonoBehaviour
         {
             fragileCondition =
                 FragileCondition.Damaged;
+
+            UpdateConditionDisplay();
 
             Debug.Log(
                 "Fragile cargo DAMAGED: " +
@@ -465,6 +505,8 @@ public class RequestPaper : MonoBehaviour
             fragileCondition =
                 FragileCondition.Broken;
 
+            UpdateConditionDisplay();
+
             Debug.Log(
                 "Fragile cargo BROKEN: " +
                 GetRequestTitle()
@@ -474,7 +516,10 @@ public class RequestPaper : MonoBehaviour
         }
 
 
-        // Already broken.
+        // -----------------------------------------------------
+        // ALREADY BROKEN
+        // -----------------------------------------------------
+
         if (
             fragileCondition ==
             FragileCondition.Broken
@@ -484,21 +529,54 @@ public class RequestPaper : MonoBehaviour
         }
     }
 
+    private void UpdateConditionDisplay()
+    {
+        if (conditionText == null)
+            return;
+
+
+        // -----------------------------------------------------
+        // NOT FRAGILE
+        // -----------------------------------------------------
+
+        if (!IsFragile())
+        {
+            conditionText.text =
+                "CONDITION: N/A";
+
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // FRAGILE CONDITION
+        // -----------------------------------------------------
+
+        conditionText.text =
+            "CONDITION: " +
+            fragileCondition.ToString().ToUpper();
+    }
 
     // =========================================================
     // ARRIVE AT REQUEST DESTINATION
     // =========================================================
 
     public void OnShipArrived(
-        Location arrivedLocation
-    )
+    Location arrivedLocation
+)
     {
         if (arrivedLocation == null)
             return;
 
+        // Request has not been accepted yet.
+        if (!activeRequest)
+            return;
+
+        // Ship arrived somewhere else.
         if (targetLocation != arrivedLocation)
             return;
 
+        // Request was already completed.
         if (completed)
             return;
 
@@ -514,6 +592,13 @@ public class RequestPaper : MonoBehaviour
     {
         if (completed)
             return;
+
+        // Request must be accepted before
+        // it can be completed.
+        if (!activeRequest)
+        {
+            return;
+        }
 
         if (requestData == null)
         {

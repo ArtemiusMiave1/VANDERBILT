@@ -33,5 +33,5 @@ public class RequestData
     public string Unlockables;
 
     [Header("Requirement")]
-    public RequestRequirement requirement;
+    public RequestRequirement Requirement;
 }
