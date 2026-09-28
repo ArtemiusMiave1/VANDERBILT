@@ -19,6 +19,18 @@ public class RequestPaper : MonoBehaviour
     [Tooltip("Image/GameObject shown when the request is successfully delivered.")]
     public GameObject deliveredStamp;
 
+    [Header("Request Requirement")]
+    public RequestRequirement requirement =
+        RequestRequirement.None;
+
+    [Header("Fragile Cargo")]
+    public FragileCondition fragileCondition =
+        FragileCondition.Safe;
+
+    [Range(0f, 1f)]
+    [Tooltip("Reward multiplier if the fragile cargo is damaged.")]
+    public float damagedRewardMultiplier = 0.5f;
+
     [Header("Request Destination")]
     public Location targetLocation;
 
@@ -84,6 +96,19 @@ public class RequestPaper : MonoBehaviour
         pendingGold = 0;
 
         requestVisual = null;
+
+        // -----------------------------------------------------
+        // REQUIREMENT
+        // -----------------------------------------------------
+
+        requirement =
+            data.requirement;
+
+        // Every newly generated fragile request
+        // starts in a safe condition.
+        fragileCondition =
+            FragileCondition.Safe;
+
 
         if (deliveredStamp != null)
         {
@@ -366,6 +391,101 @@ public class RequestPaper : MonoBehaviour
 
 
     // =========================================================
+    // FRAGILE CARGO
+    // =========================================================
+
+    public bool IsFragile()
+    {
+        return requirement ==
+               RequestRequirement.Fragile;
+    }
+
+
+    public bool IsFragileDamaged()
+    {
+        return fragileCondition ==
+               FragileCondition.Damaged;
+    }
+
+
+    public bool IsFragileBroken()
+    {
+        return fragileCondition ==
+               FragileCondition.Broken;
+    }
+
+
+    public void DamageFragileCargo()
+    {
+        // Only fragile requests can be damaged.
+        if (!IsFragile())
+            return;
+
+        // Don't damage requests that aren't
+        // currently being transported.
+        if (!activeRequest)
+            return;
+
+        // Completed requests can no longer
+        // be damaged.
+        if (completed)
+            return;
+
+
+        // -----------------------------------------------------
+        // SAFE -> DAMAGED
+        // -----------------------------------------------------
+
+        if (
+            fragileCondition ==
+            FragileCondition.Safe
+        )
+        {
+            fragileCondition =
+                FragileCondition.Damaged;
+
+            Debug.Log(
+                "Fragile cargo DAMAGED: " +
+                GetRequestTitle()
+            );
+
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // DAMAGED -> BROKEN
+        // -----------------------------------------------------
+
+        if (
+            fragileCondition ==
+            FragileCondition.Damaged
+        )
+        {
+            fragileCondition =
+                FragileCondition.Broken;
+
+            Debug.Log(
+                "Fragile cargo BROKEN: " +
+                GetRequestTitle()
+            );
+
+            return;
+        }
+
+
+        // Already broken.
+        if (
+            fragileCondition ==
+            FragileCondition.Broken
+        )
+        {
+            return;
+        }
+    }
+
+
+    // =========================================================
     // ARRIVE AT REQUEST DESTINATION
     // =========================================================
 
@@ -417,20 +537,10 @@ public class RequestPaper : MonoBehaviour
             return;
         }
 
-        /*
-         * -----------------------------------------------------
-         * DELIVER THE REQUESTED RESOURCE
-         * -----------------------------------------------------
-         *
-         * Gold is deliberately NOT handled here.
-         *
-         * Example:
-         *
-         * Food request = 20
-         *
-         * Cargo:
-         * Food 100 -> Food 80
-         */
+
+        // -----------------------------------------------------
+        // DELIVER THE REQUESTED RESOURCE
+        // -----------------------------------------------------
 
         string requestedResource =
             requestData.RequestedResources;
@@ -445,9 +555,8 @@ public class RequestPaper : MonoBehaviour
             requestedAmount > 0
         )
         {
-            /*
-             * Gold is a reward, not a delivered cargo resource.
-             */
+            // Gold is a reward,
+            // not a delivered cargo resource.
             if (
                 !requestedResource.Equals(
                     "gold",
@@ -497,11 +606,81 @@ public class RequestPaper : MonoBehaviour
 
 
         // -----------------------------------------------------
+        // CALCULATE REWARD
+        // -----------------------------------------------------
+
+        int finalReward =
+            requestData.RewardAmount;
+
+
+        // -----------------------------------------------------
+        // FRAGILE REWARD
+        // -----------------------------------------------------
+
+        if (IsFragile())
+        {
+            // SAFE
+            // Full reward.
+            if (
+                fragileCondition ==
+                FragileCondition.Safe
+            )
+            {
+                finalReward =
+                    requestData.RewardAmount;
+
+                Debug.Log(
+                    "Fragile cargo delivered safely. " +
+                    "Full reward."
+                );
+            }
+
+
+            // DAMAGED
+            // Reduced reward.
+            else if (
+                fragileCondition ==
+                FragileCondition.Damaged
+            )
+            {
+                finalReward =
+                    Mathf.RoundToInt(
+                        requestData.RewardAmount *
+                        damagedRewardMultiplier
+                    );
+
+                Debug.Log(
+                    "Fragile cargo delivered damaged. " +
+                    "Reward reduced to " +
+                    finalReward +
+                    " gold."
+                );
+            }
+
+
+            // BROKEN
+            // No reward.
+            else if (
+                fragileCondition ==
+                FragileCondition.Broken
+            )
+            {
+                finalReward = 0;
+
+                Debug.Log(
+                    "Fragile cargo was broken. " +
+                    "No reward."
+                );
+            }
+        }
+
+
+        // -----------------------------------------------------
         // STORE GOLD AS PENDING
         // -----------------------------------------------------
 
         pendingGold =
-            requestData.RewardAmount;
+            finalReward;
 
         Debug.Log(
             "Request completed. " +
@@ -642,8 +821,26 @@ public class RequestPaper : MonoBehaviour
     }
 
 
+    public bool IsAccepted()
+    {
+        return activeRequest;
+    }
+
+
     public int GetPendingGold()
     {
         return pendingGold;
+    }
+
+
+    public RequestRequirement GetRequirement()
+    {
+        return requirement;
+    }
+
+
+    public FragileCondition GetFragileCondition()
+    {
+        return fragileCondition;
     }
 }

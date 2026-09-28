@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class RequestData
@@ -30,4 +31,7 @@ public class RequestData
     public string LocationType;
 
     public string Unlockables;
+
+    [Header("Requirement")]
+    public RequestRequirement requirement;
 }

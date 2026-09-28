@@ -324,10 +324,10 @@ public class ShipRouteSystem : MonoBehaviour
         lastDraggedLocation =
             location;
 
-        Debug.Log(
-            "Added location to route: " +
-            location.GetDisplayName()
-        );
+        //Debug.Log(
+        //    "Added location to route: " +
+        //    location.GetDisplayName()
+        //);
     }
 
 
@@ -343,10 +343,10 @@ public class ShipRouteSystem : MonoBehaviour
 
         UpdateRouteLine();
 
-        Debug.Log(
-            "Finished adding route. Locations: " +
-            route.Count
-        );
+        //Debug.Log(
+        //    "Finished adding route. Locations: " +
+        //    route.Count
+        //);
     }
 
 
@@ -358,9 +358,9 @@ public class ShipRouteSystem : MonoBehaviour
     {
         if (route.Count <= 1)
         {
-            Debug.Log(
-                "Nothing to remove from route."
-            );
+            //Debug.Log(
+            //    "Nothing to remove from route."
+            //);
 
             return;
         }
@@ -372,9 +372,9 @@ public class ShipRouteSystem : MonoBehaviour
                 out currentMapMousePosition
             );
 
-        Debug.Log(
-            "Removing locations from route."
-        );
+        //Debug.Log(
+        //    "Removing locations from route."
+        //);
 
         ContinueRemovingRoute();
     }
@@ -485,10 +485,10 @@ public class ShipRouteSystem : MonoBehaviour
                 route.Count - 1
             );
 
-            Debug.Log(
-                "Removed location from route: " +
-                removedLocation.GetDisplayName()
-            );
+            //Debug.Log(
+            //    "Removed location from route: " +
+            //    removedLocation.GetDisplayName()
+            //);
         }
     }
 
@@ -503,10 +503,10 @@ public class ShipRouteSystem : MonoBehaviour
 
         UpdateRouteLine();
 
-        Debug.Log(
-            "Finished removing route. Locations: " +
-            route.Count
-        );
+        //Debug.Log(
+        //    "Finished removing route. Locations: " +
+        //    route.Count
+        //);
     }
 
 
@@ -819,9 +819,9 @@ public class ShipRouteSystem : MonoBehaviour
 
         if (connection.blocked)
         {
-            Debug.Log(
-                "Route is blocked."
-            );
+            //Debug.Log(
+            //    "Route is blocked."
+            //);
 
             return;
         }
@@ -832,12 +832,12 @@ public class ShipRouteSystem : MonoBehaviour
 
         UpdateRouteLine();
 
-        Debug.Log(
-            "Added route: " +
-            lastLocation.GetDisplayName() +
-            " -> " +
-            location.GetDisplayName()
-        );
+        //Debug.Log(
+        //    "Added route: " +
+        //    lastLocation.GetDisplayName() +
+        //    " -> " +
+        //    location.GetDisplayName()
+        //);
     }
 
 
@@ -903,12 +903,12 @@ public class ShipRouteSystem : MonoBehaviour
 
         UpdateRouteLine();
 
-        Debug.Log(
-            "Route updated after arriving at " +
-            arrivedLocation.GetDisplayName() +
-            ". Remaining route: " +
-            route.Count
-        );
+        //Debug.Log(
+        //    "Route updated after arriving at " +
+        //    arrivedLocation.GetDisplayName() +
+        //    ". Remaining route: " +
+        //    route.Count
+        //);
     }
 
 

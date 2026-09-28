@@ -22,10 +22,10 @@ public class LocationClick : MonoBehaviour
         if (location == null)
             return;
 
-        Debug.Log(
-            "Clicked location: " +
-            location.GetDisplayName()
-        );
+        //Debug.Log(
+        //    "Clicked location: " +
+        //    location.GetDisplayName()
+        //);
 
         // Tell the ShipRouteSystem that this location was clicked
         ShipRouteSystem routeSystem =

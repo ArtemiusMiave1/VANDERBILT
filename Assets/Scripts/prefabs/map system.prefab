@@ -142,6 +142,7 @@ MonoBehaviour:
   currentLocation: {fileID: 5214328117056592538}
   targetLocation: {fileID: 0}
   shipRouteSystem: {fileID: 7621336041208706445}
+  routeDangerSystem: {fileID: 2674260369968726789}
   resourceDepotPaper: {fileID: 0}
   fuelPerLocation: 2
   maximumCargoWeight: 2500
@@ -527,6 +528,9 @@ MonoBehaviour:
   maximumCargoLoss: 20
   minimumFuelLoss: 1
   maximumFuelLoss: 5
+  shipIncidentFuelLoss: 5
+  stormTrigger: {fileID: 0}
+  shipCargo: {fileID: 0}
 --- !u!114 &5952950843815554502
 MonoBehaviour:
   m_ObjectHideFlags: 0

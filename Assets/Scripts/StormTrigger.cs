@@ -85,4 +85,14 @@ public class StormTrigger : MonoBehaviour
         }
 
     }
+
+    public void ActivateStorm()
+    {
+        Toggle = true;
+    }
+    
+    public void DeactivateStorm()
+    {
+        Toggle = false;
+    }
 }

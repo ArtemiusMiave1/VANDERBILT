@@ -5,9 +5,16 @@ public class ShipMovement : MonoBehaviour
     [Header("Movement")]
     public float speed = 5f;
 
+    [Header("Speed Control")]
+    [Tooltip("Physical lever that controls the ship's speed.")]
+    public TestLever speedControl;
+
     [Header("Current Movement Stats")]
     public float currentSpeed;
     public float currentCargoWeight;
+
+    [Range(0, 5)]
+    public int currentSpeedLevel = 0;
 
     [Header("Locations")]
     public Location currentLocation;
@@ -16,11 +23,15 @@ public class ShipMovement : MonoBehaviour
     [Header("Route System")]
     public ShipRouteSystem shipRouteSystem;
 
+    [Header("Route Danger")]
+    public RouteDangerSystem routeDangerSystem;
+
     [Header("Resource Depot UI")]
     public GameObject resourceDepotPaper;
 
     [Header("Fuel")]
-    public int fuelPerLocation = 5;
+    [Tooltip("Current fuel cost based on the throttle level.")]
+    public int currentFuelCost = 0;
 
     [Header("Cargo Weight")]
     public float maximumCargoWeight = 750f;
@@ -34,21 +45,10 @@ public class ShipMovement : MonoBehaviour
     private bool moving = false;
 
 
-    // =========================================================
-    // START
-    // =========================================================
-
     private void Start()
     {
         shipCargo =
             FindObjectOfType<ShipCargo>();
-
-        if (shipCargo == null)
-        {
-            Debug.LogError(
-                "ShipMovement: ShipCargo not found!"
-            );
-        }
 
         if (shipRouteSystem == null)
         {
@@ -62,32 +62,36 @@ public class ShipMovement : MonoBehaviour
             }
         }
 
-        if (shipRouteSystem == null)
+        if (routeDangerSystem == null)
         {
-            Debug.LogError(
-                "ShipMovement: ShipRouteSystem not found!"
-            );
+            routeDangerSystem =
+                FindObjectOfType<RouteDangerSystem>();
         }
 
-        currentSpeed =
-            speed;
+        currentSpeed = 0f;
 
         UpdateResourceDepotPaper();
     }
 
 
-    // =========================================================
-    // UPDATE
-    // =========================================================
-
     private void Update()
     {
+        // Always update the throttle level,
+        // even when the ship isn't travelling.
+        UpdateSpeedLevel();
+
         if (!moving)
             return;
 
         if (targetLocation == null)
         {
             moving = false;
+
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
             return;
         }
 
@@ -95,29 +99,46 @@ public class ShipMovement : MonoBehaviour
     }
 
 
-    // =========================================================
-    // MOVEMENT
-    // =========================================================
-
     private void UpdateMovement()
     {
         if (shipCargo == null)
         {
             moving = false;
+
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
             return;
         }
 
-        // Stop if there is no fuel.
+        // -----------------------------------------------------
+        // SPEED LEVEL 0 = STOPPED
+        // -----------------------------------------------------
+
+        if (currentSpeedLevel == 0)
+        {
+            currentSpeed = 0f;
+            return;
+        }
+
+        // -----------------------------------------------------
+        // CHECK FUEL
+        // -----------------------------------------------------
+
         if (
             shipCargo.GetResourceAmount("fuel") <= 0
         )
         {
+            currentSpeed = 0f;
             moving = false;
             targetLocation = null;
 
-            Debug.Log(
-                "Ship has run out of fuel!"
-            );
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
 
             return;
         }
@@ -136,7 +157,6 @@ public class ShipMovement : MonoBehaviour
                 Time.deltaTime
             );
 
-        // Check for arrival.
         if (
             Vector3.Distance(
                 transform.position,
@@ -152,50 +172,42 @@ public class ShipMovement : MonoBehaviour
     }
 
 
-    // =========================================================
-    // ARRIVAL
-    // =========================================================
-
     private void ArriveAtLocation()
     {
         if (targetLocation == null)
         {
             moving = false;
+
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
             return;
         }
 
         Location arrivedLocation =
             targetLocation;
 
-        // Update current location.
         currentLocation =
             arrivedLocation;
 
-        // Consume fuel once for this trip.
         ConsumeFuel();
 
-        // Update Resource Depot visibility.
         UpdateResourceDepotPaper();
 
-        // Deliver requests at this location.
         CompleteRequestsAtLocation(
             currentLocation
         );
 
-        // Collect pending gold if this is Vanderbilt.
         CheckForVanderbiltPayment();
 
-        // Update the route.
         if (shipRouteSystem != null)
         {
             shipRouteSystem.OnArrivedAtLocation(
                 currentLocation
             );
 
-            /*
-             * Get the next location AFTER
-             * the route has been updated.
-             */
             targetLocation =
                 shipRouteSystem.GetNextLocation();
         }
@@ -204,50 +216,98 @@ public class ShipMovement : MonoBehaviour
             targetLocation = null;
         }
 
-        /*
-         * Safety check.
-         *
-         * Prevents the ship from repeatedly
-         * arriving at the same location.
-         */
         if (
             targetLocation != null &&
             targetLocation == currentLocation
         )
         {
-            Debug.LogWarning(
-                "ShipMovement: Next location is the " +
-                "same as the current location. " +
-                "Stopping movement to prevent a loop."
-            );
-
             targetLocation = null;
         }
 
-        // Continue route if another destination exists.
+        if (targetLocation != null)
+        {
+            CheckNextRouteDanger();
+        }
+        else
+        {
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+        }
+
+        // -----------------------------------------------------
+        // Continue or stop
+        // -----------------------------------------------------
+
         if (targetLocation != null)
         {
             moving = true;
-
-            Debug.Log(
-                "Continuing route to " +
-                targetLocation.GetDisplayName()
-            );
         }
         else
         {
             moving = false;
 
-            Debug.Log(
-                "Ship route complete."
-            );
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
         }
     }
 
 
-    // =========================================================
-    // REQUEST DELIVERY
-    // =========================================================
+    private void CheckNextRouteDanger()
+    {
+        if (
+            currentLocation == null ||
+            targetLocation == null
+        )
+        {
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
+            return;
+        }
+
+        LocationManager locationManager =
+            LocationManager.Instance;
+
+        if (locationManager == null)
+        {
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
+            return;
+        }
+
+        RouteConnection connection =
+            locationManager.GetConnection(
+                currentLocation,
+                targetLocation
+            );
+
+        if (connection == null)
+        {
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
+            return;
+        }
+
+        if (routeDangerSystem != null)
+        {
+            routeDangerSystem.CheckRouteDanger(
+                connection
+            );
+        }
+    }
+
 
     private void CompleteRequestsAtLocation(
         Location location
@@ -259,10 +319,6 @@ public class ShipMovement : MonoBehaviour
         if (location.activeRequests == null)
             return;
 
-        /*
-         * Make a copy because completing a request
-         * removes it from activeRequests.
-         */
         RequestPaper[] requests =
             location.activeRequests.ToArray();
 
@@ -281,10 +337,6 @@ public class ShipMovement : MonoBehaviour
     }
 
 
-    // =========================================================
-    // VANDERBILT PAYMENT
-    // =========================================================
-
     private void CheckForVanderbiltPayment()
     {
         if (currentLocation == null)
@@ -293,10 +345,6 @@ public class ShipMovement : MonoBehaviour
         if (currentLocation.locationType == null)
             return;
 
-        /*
-         * Only Vanderbilt locations can pay
-         * pending request rewards.
-         */
         if (
             currentLocation.locationType.LocationType !=
             "Vanderbilt"
@@ -306,13 +354,7 @@ public class ShipMovement : MonoBehaviour
         }
 
         if (shipCargo == null)
-        {
-            Debug.LogError(
-                "ShipMovement: ShipCargo not found!"
-            );
-
             return;
-        }
 
         RequestPaper[] requests =
             FindObjectsOfType<RequestPaper>();
@@ -343,16 +385,6 @@ public class ShipMovement : MonoBehaviour
 
             totalGoldCollected += gold;
         }
-
-        if (totalGoldCollected > 0)
-        {
-            Debug.Log(
-                "Arrived at Vanderbilt. " +
-                "Collected " +
-                totalGoldCollected +
-                " gold from completed requests."
-            );
-        }
     }
 
 
@@ -365,93 +397,73 @@ public class ShipMovement : MonoBehaviour
         if (shipCargo == null)
             return;
 
+        // Level 0 consumes nothing.
+        if (currentSpeedLevel == 0)
+            return;
+
+        // Fuel cost matches speed level.
+        //
+        // Level 1 = 1 fuel
+        // Level 2 = 2 fuel
+        // Level 3 = 3 fuel
+        // Level 4 = 4 fuel
+        // Level 5 = 5 fuel
+
+        currentFuelCost =
+            currentSpeedLevel;
+
         shipCargo.AddOrRemoveResource(
             "fuel",
-            -fuelPerLocation
-        );
-
-        Debug.Log(
-            "Fuel consumed: " +
-            fuelPerLocation
+            -currentFuelCost
         );
     }
 
 
-    // =========================================================
-    // START ROUTE
-    // =========================================================
-
     public void StartRoute()
     {
-        Debug.Log(
-            "========== START ROUTE =========="
-        );
-
         if (shipRouteSystem == null)
         {
-            Debug.LogError(
-                "ShipMovement: ShipRouteSystem not found!"
-            );
-
             return;
         }
 
         if (moving)
         {
-            Debug.Log(
-                "Ship is already moving."
-            );
-
             return;
         }
 
-        /*
-         * Get the next location from the
-         * planned route.
-         */
         targetLocation =
             shipRouteSystem.GetNextLocation();
 
         if (targetLocation == null)
         {
-            Debug.Log(
-                "Ship route is empty."
-            );
-
             moving = false;
+
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
 
             return;
         }
 
-        /*
-         * Prevent movement to the location
-         * the ship is already at.
-         */
         if (targetLocation == currentLocation)
         {
-            Debug.LogWarning(
-                "ShipMovement: Target location is " +
-                "the same as current location."
-            );
-
             targetLocation = null;
             moving = false;
 
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+
             return;
         }
 
-        moving = true;
+        CheckNextRouteDanger();
 
-        Debug.Log(
-            "Ship starting route to " +
-            targetLocation.GetDisplayName()
-        );
+        moving = true;
     }
 
-
-    // =========================================================
-    // STOP MOVEMENT
-    // =========================================================
 
     public void StopMovement()
     {
@@ -459,15 +471,14 @@ public class ShipMovement : MonoBehaviour
 
         targetLocation = null;
 
-        Debug.Log(
-            "Ship movement stopped."
-        );
+        currentSpeed = 0f;
+
+        if (routeDangerSystem != null)
+        {
+            routeDangerSystem.SetStorm(false);
+        }
     }
 
-
-    // =========================================================
-    // RESOURCE DEPOT
-    // =========================================================
 
     private void UpdateResourceDepotPaper()
     {
@@ -491,47 +502,121 @@ public class ShipMovement : MonoBehaviour
 
 
     // =========================================================
-    // CARGO WEIGHT / SPEED
+    // SPEED LEVEL
     // =========================================================
 
-    private float CalculateCurrentSpeed()
+    private void UpdateSpeedLevel()
     {
-        if (shipCargo == null)
-            return speed;
+        if (speedControl == null)
+        {
+            currentSpeedLevel = 5;
+            currentFuelCost = 5;
+            return;
+        }
 
-        currentCargoWeight =
-            shipCargo.GetTotalWeight();
+        float leverSpeed =
+            speedControl.GetSpeed();
 
-        float weightPercentage =
-            currentCargoWeight /
-            maximumCargoWeight;
+        // -----------------------------------------------------
+        // CONVERT 0-100 LEVER INTO 0-5 LEVELS
+        // -----------------------------------------------------
 
-        weightPercentage =
-            Mathf.Clamp01(
-                weightPercentage
-            );
+        if (leverSpeed <= 0f)
+        {
+            currentSpeedLevel = 0;
+        }
+        else if (leverSpeed <= 20f)
+        {
+            currentSpeedLevel = 1;
+        }
+        else if (leverSpeed <= 40f)
+        {
+            currentSpeedLevel = 2;
+        }
+        else if (leverSpeed <= 60f)
+        {
+            currentSpeedLevel = 3;
+        }
+        else if (leverSpeed <= 80f)
+        {
+            currentSpeedLevel = 4;
+        }
+        else
+        {
+            currentSpeedLevel = 5;
+        }
 
-        /*
-         * Empty cargo:
-         * 100% speed
-         *
-         * Maximum cargo:
-         * minimumSpeedMultiplier
-         */
-        float speedMultiplier =
-            Mathf.Lerp(
-                1f,
-                minimumSpeedMultiplier,
-                weightPercentage
-            );
-
-        return speed *
-               speedMultiplier;
+        currentFuelCost =
+            currentSpeedLevel;
     }
 
 
     // =========================================================
-    // GETTERS
+    // SPEED CALCULATION
+    // =========================================================
+
+    private float CalculateCurrentSpeed()
+    {
+        // Level 0 means completely stopped.
+        if (currentSpeedLevel == 0)
+        {
+            return 0f;
+        }
+
+        // -----------------------------------------------------
+        // SPEED LEVEL
+        // -----------------------------------------------------
+
+        float speedPercentage =
+            currentSpeedLevel / 5f;
+
+        // Level 1 = 20%
+        // Level 2 = 40%
+        // Level 3 = 60%
+        // Level 4 = 80%
+        // Level 5 = 100%
+
+        // -----------------------------------------------------
+        // CARGO WEIGHT
+        // -----------------------------------------------------
+
+        float cargoSpeedMultiplier =
+            1f;
+
+        if (shipCargo != null)
+        {
+            currentCargoWeight =
+                shipCargo.GetTotalWeight();
+
+            float weightPercentage =
+                currentCargoWeight /
+                maximumCargoWeight;
+
+            weightPercentage =
+                Mathf.Clamp01(
+                    weightPercentage
+                );
+
+            cargoSpeedMultiplier =
+                Mathf.Lerp(
+                    1f,
+                    minimumSpeedMultiplier,
+                    weightPercentage
+                );
+        }
+
+        // -----------------------------------------------------
+        // FINAL SPEED
+        // -----------------------------------------------------
+
+        return speed *
+               speedPercentage *
+               cargoSpeedMultiplier;
+    }
+
+
+    // =========================================================
+    // PUBLIC VALUES
     // =========================================================
 
     public bool IsMoving()
@@ -561,5 +646,26 @@ public class ShipMovement : MonoBehaviour
     public float GetCurrentCargoWeight()
     {
         return currentCargoWeight;
+    }
+
+
+    public float GetLeverSpeed()
+    {
+        if (speedControl == null)
+            return 100f;
+
+        return speedControl.GetSpeed();
+    }
+
+
+    public int GetSpeedLevel()
+    {
+        return currentSpeedLevel;
+    }
+
+
+    public int GetFuelCost()
+    {
+        return currentFuelCost;
     }
 }

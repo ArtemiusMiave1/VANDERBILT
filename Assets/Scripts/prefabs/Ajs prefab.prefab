@@ -270,6 +270,7 @@ Transform:
   - {fileID: 7412805422443321545}
   - {fileID: 7848810969615837698}
   - {fileID: 2506856413518518605}
+  - {fileID: 8826277612108548547}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6648453723236305385
@@ -861,6 +862,79 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3166741737688348636, guid: ff94bdf8874f59d4c9c98b548e332922, type: 3}
   m_PrefabInstance: {fileID: 1060022949078124216}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1635257427184714762
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3271361826690844679}
+    m_Modifications:
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.159
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.948
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11.447
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880723851081215321, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+      propertyPath: m_Name
+      value: TestLever
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+--- !u!114 &112831807884129249 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1666686013250369515, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+  m_PrefabInstance: {fileID: 1635257427184714762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2d24ea1d0c4559428129defb80f6ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestLever
+--- !u!4 &8826277612108548547 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7839822806595177929, guid: 9554b9f331c27764e9a3c2c6b3ca6b89, type: 3}
+  m_PrefabInstance: {fileID: 1635257427184714762}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1768256100656651541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1405,6 +1479,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameController
       objectReference: {fileID: 0}
+    - target: {fileID: 6540059603523761989, guid: 66167fb239dfce04c88a3b8d01fbfdff, type: 3}
+      propertyPath: speedControl
+      value: 
+      objectReference: {fileID: 112831807884129249}
     - target: {fileID: 6540059603523761989, guid: 66167fb239dfce04c88a3b8d01fbfdff, type: 3}
       propertyPath: resourceDepotPaper
       value: 
