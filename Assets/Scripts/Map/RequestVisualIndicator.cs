@@ -9,8 +9,16 @@ public class RequestVisualIndicator : MonoBehaviour
     public Material originalMaterial;
     public Material activeMaterial;
 
+    [Header("Payment")]
+    public Material paymentReadyMaterial;
+    public Color paymentReadyLightColour = Color.green;
+
     [Header("Light")]
     public GameObject requestLight;
+
+    private Light lightComponent;
+    private Color originalLightColour;
+
 
     private void Awake()
     {
@@ -20,7 +28,7 @@ public class RequestVisualIndicator : MonoBehaviour
                 GetComponent<Renderer>();
         }
 
-        // Automatically remember the starting material
+        // Automatically remember starting material.
         if (
             targetRenderer != null &&
             originalMaterial == null
@@ -30,43 +38,115 @@ public class RequestVisualIndicator : MonoBehaviour
                 targetRenderer.material;
         }
 
-        // Make sure the request starts inactive
+
+        // -----------------------------------------------------
+        // GET LIGHT
+        // -----------------------------------------------------
+
+        if (requestLight != null)
+        {
+            lightComponent =
+                requestLight.GetComponent<Light>();
+
+            if (lightComponent != null)
+            {
+                originalLightColour =
+                    lightComponent.color;
+            }
+        }
+
+
+        // Start inactive.
         SetInactive();
     }
 
 
-    // ==========================================
+    // =========================================================
     // REQUEST ACCEPTED
-    // ==========================================
+    // =========================================================
 
     public void SetActive()
     {
-        if (targetRenderer != null &&
-            activeMaterial != null)
+        if (
+            targetRenderer != null &&
+            activeMaterial != null
+        )
         {
             targetRenderer.material =
                 activeMaterial;
         }
 
+
         if (requestLight != null)
         {
             requestLight.SetActive(true);
         }
+
+
+        // Restore normal request light colour.
+        if (lightComponent != null)
+        {
+            lightComponent.color =
+                originalLightColour;
+        }
     }
 
 
-    // ==========================================
-    // REQUEST COMPLETED
-    // ==========================================
+    // =========================================================
+    // PAYMENT READY
+    // =========================================================
+
+    public void SetPaymentReady()
+    {
+        // Change material if one has been assigned.
+        if (
+            targetRenderer != null &&
+            paymentReadyMaterial != null
+        )
+        {
+            targetRenderer.material =
+                paymentReadyMaterial;
+        }
+
+
+        // Turn light on.
+        if (requestLight != null)
+        {
+            requestLight.SetActive(true);
+        }
+
+
+        // Make light green.
+        if (lightComponent != null)
+        {
+            lightComponent.color =
+                paymentReadyLightColour;
+        }
+    }
+
+
+    // =========================================================
+    // INACTIVE
+    // =========================================================
 
     public void SetInactive()
     {
-        if (targetRenderer != null &&
-            originalMaterial != null)
+        if (
+            targetRenderer != null &&
+            originalMaterial != null
+        )
         {
             targetRenderer.material =
                 originalMaterial;
         }
+
+
+        if (lightComponent != null)
+        {
+            lightComponent.color =
+                originalLightColour;
+        }
+
 
         if (requestLight != null)
         {

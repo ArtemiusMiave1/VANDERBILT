@@ -326,6 +326,8 @@ MonoBehaviour:
   targetRenderer: {fileID: 1777464032776438860}
   originalMaterial: {fileID: 2100000, guid: 4fe4ed6db1b43464d8c02570abe95792, type: 2}
   activeMaterial: {fileID: 2100000, guid: a888c41b3be871442b42d73afc4a4d87, type: 2}
+  paymentReadyMaterial: {fileID: 0}
+  paymentReadyLightColour: {r: 0, g: 1, b: 0, a: 1}
   requestLight: {fileID: 3874049268803758445}
 --- !u!1 &3874049268803758445
 GameObject:
@@ -344,7 +346,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3791521282471072629
 Transform:
   m_ObjectHideFlags: 0
@@ -371,7 +373,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.83947754, b: 0, a: 1}
-  m_Intensity: 0.005
+  m_Intensity: 0.01
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

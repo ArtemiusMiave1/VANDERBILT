@@ -767,6 +767,8 @@ public class RequestPaper : MonoBehaviour
         pendingGold =
             finalReward;
 
+        UpdateVanderbiltPaymentLight();
+
         Debug.Log(
             "Request completed. " +
             pendingGold +
@@ -843,6 +845,8 @@ public class RequestPaper : MonoBehaviour
 
         pendingGold = 0;
 
+        UpdateVanderbiltPaymentLight();
+
         Debug.Log(
             "Collected " +
             goldToCollect +
@@ -850,9 +854,101 @@ public class RequestPaper : MonoBehaviour
             GetRequestTitle()
         );
 
+
+        // -----------------------------------------------------
+        // REMOVE COMPLETED REQUEST
+        // -----------------------------------------------------
+
+        if (completed)
+        {
+            Destroy(
+                gameObject
+            );
+        }
+
+
         return goldToCollect;
     }
 
+    private void UpdateVanderbiltPaymentLight()
+    {
+        if (LocationManager.Instance == null)
+            return;
+
+
+        var locations =
+            LocationManager.Instance.GetLocationsByType(
+                "Vanderbilt"
+            );
+
+
+        if (
+            locations == null ||
+            locations.Count == 0
+        )
+        {
+            Debug.LogWarning(
+                "RequestPaper: Vanderbilt location not found."
+            );
+
+            return;
+        }
+
+
+        Location vanderbilt =
+            locations[0];
+
+
+        RequestVisualIndicator indicator =
+            vanderbilt.GetComponentInChildren<RequestVisualIndicator>(
+                true
+            );
+
+
+        if (indicator == null)
+            return;
+
+
+        // -----------------------------------------------------
+        // CHECK FOR PENDING MONEY
+        // -----------------------------------------------------
+
+        RequestPaper[] requests =
+            FindObjectsOfType<RequestPaper>();
+
+        bool paymentWaiting = false;
+
+
+        foreach (
+            RequestPaper request
+            in requests
+        )
+        {
+            if (request == null)
+                continue;
+
+
+            if (request.HasPendingGold())
+            {
+                paymentWaiting = true;
+                break;
+            }
+        }
+
+
+        // -----------------------------------------------------
+        // UPDATE LIGHT
+        // -----------------------------------------------------
+
+        if (paymentWaiting)
+        {
+            indicator.SetPaymentReady();
+        }
+        else
+        {
+            indicator.SetInactive();
+        }
+    }
 
     public bool HasPendingGold()
     {
