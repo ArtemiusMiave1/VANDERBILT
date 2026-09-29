@@ -2863,7 +2863,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 2ca5da36735629449811c4db24e9f771, type: 3}
+  m_Texture: {fileID: 2800000, guid: faaac50eb3e779f45861618c685a65be, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -3573,7 +3573,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press 'TAB' to check the clipboard to keep track what you have!
+  m_text: Press 'TAB' to check the clipboard to keep track of what you have!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
