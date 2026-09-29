@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4662782334441539918}
+  - component: {fileID: 7033437733367897552}
   - component: {fileID: 2839220712275808437}
   m_Layer: 0
-  m_Name: Cargo
+  m_Name: ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +33,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5074561657483304639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7033437733367897552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567660086139215494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5582bd5835a0bb04a8d1c1e8fec2ab52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ship
+  currentState: 0
+  shipMovement: {fileID: 6540059603523761989}
 --- !u!114 &2839220712275808437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,3 +371,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5489633768892631231, guid: 8c4292314bd14c445bc2c5c5204a2ada, type: 3}
   m_PrefabInstance: {fileID: 8116838892398144050}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6540059603523761989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3055191488580099447, guid: 8c4292314bd14c445bc2c5c5204a2ada, type: 3}
+  m_PrefabInstance: {fileID: 8116838892398144050}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd3d7cb146d6d945bda49c5fec575a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipMovement
