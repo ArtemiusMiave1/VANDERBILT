@@ -12,6 +12,7 @@ public class StormTrigger : MonoBehaviour
     float thunderlerp;
     Color colorlarp;
     Material skyboxreal;
+    public Vector2 skyboxSpeed;
 
 
     public float cloudintensity;
@@ -24,6 +25,7 @@ public class StormTrigger : MonoBehaviour
         Material skyboxreal = RenderSettings.Instantiate(skybox);
         RenderSettings.skybox = skyboxreal;
         skybox = skyboxreal;
+        skyboxSpeed = skybox.GetVector("_FanSpeed");
 
     }
 
@@ -40,6 +42,8 @@ public class StormTrigger : MonoBehaviour
             togglestorm = false;
             StartCoroutine(DONTToggleThing());
         }
+
+        skybox.SetVector("_FanSpeed", skyboxSpeed);
     }
 
     public IEnumerator ToggleThing()
