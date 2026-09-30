@@ -8,6 +8,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip RequestComplete;
     public AudioClip FaxPrint;
     public AudioClip FaxPurchase;
+    public AudioClip Thunder;
+    public AudioClip Landing;
 
     public void PlaySFX(AudioClip clip)
     {
