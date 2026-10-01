@@ -15,6 +15,12 @@ public class Ship : MonoBehaviour
         Moving
     }
 
+    public enum ShipEnvironment
+    {
+        Clear,
+        Storm
+    }
+
 
     [Header("Ship State")]
     public ShipState currentState =

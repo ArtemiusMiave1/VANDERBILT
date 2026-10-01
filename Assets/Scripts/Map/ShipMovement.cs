@@ -385,6 +385,7 @@ public class ShipMovement : MonoBehaviour
 
             int gold =
                 request.CollectGold();
+            request.DeletedSelf();
 
             if (gold <= 0)
                 continue;
@@ -396,6 +397,7 @@ public class ShipMovement : MonoBehaviour
 
             totalGoldCollected += gold;
         }
+        RequestVisualIndicator.RefreshVanderbiltPaymentLights();
     }
 
 

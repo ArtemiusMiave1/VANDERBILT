@@ -901,8 +901,9 @@ public class RequestPaper : MonoBehaviour
             GetRequestTitle()
         );
 
-
+        
         return goldToCollect;
+
     }
 
 
@@ -951,7 +952,10 @@ public class RequestPaper : MonoBehaviour
         return deadlineMinutes;
     }
 
-
+    public void DeletedSelf()
+    {
+        Destroy(gameObject);
+    }
     public bool IsCompleted()
     {
         return completed;
