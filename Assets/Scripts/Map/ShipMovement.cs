@@ -44,6 +44,9 @@ public class ShipMovement : MonoBehaviour
 
     private bool moving = false;
 
+    private SoundManager soundManager;
+
+
 
     private void Start()
     {
@@ -71,6 +74,14 @@ public class ShipMovement : MonoBehaviour
         currentSpeed = 0f;
 
         UpdateResourceDepotPaper();
+
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+
+        if (audioObject != null)
+        {
+            soundManager =
+                audioObject.GetComponent<SoundManager>();
+        }
     }
 
 
@@ -194,8 +205,6 @@ public class ShipMovement : MonoBehaviour
 
         ConsumeFuel();
 
-        UpdateResourceDepotPaper();
-
         CompleteRequestsAtLocation(
             currentLocation
         );
@@ -253,6 +262,8 @@ public class ShipMovement : MonoBehaviour
                 routeDangerSystem.SetStorm(false);
             }
         }
+
+        UpdateResourceDepotPaper();
     }
 
 
@@ -485,19 +496,49 @@ public class ShipMovement : MonoBehaviour
         if (resourceDepotPaper == null)
             return;
 
-        if (
+
+        bool atResourceDepot =
             currentLocation != null &&
             currentLocation.locationType != null &&
             currentLocation.locationType.LocationType ==
-            "ResourceDepot"
+            "ResourceDepot";
+
+
+        bool shipStopped =
+            !moving;
+
+
+        // =========================================================
+        // SHOW PAPER
+        // =========================================================
+
+        if (
+            atResourceDepot &&
+            shipStopped
         )
         {
-            resourceDepotPaper.SetActive(true);
+            if (!resourceDepotPaper.activeSelf)
+            {
+                resourceDepotPaper.SetActive(true);
+
+
+                if (soundManager != null)
+                {
+                    soundManager.PlaySFX(
+                        soundManager.FaxPrint
+                    );
+                }
+            }
+
+            return;
         }
-        else
-        {
-            resourceDepotPaper.SetActive(false);
-        }
+
+
+        // =========================================================
+        // HIDE PAPER
+        // =========================================================
+
+        resourceDepotPaper.SetActive(false);
     }
 
 

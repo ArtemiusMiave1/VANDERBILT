@@ -40,6 +40,8 @@ public class RouteDangerSystem : MonoBehaviour
 
     private ShipCargo shipCargo;
 
+    private SoundManager soundManager;
+
 
     // =========================================================
     // START
@@ -55,6 +57,14 @@ public class RouteDangerSystem : MonoBehaviour
             stormTrigger =
                 FindObjectOfType<StormTrigger>();
         }
+        
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+
+        if (audioObject != null)
+        {
+            soundManager =
+                audioObject.GetComponent<SoundManager>();
+        }
     }
 
 
@@ -63,8 +73,8 @@ public class RouteDangerSystem : MonoBehaviour
     // =========================================================
 
     public void CheckRouteDanger(
-        RouteConnection route
-    )
+    RouteConnection route
+)
     {
         if (route == null)
         {
@@ -73,24 +83,37 @@ public class RouteDangerSystem : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
+        // =========================================================
         // NORMAL ROUTE
-        // -----------------------------------------------------
+        // =========================================================
 
         if (route.dangerLevel <= 0)
         {
             SetStorm(false);
-
             return;
         }
 
 
-        // -----------------------------------------------------
+        // =========================================================
         // DANGEROUS ROUTE
-        // -----------------------------------------------------
+        // =========================================================
 
         SetStorm(true);
 
+
+        // Play thunder when entering
+        // Dangerous OR Very Dangerous route.
+        if (soundManager != null)
+        {
+            soundManager.PlaySFX(
+                soundManager.Thunder
+            );
+        }
+
+
+        // =========================================================
+        // DANGER EVENT
+        // =========================================================
 
         float eventChance = 0f;
 
@@ -108,12 +131,9 @@ public class RouteDangerSystem : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
-        // NORMAL DANGER EVENT
-        // -----------------------------------------------------
-
         float roll =
             Random.value;
+
 
         if (roll <= eventChance)
         {
@@ -121,9 +141,9 @@ public class RouteDangerSystem : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
+        // =========================================================
         // FRAGILE CARGO
-        // -----------------------------------------------------
+        // =========================================================
 
         CheckFragileCargo(
             route.dangerLevel

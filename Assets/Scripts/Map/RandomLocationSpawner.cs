@@ -13,6 +13,10 @@ public class RandomLocationSpawner : MonoBehaviour
     public int locationAmount = 20;
     public float minimumDistance = 2f;
 
+    [Header("Special Location Spacing")]
+    [Tooltip("Minimum distance between locations of the same special type.")]
+    public float specialLocationMinimumDistance = 1f;
+
     [Header("Parent")]
     public Transform locationParent;
 
@@ -56,16 +60,34 @@ public class RandomLocationSpawner : MonoBehaviour
             return;
         }
 
-        // Use the seed if requested.
+
+        // ----------------------------------------------
+        // RANDOM SEED
+        // ----------------------------------------------
+
         if (!useRandomSeed)
         {
-            Random.InitState(randomSeed);
+            Random.InitState(
+                randomSeed
+            );
         }
+
+
+        // ----------------------------------------------
+        // SPAWN REQUIRED SPECIAL LOCATIONS FIRST
+        // ----------------------------------------------
+
+        SpawnSpecialLocations();
+
+
+        // ----------------------------------------------
+        // SPAWN NORMAL DISTRICT LOCATIONS
+        // ----------------------------------------------
 
         int attempts = 0;
 
         int maximumAttempts =
-            locationAmount * 100;
+            locationAmount * 200;
 
 
         while (
@@ -76,125 +98,29 @@ public class RandomLocationSpawner : MonoBehaviour
             attempts++;
 
 
-            // ------------------------------------------
-            // GET AVAILABLE LOCATION DATA
-            // ------------------------------------------
-
             LocationData selectedData =
-                GetAvailableLocationData();
+                GetRandomDistrictLocationData();
 
 
             if (selectedData == null)
             {
                 Debug.LogWarning(
                     "RandomLocationSpawner: " +
-                    "No more valid LocationData available."
+                    "No district LocationData available."
                 );
 
                 break;
             }
 
 
-            // ------------------------------------------
-            // GET RANDOM POSITION
-            // ------------------------------------------
-
-            Vector3 spawnPosition =
-                GetRandomSpawnPosition();
-
-
-            if (!IsPositionValid(spawnPosition))
-            {
-                continue;
-            }
-
-
-            // ------------------------------------------
-            // CREATE LOCATION
-            // ------------------------------------------
-
-            GameObject locationObject =
-                Instantiate(
-                    locationPrefab,
-                    spawnPosition,
-                    Quaternion.identity,
-                    locationParent
-                );
-
-
-            Location location =
-                locationObject.GetComponent<Location>();
-
-
-            if (location == null)
-            {
-                Debug.LogError(
-                    "RandomLocationSpawner: " +
-                    "Location prefab does not have " +
-                    "a Location component!"
-                );
-
-                Destroy(locationObject);
-
-                return;
-            }
-
-
-            // ------------------------------------------
-            // ASSIGN LOCATION DATA
-            // ------------------------------------------
-
-            location.SetLocationType(
-                selectedData
-            );
-
-
-            // ------------------------------------------
-            // GENERATE LOCATION ID
-            // ------------------------------------------
-
-            string generatedID =
-                GenerateLocationID(
-                    selectedData
-                );
-
-
-            location.SetLocationID(
-                generatedID
-            );
-
-
-            // ------------------------------------------
-            // ADD TO SPAWNED LIST
-            // ------------------------------------------
-
-            spawnedLocations.Add(
-                location
-            );
-
-
-            // ------------------------------------------
-            // ADD TO LOCATION MANAGER
-            // ------------------------------------------
-
             if (
-                !locationManager.locations.Contains(
-                    location
+                TrySpawnLocation(
+                    selectedData
                 )
             )
             {
-                locationManager.locations.Add(
-                    location
-                );
+                attempts = 0;
             }
-
-
-            Debug.Log(
-                "Spawned Location: " +
-                generatedID +
-                " | " +
-                selectedData.LocationType
-            );
         }
 
 
@@ -219,32 +145,269 @@ public class RandomLocationSpawner : MonoBehaviour
 
 
     // --------------------------------------------------
-    // GET AVAILABLE LOCATION DATA
+    // SPAWN SPECIAL LOCATIONS
     // --------------------------------------------------
 
-    private LocationData GetAvailableLocationData()
+    private void SpawnSpecialLocations()
     {
         if (GameDatabase.Instance == null)
-        {
-            Debug.LogError(
-                "RandomLocationSpawner: " +
-                "GameDatabase not found!"
-            );
+            return;
 
-            return null;
+        if (
+            GameDatabase.Instance.LocationData ==
+            null
+        )
+        {
+            return;
         }
 
 
-        if (
-            GameDatabase.Instance.LocationData == null ||
-            GameDatabase.Instance.LocationData.Count == 0
+        foreach (
+            LocationData data
+            in GameDatabase.Instance.LocationData
         )
         {
-            Debug.LogWarning(
-                "RandomLocationSpawner: " +
-                "GameDatabase contains no LocationData!"
+            if (data == null)
+                continue;
+
+
+            // District locations are spawned later.
+            if (data.District)
+                continue;
+
+
+            // Limit now determines how many
+            // of this special location should exist.
+            if (data.Limit <= 0)
+                continue;
+
+
+            for (
+                int i = 0;
+                i < data.Limit;
+                i++
+            )
+            {
+                bool spawned =
+                    TrySpawnSpecialLocation(
+                        data
+                    );
+
+
+                if (!spawned)
+                {
+                    Debug.LogWarning(
+                        "RandomLocationSpawner: " +
+                        "Could not spawn required special location: " +
+                        data.LocationType +
+                        " (" +
+                        (i + 1) +
+                        "/" +
+                        data.Limit +
+                        ")"
+                    );
+                }
+            }
+        }
+    }
+
+
+    // --------------------------------------------------
+    // TRY SPAWN SPECIAL LOCATION
+    // --------------------------------------------------
+
+    private bool TrySpawnSpecialLocation(
+        LocationData data
+    )
+    {
+        const int maxAttempts = 500;
+
+
+        for (
+            int attempt = 0;
+            attempt < maxAttempts;
+            attempt++
+        )
+        {
+            Vector3 spawnPosition =
+                GetRandomSpawnPosition();
+
+
+            if (
+                !IsPositionValid(
+                    spawnPosition,
+                    data
+                )
+            )
+            {
+                continue;
+            }
+
+
+            return CreateLocation(
+                data,
+                spawnPosition
+            );
+        }
+
+
+        return false;
+    }
+
+
+    // --------------------------------------------------
+    // TRY SPAWN NORMAL LOCATION
+    // --------------------------------------------------
+
+    private bool TrySpawnLocation(
+        LocationData data
+    )
+    {
+        if (data == null)
+            return false;
+
+
+        Vector3 spawnPosition =
+            GetRandomSpawnPosition();
+
+
+        if (
+            !IsPositionValid(
+                spawnPosition,
+                data
+            )
+        )
+        {
+            return false;
+        }
+
+
+        return CreateLocation(
+            data,
+            spawnPosition
+        );
+    }
+
+
+    // --------------------------------------------------
+    // CREATE LOCATION
+    // --------------------------------------------------
+
+    private bool CreateLocation(
+        LocationData data,
+        Vector3 spawnPosition
+    )
+    {
+        if (data == null)
+            return false;
+
+
+        GameObject locationObject =
+            Instantiate(
+                locationPrefab,
+                spawnPosition,
+                Quaternion.identity,
+                locationParent
             );
 
+
+        Location location =
+            locationObject.GetComponent<Location>();
+
+
+        if (location == null)
+        {
+            Debug.LogError(
+                "RandomLocationSpawner: " +
+                "Location prefab does not have " +
+                "a Location component!"
+            );
+
+            Destroy(
+                locationObject
+            );
+
+            return false;
+        }
+
+
+        // ----------------------------------------------
+        // LOCATION DATA
+        // ----------------------------------------------
+
+        location.SetLocationType(
+            data
+        );
+
+
+        // ----------------------------------------------
+        // LOCATION ID
+        // ----------------------------------------------
+
+        string generatedID =
+            GenerateLocationID(
+                data
+            );
+
+
+        location.SetLocationID(
+            generatedID
+        );
+
+
+        // ----------------------------------------------
+        // ADD TO LIST
+        // ----------------------------------------------
+
+        spawnedLocations.Add(
+            location
+        );
+
+
+        // ----------------------------------------------
+        // LOCATION MANAGER
+        // ----------------------------------------------
+
+        if (
+            locationManager != null &&
+            !locationManager.locations.Contains(
+                location
+            )
+        )
+        {
+            locationManager.locations.Add(
+                location
+            );
+        }
+
+
+        Debug.Log(
+            "Spawned Location: " +
+            generatedID +
+            " | " +
+            data.LocationType
+        );
+
+
+        return true;
+    }
+
+
+    // --------------------------------------------------
+    // GET RANDOM DISTRICT LOCATION
+    // --------------------------------------------------
+
+    private LocationData GetRandomDistrictLocationData()
+    {
+        if (GameDatabase.Instance == null)
+            return null;
+
+
+        if (
+            GameDatabase.Instance.LocationData ==
+            null
+        )
+        {
             return null;
         }
 
@@ -262,40 +425,20 @@ public class RandomLocationSpawner : MonoBehaviour
                 continue;
 
 
-            // ------------------------------------------
-            // DISTRICT LOCATIONS
-            // ------------------------------------------
-
-            // District locations can have any number.
-            if (data.District)
-            {
-                available.Add(data);
+            // Only normal district locations
+            // are randomly selected here.
+            if (!data.District)
                 continue;
-            }
 
 
-            // ------------------------------------------
-            // SPECIAL LOCATIONS
-            // ------------------------------------------
-
-            int currentCount =
-                CountLocationType(data);
-
-
-            if (
-                data.Limit <= 0 ||
-                currentCount < data.Limit
-            )
-            {
-                available.Add(data);
-            }
+            available.Add(
+                data
+            );
         }
 
 
         if (available.Count == 0)
-        {
             return null;
-        }
 
 
         return available[
@@ -320,7 +463,7 @@ public class RandomLocationSpawner : MonoBehaviour
 
 
         // ----------------------------------------------
-        // DISTRICT
+        // DISTRICT LOCATION
         // ----------------------------------------------
 
         if (data.District)
@@ -350,7 +493,67 @@ public class RandomLocationSpawner : MonoBehaviour
         // SPECIAL LOCATION
         // ----------------------------------------------
 
-        return data.LocationType;
+        // Vanderbilt only has one, so it can
+        // simply be called Vanderbilt.
+        if (
+            data.LocationType ==
+            "Vanderbilt"
+        )
+        {
+            return "Vanderbilt";
+        }
+
+
+        // Resource Depot can have multiple locations,
+        // so number them.
+        if (
+            data.LocationType ==
+            "ResourceDepot"
+        )
+        {
+            int number = 1;
+
+
+            while (
+                LocationIDExists(
+                    "ResourceDepot" +
+                    number
+                )
+            )
+            {
+                number++;
+            }
+
+
+            return
+                "ResourceDepot" +
+                number;
+        }
+
+
+        // Generic fallback for any future
+        // special location type.
+        int specialNumber = 1;
+
+        string specialID =
+            data.LocationType;
+
+
+        while (
+            LocationIDExists(
+                specialID
+            )
+        )
+        {
+            specialNumber++;
+
+            specialID =
+                data.LocationType +
+                specialNumber;
+        }
+
+
+        return specialID;
     }
 
 
@@ -382,40 +585,6 @@ public class RandomLocationSpawner : MonoBehaviour
 
 
         return false;
-    }
-
-
-    // --------------------------------------------------
-    // COUNT LOCATION TYPE
-    // --------------------------------------------------
-
-    private int CountLocationType(
-        LocationData data
-    )
-    {
-        int count = 0;
-
-
-        foreach (
-            Location location
-            in spawnedLocations
-        )
-        {
-            if (location == null)
-                continue;
-
-
-            if (
-                location.locationType ==
-                data
-            )
-            {
-                count++;
-            }
-        }
-
-
-        return count;
     }
 
 
@@ -492,8 +661,13 @@ public class RandomLocationSpawner : MonoBehaviour
     // CHECK POSITION
     // --------------------------------------------------
 
+    // --------------------------------------------------
+    // CHECK POSITION
+    // --------------------------------------------------
+
     private bool IsPositionValid(
-        Vector3 position
+        Vector3 position,
+        LocationData selectedData
     )
     {
         foreach (
@@ -505,14 +679,14 @@ public class RandomLocationSpawner : MonoBehaviour
                 continue;
 
 
-            Vector2 a =
+            Vector2 newPosition =
                 new Vector2(
                     position.x,
                     position.z
                 );
 
 
-            Vector2 b =
+            Vector2 existingPosition =
                 new Vector2(
                     location.transform.position.x,
                     location.transform.position.z
@@ -521,14 +695,67 @@ public class RandomLocationSpawner : MonoBehaviour
 
             float distance =
                 Vector2.Distance(
-                    a,
-                    b
+                    newPosition,
+                    existingPosition
                 );
 
 
+            // ------------------------------------------
+            // DEFAULT DISTANCE
+            // ------------------------------------------
+
+            float requiredDistance =
+                minimumDistance;
+
+
+            // ------------------------------------------
+            // SAME SPECIAL LOCATION TYPE
+            // ------------------------------------------
+
+            if (
+                selectedData != null &&
+                location.locationType != null
+            )
+            {
+                bool sameLocationType =
+                    selectedData.LocationType ==
+                    location.locationType.LocationType;
+
+
+                bool isResourceDepot =
+                    selectedData.LocationType ==
+                    "ResourceDepot";
+
+
+                bool isVanderbilt =
+                    selectedData.LocationType ==
+                    "Vanderbilt";
+
+
+                // Only apply the larger spacing when
+                // the SAME special location type
+                // is being placed near itself.
+                if (
+                    sameLocationType &&
+                    (
+                        isResourceDepot ||
+                        isVanderbilt
+                    )
+                )
+                {
+                    requiredDistance =
+                        specialLocationMinimumDistance;
+                }
+            }
+
+
+            // ------------------------------------------
+            // CHECK DISTANCE
+            // ------------------------------------------
+
             if (
                 distance <
-                minimumDistance
+                requiredDistance
             )
             {
                 return false;
@@ -537,6 +764,26 @@ public class RandomLocationSpawner : MonoBehaviour
 
 
         return true;
+    }
+
+
+    // --------------------------------------------------
+    // CHECK SPECIAL LOCATION
+    // --------------------------------------------------
+
+    private bool IsSpecialLocation(
+        LocationData data
+    )
+    {
+        if (data == null)
+            return false;
+
+
+        return
+            data.LocationType ==
+            "ResourceDepot" ||
+            data.LocationType ==
+            "Vanderbilt";
     }
 
 
@@ -628,10 +875,6 @@ public class RandomLocationSpawner : MonoBehaviour
             return false;
         }
 
-
-        // ----------------------------------------------
-        // GAME DATABASE
-        // ----------------------------------------------
 
         if (GameDatabase.Instance == null)
         {

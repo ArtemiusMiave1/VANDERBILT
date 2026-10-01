@@ -972,6 +972,7 @@ MonoBehaviour:
   spawnPlane: {fileID: 9215336876780299511}
   locationAmount: 100
   minimumDistance: 0.3
+  specialLocationMinimumDistance: 1
   locationParent: {fileID: 3621616904525438553}
   locationManager: {fileID: 5952950843815554502}
   generateOnStart: 0

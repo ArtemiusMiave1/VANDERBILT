@@ -446,8 +446,8 @@ MonoBehaviour:
   RequestComplete: {fileID: 8300000, guid: 45243d31ed8688e4daa0ebbb90f2b6ce, type: 3}
   FaxPrint: {fileID: 8300000, guid: d8245574d5885194d83cab782cd617a3, type: 3}
   FaxPurchase: {fileID: 8300000, guid: 8dc62523a246b174387feb08850f0a4f, type: 3}
-  Thunder: {fileID: 8300000, guid: ecd68100bfebf5240be4b28744bff8d4, type: 3}
-  Landing: {fileID: 8300000, guid: ea355bad34e49d0449518805627892e3, type: 3}
+  Thunder: {fileID: 8300000, guid: 95ba1c4bd7cac6b40a4dbd1b18b2ea50, type: 3}
+  Landing: {fileID: 8300000, guid: 7bd055b2e42647c4bbd2afab12d6bf65, type: 3}
 --- !u!1 &4728354574104734854
 GameObject:
   m_ObjectHideFlags: 0

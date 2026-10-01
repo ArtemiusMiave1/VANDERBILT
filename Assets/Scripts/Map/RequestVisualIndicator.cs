@@ -11,7 +11,8 @@ public class RequestVisualIndicator : MonoBehaviour
 
     [Header("Payment")]
     public Material paymentReadyMaterial;
-    public Color paymentReadyLightColour = Color.green;
+    public Color paymentReadyLightColour =
+        Color.green;
 
     [Header("Light")]
     public GameObject requestLight;
@@ -20,6 +21,10 @@ public class RequestVisualIndicator : MonoBehaviour
     private Color originalLightColour;
 
 
+    // =========================================================
+    // AWAKE
+    // =========================================================
+
     private void Awake()
     {
         if (targetRenderer == null)
@@ -27,6 +32,7 @@ public class RequestVisualIndicator : MonoBehaviour
             targetRenderer =
                 GetComponent<Renderer>();
         }
+
 
         // Automatically remember starting material.
         if (
@@ -98,7 +104,6 @@ public class RequestVisualIndicator : MonoBehaviour
 
     public void SetPaymentReady()
     {
-        // Change material if one has been assigned.
         if (
             targetRenderer != null &&
             paymentReadyMaterial != null
@@ -109,14 +114,12 @@ public class RequestVisualIndicator : MonoBehaviour
         }
 
 
-        // Turn light on.
         if (requestLight != null)
         {
             requestLight.SetActive(true);
         }
 
 
-        // Make light green.
         if (lightComponent != null)
         {
             lightComponent.color =
@@ -152,5 +155,108 @@ public class RequestVisualIndicator : MonoBehaviour
         {
             requestLight.SetActive(false);
         }
+    }
+
+
+    // =========================================================
+    // SET ALL VANDERBILT PAYMENT LIGHTS
+    // =========================================================
+
+    public static void SetAllVanderbiltPaymentLights(
+        bool paymentReady
+    )
+    {
+        if (LocationManager.Instance == null)
+            return;
+
+
+        foreach (
+            Location location
+            in LocationManager.Instance.locations
+        )
+        {
+            if (location == null)
+                continue;
+
+            if (location.locationType == null)
+                continue;
+
+
+            // Only Vanderbilt collection locations.
+            if (
+                location.locationType.LocationType !=
+                "Vanderbilt"
+            )
+            {
+                continue;
+            }
+
+
+            RequestVisualIndicator indicator =
+                location.GetComponentInChildren
+                <RequestVisualIndicator>(true);
+
+
+            if (indicator == null)
+            {
+                Debug.LogWarning(
+                    "RequestVisualIndicator: " +
+                    "No indicator found on Vanderbilt " +
+                    "location " +
+                    location.GetDisplayName()
+                );
+
+                continue;
+            }
+
+
+            if (paymentReady)
+            {
+                indicator.SetPaymentReady();
+            }
+            else
+            {
+                indicator.SetInactive();
+            }
+        }
+    }
+
+
+    // =========================================================
+    // REFRESH VANDERBILT PAYMENT LIGHTS
+    // =========================================================
+
+    public static void RefreshVanderbiltPaymentLights()
+    {
+        RequestPaper[] requests =
+            FindObjectsOfType<RequestPaper>();
+
+
+        bool paymentWaiting =
+            false;
+
+
+        // Check whether ANY request has
+        // money waiting to be collected.
+        foreach (
+            RequestPaper request
+            in requests
+        )
+        {
+            if (request == null)
+                continue;
+
+
+            if (request.HasPendingGold())
+            {
+                paymentWaiting = true;
+                break;
+            }
+        }
+
+
+        SetAllVanderbiltPaymentLights(
+            paymentWaiting
+        );
     }
 }
