@@ -65,8 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Route your way to the location marked yellow to deliver your resources
-    and complete the request.
+  m_text: Once resources are delivered, head to HQ landmarks to collect Gold.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
@@ -795,14 +794,14 @@ RectTransform:
   m_GameObject: {fileID: 1761664207258639153}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0884, y: 1.0884, z: 1.0884}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4032371807648661422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10.5, y: -93.5}
+  m_AnchoredPosition: {x: -30, y: -116}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5337293649694316651
@@ -833,7 +832,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Requests will be pinned on the corkboard. Press 'E' to pin them on.
+  m_text: 'Press ''E'' to pin Requests on the corkboard. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
@@ -1042,10 +1041,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Left Click and Hold to interact with the map and direct your route around
-    the area.
+  m_text: 'Left Click and Hold at the map table to route your way!
 
-    !TRY TO STEER CLEAR OF DANGEROUS ROUTES!'
+    !TRY TO STEER
+    CLEAR OF DANGEROUS ROUTES!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
@@ -1378,7 +1377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &750484674364096323
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1840,14 +1839,14 @@ RectTransform:
   m_GameObject: {fileID: 5043235518094969968}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0619, y: 1.0619, z: 1.0619}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5514880283304443355}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -35.2, y: 204.8}
+  m_AnchoredPosition: {x: -49, y: 172}
   m_SizeDelta: {x: 200, y: 45.379}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6728351063686884595
@@ -2672,7 +2671,7 @@ RectTransform:
   m_GameObject: {fileID: 7037943563328524079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.246583, y: 5.4889636, z: 1.1945}
+  m_LocalScale: {x: 7.174602, y: 9.273603, z: 2.0181077}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1863371996259598004}
@@ -3007,7 +3006,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Fill out an Order Form at a Resource Depot to gain more resources for requests.
+  m_text: Fill out Order Forms at Resource Depots to purchase resources.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
@@ -3073,7 +3072,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -66.3327, y: 0, z: -121.886536, w: 0}
+  m_margin: {x: -48.33873, y: 0, z: -93.26819, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3288,8 +3287,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The more resources you have ordered and have in your ship, the slower
-    you will travel. '
+  m_text: 'The more resources you have in your ship, the slower you will travel. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
