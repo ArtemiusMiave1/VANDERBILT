@@ -72,8 +72,6 @@ public class ShipMovement : MonoBehaviour
 
         currentSpeed = 0f;
 
-        UpdateResourceDepotPaper();
-
         GameObject audioObject =
             GameObject.FindGameObjectWithTag("Audio");
 
@@ -82,6 +80,8 @@ public class ShipMovement : MonoBehaviour
             soundManager =
                 audioObject.GetComponent<SoundManager>();
         }
+
+        UpdateResourceDepotPaper();
     }
 
 
@@ -92,7 +92,7 @@ public class ShipMovement : MonoBehaviour
     private void Update()
     {
         // Always update throttle level,
-        // even when ship isn't travelling.
+        // even when the ship isn't travelling.
         UpdateSpeedLevel();
 
         if (!moving)
@@ -324,18 +324,19 @@ public class ShipMovement : MonoBehaviour
 
         if (targetLocation != null)
         {
-            // There is another destination in the route.
+            // There is another location in the route.
             //
             // The ship continues travelling.
             //
-            // Therefore a Resource Depot that we merely
-            // travelled through will NOT show the Fax.
+            // Therefore, if this was a Resource Depot
+            // that the ship is only travelling through,
+            // the Fax will NOT appear.
 
             moving = true;
         }
         else
         {
-            // No more locations in the route.
+            // There are no more locations.
             //
             // The ship has actually stopped here.
 
@@ -608,12 +609,13 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // THE PLAYER HAS STARTED TRAVELLING
+        // PLAYER HAS STARTED TRAVELLING
         // -----------------------------------------------------
 
         moving = true;
 
-        // Immediately hide the Fax when leaving the depot.
+        // Immediately hide the Fax when leaving
+        // the Resource Depot.
         UpdateResourceDepotPaper();
 
 
@@ -640,8 +642,8 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // If we stopped at a Resource Depot,
-        // the Fax can now appear.
+        // If the ship is stopped at a Resource Depot,
+        // the Fax can appear.
         UpdateResourceDepotPaper();
     }
 
@@ -657,7 +659,7 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // IS THE SHIP ACTUALLY AT A RESOURCE DEPOT?
+        // CHECK CURRENT LOCATION
         // -----------------------------------------------------
 
         bool atResourceDepot =
@@ -668,7 +670,7 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // IS THE SHIP ACTUALLY STOPPED?
+        // CHECK WHETHER SHIP IS STOPPED
         // -----------------------------------------------------
 
         bool shipStopped =
@@ -681,15 +683,15 @@ public class ShipMovement : MonoBehaviour
         //
         // The Fax ONLY appears when:
         //
-        // currentLocation = Resource Depot
-        // AND
-        // moving = false
+        // 1. The ship's CURRENT location is a Resource Depot.
         //
-        // This means:
+        // 2. The ship is NOT moving.
         //
-        // Travelling through a Resource Depot = NO Fax
+        // Therefore:
         //
-        // Stopped at a Resource Depot = Fax
+        // Travelling through Resource Depot = NO Fax.
+        //
+        // Stopped at Resource Depot = Fax.
         // -----------------------------------------------------
 
         if (
@@ -701,6 +703,9 @@ public class ShipMovement : MonoBehaviour
             {
                 resourceDepotPaper.SetActive(true);
 
+
+                // Play Fax print sound only when
+                // the Fax actually appears.
 
                 if (soundManager != null)
                 {
@@ -718,11 +723,11 @@ public class ShipMovement : MonoBehaviour
         // HIDE FAX
         // -----------------------------------------------------
         //
-        // This happens when:
+        // The Fax disappears when:
         //
-        // - Ship is travelling
-        // - Ship is at another type of location
-        // - Ship has left the Resource Depot
+        // - The ship starts travelling.
+        // - The ship leaves the Resource Depot.
+        // - The ship is at another location.
         // -----------------------------------------------------
 
         if (resourceDepotPaper.activeSelf)
