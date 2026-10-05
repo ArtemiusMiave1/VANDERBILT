@@ -12,35 +12,80 @@ public class ResourceOrderRow : MonoBehaviour
     public TMP_Text priceText;
     public TMP_InputField quantityInput;
 
+
+    // =========================================================
+    // START
+    // =========================================================
+
     private void Start()
     {
         Setup();
     }
 
+
+    // =========================================================
+    // SETUP
+    // =========================================================
+
     public void Setup()
     {
-        resourceNameText.text = resourceType;
-        priceText.text = price + " Gold";
+        resourceNameText.text =
+            resourceType;
 
 
-        quantityInput.contentType = TMP_InputField.ContentType.IntegerNumber;
-        quantityInput.onValidateInput += ValidateNumberInput;
+        priceText.text =
+            price +
+            " Gold";
 
-        quantityInput.text = "0";
 
-        // Update the depot whenever the player changes the number
-        quantityInput.onValueChanged.AddListener(OnQuantityChanged);
+        quantityInput.contentType =
+            TMP_InputField.ContentType.IntegerNumber;
+
+
+        quantityInput.onValidateInput +=
+            ValidateNumberInput;
+
+
+        quantityInput.text =
+            "0";
+
+
+        // Update depot whenever the player
+        // changes the quantity.
+
+        quantityInput.onValueChanged.AddListener(
+            OnQuantityChanged
+        );
     }
 
-    private char ValidateNumberInput(string text, int charIndex, char addedChar)
+
+    // =========================================================
+    // VALIDATE INPUT
+    // =========================================================
+
+    private char ValidateNumberInput(
+        string text,
+        int charIndex,
+        char addedChar
+    )
     {
-        return char.IsDigit(addedChar) ? addedChar : '\0';
+        return char.IsDigit(addedChar)
+            ? addedChar
+            : '\0';
     }
 
-    private void OnQuantityChanged(string value)
+
+    // =========================================================
+    // QUANTITY CHANGED
+    // =========================================================
+
+    private void OnQuantityChanged(
+        string value
+    )
     {
-        // Tell the depot paper that something changed
-        ResourceDepotPaper paper = GetComponentInParent<ResourceDepotPaper>();
+        ResourceDepotPaper paper =
+            GetComponentInParent<ResourceDepotPaper>();
+
 
         if (paper != null)
         {
@@ -48,23 +93,49 @@ public class ResourceOrderRow : MonoBehaviour
         }
     }
 
+
+    // =========================================================
+    // GET AMOUNT
+    // =========================================================
+
     public int GetAmount()
     {
-        if (int.TryParse(quantityInput.text, out int amount))
+        if (
+            int.TryParse(
+                quantityInput.text,
+                out int amount
+            )
+        )
         {
-            return Mathf.Max(0, amount);
+            return Mathf.Max(
+                0,
+                amount
+            );
         }
+
 
         return 0;
     }
 
+
+    // =========================================================
+    // GET TOTAL COST
+    // =========================================================
+
     public int GetTotalCost()
     {
-        return GetAmount() * price;
+        return GetAmount() *
+               price;
     }
+
+
+    // =========================================================
+    // CLEAR AMOUNT
+    // =========================================================
 
     public void ClearAmount()
     {
-        quantityInput.text = "0";
+        quantityInput.text =
+            "0";
     }
 }
