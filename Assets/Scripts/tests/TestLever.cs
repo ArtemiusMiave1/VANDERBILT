@@ -32,6 +32,13 @@ public class TestLever : MonoBehaviour
     [Header("Player Camera")]
     public Camera playerCamera;
 
+    [Header("Lever Sound")]
+    [Tooltip("Minimum amount of movement required before the lever counts as moving.")]
+    public float soundMovementThreshold = 0.01f;
+
+    [Tooltip("How long the lever must remain nearly still before it is considered stopped.")]
+    public float movementStopDelay = 0.08f;
+
     private bool dragging = false;
     private bool returning = false;
 
@@ -40,12 +47,42 @@ public class TestLever : MonoBehaviour
     private Vector2 currentValue =
         new Vector2(0.5f, 0f);
 
+
+    // =========================================================
+    // SOUND MOVEMENT TRACKING
+    // =========================================================
+
+    private float previousX;
+
+    private float movementStopTimer = 0f;
+
+    // True when the lever is currently considered
+    // to be actively moving.
+    private bool isLeverMoving = false;
+
+    // 1 = moving right
+    // -1 = moving left
+    private int movementDirection = 0;
+
+
+    SoundManager soundManager;
+
+
+    private void Awake()
+    {
+        soundManager =
+            GameObject.FindGameObjectWithTag("Audio")
+            .GetComponent<SoundManager>();
+    }
+
+
     private void Start()
     {
         if (playerCamera == null)
         {
             playerCamera = Camera.main;
         }
+
 
         if (handle == null)
         {
@@ -56,6 +93,7 @@ public class TestLever : MonoBehaviour
             return;
         }
 
+
         if (pivot == null)
         {
             Debug.LogError(
@@ -64,6 +102,7 @@ public class TestLever : MonoBehaviour
 
             return;
         }
+
 
         if (returnPoint == null)
         {
@@ -74,8 +113,10 @@ public class TestLever : MonoBehaviour
             return;
         }
 
+
         SetHandleToReturnPoint();
     }
+
 
     private void Update()
     {
@@ -84,25 +125,32 @@ public class TestLever : MonoBehaviour
             TryGrabHandle();
         }
 
+
         if (dragging)
         {
             DragHandle();
         }
 
+
         if (Input.GetMouseButtonUp(0))
         {
             dragging = false;
             returning = true;
+
+            ResetMovementTracking();
         }
+
 
         if (returning && !dragging)
         {
             ReturnHandle();
         }
 
+
         RotatePivotTowardsHandle();
         RotateHandleTowardsPivot();
     }
+
 
     // =========================================================
     // HANDLE DRAGGING
@@ -113,15 +161,19 @@ public class TestLever : MonoBehaviour
         if (playerCamera == null)
             return;
 
+
         Ray ray =
             playerCamera.ScreenPointToRay(
                 Input.mousePosition
             );
 
+
         RaycastHit hit;
+
 
         if (!Physics.Raycast(ray, out hit))
             return;
+
 
         if (
             hit.transform != handle &&
@@ -131,8 +183,24 @@ public class TestLever : MonoBehaviour
             return;
         }
 
+
         dragging = true;
         returning = false;
+
+
+        // -----------------------------------------------------
+        // RESET SOUND MOVEMENT
+        // -----------------------------------------------------
+
+        movementDirection = 0;
+
+        isLeverMoving = false;
+
+        movementStopTimer = 0f;
+
+        previousX =
+            handle.localPosition.x;
+
 
         Plane plane =
             new Plane(
@@ -140,7 +208,9 @@ public class TestLever : MonoBehaviour
                 handle.position
             );
 
+
         float distance;
+
 
         if (
             plane.Raycast(
@@ -152,21 +222,25 @@ public class TestLever : MonoBehaviour
             Vector3 mousePosition =
                 ray.GetPoint(distance);
 
+
             grabOffset =
                 handle.position -
                 mousePosition;
         }
     }
 
+
     private void DragHandle()
     {
         if (playerCamera == null)
             return;
 
+
         Ray ray =
             playerCamera.ScreenPointToRay(
                 Input.mousePosition
             );
+
 
         Plane plane =
             new Plane(
@@ -174,7 +248,9 @@ public class TestLever : MonoBehaviour
                 handle.position
             );
 
+
         float distance;
+
 
         if (
             !plane.Raycast(
@@ -186,21 +262,30 @@ public class TestLever : MonoBehaviour
             return;
         }
 
+
         Vector3 mouseWorldPosition =
             ray.GetPoint(distance);
+
 
         Vector3 targetWorldPosition =
             mouseWorldPosition +
             grabOffset;
 
-        // Convert the mouse position
-        // into this object's local space.
+
+        // -----------------------------------------------------
+        // CONVERT MOUSE POSITION TO LOCAL SPACE
+        // -----------------------------------------------------
+
         Vector3 localPosition =
             transform.InverseTransformPoint(
                 targetWorldPosition
             );
 
-        // Only X can move.
+
+        // -----------------------------------------------------
+        // ONLY X CAN MOVE
+        // -----------------------------------------------------
+
         float x =
             Mathf.Clamp(
                 localPosition.x,
@@ -208,14 +293,124 @@ public class TestLever : MonoBehaviour
                 maximumX
             );
 
+
         Vector3 newPosition =
             handle.localPosition;
 
+
         newPosition.x = x;
 
-        // Y and Z remain unchanged.
+
+        // Y AND Z REMAIN UNCHANGED
+
         handle.localPosition =
             newPosition;
+
+
+        // =====================================================
+        // MOVEMENT DETECTION
+        // =====================================================
+
+        float movement =
+            x - previousX;
+
+
+        bool hasMeaningfulMovement =
+            Mathf.Abs(movement) >=
+            soundMovementThreshold;
+
+
+        // -----------------------------------------------------
+        // LEVER IS MOVING
+        // -----------------------------------------------------
+
+        if (hasMeaningfulMovement)
+        {
+            // Reset the stop timer because
+            // the lever is clearly moving.
+
+            movementStopTimer = 0f;
+
+
+            int newDirection =
+                movement > 0f
+                    ? 1
+                    : -1;
+
+
+            // -------------------------------------------------
+            // PLAY SOUND
+            // -------------------------------------------------
+            //
+            // Play only when:
+            //
+            // - Movement starts
+            // OR
+            // - Direction changes
+            //
+            // Holding the lever still will NOT retrigger it.
+
+            if (
+                !isLeverMoving ||
+                newDirection != movementDirection
+            )
+            {
+                if (soundManager != null)
+                {
+                    soundManager.PlaySFX(
+                        soundManager.Lever
+                    );
+                }
+            }
+
+
+            movementDirection =
+                newDirection;
+
+
+            isLeverMoving = true;
+
+
+            previousX = x;
+        }
+
+
+        // -----------------------------------------------------
+        // LEVER IS NOT CURRENTLY MOVING
+        // -----------------------------------------------------
+
+        else
+        {
+            // Start counting how long the lever
+            // has remained still.
+
+            movementStopTimer +=
+                Time.deltaTime;
+
+
+            // Only declare the lever stopped after
+            // it has actually remained still for a
+            // short period of time.
+
+            if (
+                movementStopTimer >=
+                movementStopDelay
+            )
+            {
+                isLeverMoving = false;
+
+                movementDirection = 0;
+
+                previousX = x;
+
+                movementStopTimer = 0f;
+            }
+        }
+
+
+        // -----------------------------------------------------
+        // CURRENT VALUE
+        // -----------------------------------------------------
 
         float xValue =
             Mathf.InverseLerp(
@@ -224,12 +419,34 @@ public class TestLever : MonoBehaviour
                 x
             );
 
+
         currentValue =
             new Vector2(
                 xValue,
                 0f
             );
     }
+
+
+    // =========================================================
+    // RESET MOVEMENT TRACKING
+    // =========================================================
+
+    private void ResetMovementTracking()
+    {
+        movementDirection = 0;
+
+        isLeverMoving = false;
+
+        movementStopTimer = 0f;
+
+        if (handle != null)
+        {
+            previousX =
+                handle.localPosition.x;
+        }
+    }
+
 
     // =========================================================
     // RETURN HANDLE
@@ -240,6 +457,7 @@ public class TestLever : MonoBehaviour
         if (returnPoint == null)
             return;
 
+
         handle.position =
             Vector3.MoveTowards(
                 handle.position,
@@ -247,6 +465,7 @@ public class TestLever : MonoBehaviour
                 returnSpeed *
                 Time.deltaTime
             );
+
 
         if (
             Vector3.Distance(
@@ -258,27 +477,34 @@ public class TestLever : MonoBehaviour
             handle.position =
                 returnPoint.position;
 
+
             returning = false;
+
 
             UpdateCurrentValue();
         }
     }
+
 
     private void SetHandleToReturnPoint()
     {
         if (returnPoint == null)
             return;
 
+
         handle.position =
             returnPoint.position;
 
+
         UpdateCurrentValue();
     }
+
 
     private void UpdateCurrentValue()
     {
         float x =
             handle.localPosition.x;
+
 
         float xValue =
             Mathf.InverseLerp(
@@ -287,12 +513,14 @@ public class TestLever : MonoBehaviour
                 x
             );
 
+
         currentValue =
             new Vector2(
                 xValue,
                 0f
             );
     }
+
 
     // =========================================================
     // PIVOT ROTATION
@@ -308,27 +536,31 @@ public class TestLever : MonoBehaviour
             return;
         }
 
+
         if (pivot.parent == null)
             return;
 
-        // Convert both objects into the same
-        // local coordinate space.
+
         Vector3 localHandlePosition =
             pivot.parent.InverseTransformPoint(
                 handle.position
             );
+
 
         Vector3 localPivotPosition =
             pivot.parent.InverseTransformPoint(
                 pivot.position
             );
 
+
         Vector3 direction =
             localHandlePosition -
             localPivotPosition;
 
+
         if (direction.sqrMagnitude < 0.001f)
             return;
+
 
         float angle =
             Mathf.Atan2(
@@ -337,16 +569,20 @@ public class TestLever : MonoBehaviour
             ) *
             Mathf.Rad2Deg;
 
+
         angle +=
             pivotRotationOffset;
 
+
         // Clamp LOCAL rotation.
+
         angle =
             Mathf.Clamp(
                 angle,
                 minimumPivotAngle,
                 maximumPivotAngle
             );
+
 
         pivot.localRotation =
             Quaternion.Euler(
@@ -355,7 +591,9 @@ public class TestLever : MonoBehaviour
                 angle
             );
 
+
         // Convert angle to 0-100 speed.
+
         speed =
             Mathf.InverseLerp(
                 minimumPivotAngle,
@@ -364,6 +602,7 @@ public class TestLever : MonoBehaviour
             ) *
             100f;
     }
+
 
     // =========================================================
     // HANDLE ROTATION
@@ -379,12 +618,15 @@ public class TestLever : MonoBehaviour
             return;
         }
 
+
         Vector3 direction =
             pivot.position -
             handle.position;
 
+
         if (direction.sqrMagnitude < 0.001f)
             return;
+
 
         float angle =
             Mathf.Atan2(
@@ -393,11 +635,14 @@ public class TestLever : MonoBehaviour
             ) *
             Mathf.Rad2Deg;
 
+
         // Flip the handle so it points
         // in the same visual direction.
+
         angle +=
             handleRotationOffset +
             180f;
+
 
         handle.rotation =
             Quaternion.Euler(
@@ -407,6 +652,7 @@ public class TestLever : MonoBehaviour
             );
     }
 
+
     // =========================================================
     // PUBLIC VALUES
     // =========================================================
@@ -415,6 +661,7 @@ public class TestLever : MonoBehaviour
     {
         return currentValue;
     }
+
 
     public float GetSpeed()
     {
