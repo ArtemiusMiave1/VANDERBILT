@@ -10,7 +10,8 @@ public class SoundManager : MonoBehaviour
     [Header("Request Sounds")]
     public AudioClip Request;
     public AudioClip RequestComplete;
-
+    public AudioClip Button;
+    public AudioClip Lever;
 
     [Header("Fax Sounds")]
     public AudioClip FaxPrint;
@@ -20,6 +21,9 @@ public class SoundManager : MonoBehaviour
     [Header("World Sounds")]
     public AudioClip Thunder;
     public AudioClip Landing;
+    public AudioClip Blimprumble;
+    public AudioClip Engine;
+    public AudioClip Moving;
 
 
     // =========================================================
