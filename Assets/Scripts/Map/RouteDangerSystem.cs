@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class RouteDangerSystem : MonoBehaviour
 {
@@ -38,9 +39,38 @@ public class RouteDangerSystem : MonoBehaviour
     public StormTrigger stormTrigger;
 
 
+    [Header("Danger Audio")]
+    [Tooltip("How quickly both danger sounds fade out.")]
+    public float dangerAudioFadeSpeed = 1f;
+
+    [Range(0f, 1f)]
+    public float thunderVolume = 1f;
+
+    [Range(0f, 1f)]
+    public float dangerAmbienceVolume = 0.5f;
+
+
     private ShipCargo shipCargo;
 
     private SoundManager soundManager;
+
+
+    // =========================================================
+    // DANGER AUDIO SOURCES
+    // =========================================================
+
+    private AudioSource thunderSource;
+
+    private AudioSource dangerAmbienceSource;
+
+
+    // =========================================================
+    // AUDIO STATE
+    // =========================================================
+
+    private bool dangerAudioPlaying = false;
+
+    private Coroutine dangerAudioFadeCoroutine;
 
 
     // =========================================================
@@ -52,18 +82,68 @@ public class RouteDangerSystem : MonoBehaviour
         shipCargo =
             FindObjectOfType<ShipCargo>();
 
+
         if (stormTrigger == null)
         {
             stormTrigger =
                 FindObjectOfType<StormTrigger>();
         }
-        
-        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+
+
+        // -----------------------------------------------------
+        // FIND SOUND MANAGER
+        // -----------------------------------------------------
+
+        GameObject audioObject =
+            GameObject.FindGameObjectWithTag("Audio");
+
 
         if (audioObject != null)
         {
             soundManager =
                 audioObject.GetComponent<SoundManager>();
+        }
+
+
+        // -----------------------------------------------------
+        // CREATE THUNDER SOURCE
+        // -----------------------------------------------------
+
+        if (soundManager != null)
+        {
+            thunderSource =
+                gameObject.AddComponent<AudioSource>();
+
+
+            thunderSource.playOnAwake = false;
+
+            thunderSource.loop = true;
+
+            thunderSource.clip =
+                soundManager.Thunder;
+
+            thunderSource.volume = 0f;
+        }
+
+
+        // -----------------------------------------------------
+        // CREATE DANGER AMBIENCE SOURCE
+        // -----------------------------------------------------
+
+        if (soundManager != null)
+        {
+            dangerAmbienceSource =
+                gameObject.AddComponent<AudioSource>();
+
+
+            dangerAmbienceSource.playOnAwake = false;
+
+            dangerAmbienceSource.loop = true;
+
+            dangerAmbienceSource.clip =
+                soundManager.DangerAmbience;
+
+            dangerAmbienceSource.volume = 0f;
         }
     }
 
@@ -73,60 +153,82 @@ public class RouteDangerSystem : MonoBehaviour
     // =========================================================
 
     public void CheckRouteDanger(
-    RouteConnection route
-)
+        RouteConnection route
+    )
     {
+        // -----------------------------------------------------
+        // NO ROUTE
+        // -----------------------------------------------------
+
         if (route == null)
         {
             SetStorm(false);
+
+            StopDangerAudio();
+
             return;
         }
 
 
-        // =========================================================
-        // NORMAL ROUTE
-        // =========================================================
+        // -----------------------------------------------------
+        // SAFE ROUTE
+        // -----------------------------------------------------
 
         if (route.dangerLevel <= 0)
         {
             SetStorm(false);
+
+            StopDangerAudio();
+
             return;
         }
 
 
-        // =========================================================
+        // -----------------------------------------------------
         // DANGEROUS ROUTE
-        // =========================================================
+        // -----------------------------------------------------
 
         SetStorm(true);
 
 
-        // Play thunder when entering
-        // Dangerous OR Very Dangerous route.
-        if (soundManager != null)
-        {
-            soundManager.PlaySFX(
-                soundManager.Thunder
-            );
-        }
+        // -----------------------------------------------------
+        // START DANGER AUDIO
+        // -----------------------------------------------------
+        //
+        // If the audio is already playing, this does nothing.
+        //
+        // This is what allows:
+        //
+        // Danger -> Danger -> Danger
+        //
+        // without restarting either sound.
+        // -----------------------------------------------------
+
+        StartDangerAudio();
 
 
-        // =========================================================
+        // =====================================================
         // DANGER EVENT
-        // =========================================================
+        // =====================================================
 
         float eventChance = 0f;
+
 
         switch (route.dangerLevel)
         {
             case 1:
+
                 eventChance =
                     dangerLevel1Chance;
+
                 break;
 
+
             case 2:
+
                 eventChance =
                     dangerLevel2Chance;
+
                 break;
         }
 
@@ -141,13 +243,230 @@ public class RouteDangerSystem : MonoBehaviour
         }
 
 
-        // =========================================================
+        // =====================================================
         // FRAGILE CARGO
-        // =========================================================
+        // =====================================================
 
         CheckFragileCargo(
             route.dangerLevel
         );
+    }
+
+
+    // =========================================================
+    // START DANGER AUDIO
+    // =========================================================
+
+    private void StartDangerAudio()
+    {
+        // -----------------------------------------------------
+        // ALREADY PLAYING
+        // -----------------------------------------------------
+        //
+        // Do NOT restart either sound.
+        // -----------------------------------------------------
+
+        if (dangerAudioPlaying)
+        {
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // CANCEL ANY FADE
+        // -----------------------------------------------------
+
+        if (dangerAudioFadeCoroutine != null)
+        {
+            StopCoroutine(
+                dangerAudioFadeCoroutine
+            );
+
+            dangerAudioFadeCoroutine = null;
+        }
+
+
+        dangerAudioPlaying = true;
+
+
+        // =====================================================
+        // THUNDER
+        // =====================================================
+
+        if (
+            thunderSource != null &&
+            thunderSource.clip != null
+        )
+        {
+            thunderSource.loop = true;
+
+            thunderSource.volume =
+                thunderVolume;
+
+
+            if (!thunderSource.isPlaying)
+            {
+                thunderSource.Play();
+            }
+        }
+
+
+        // =====================================================
+        // DANGER AMBIENCE
+        // =====================================================
+
+        if (
+            dangerAmbienceSource != null &&
+            dangerAmbienceSource.clip != null
+        )
+        {
+            dangerAmbienceSource.loop = true;
+
+            dangerAmbienceSource.volume =
+                dangerAmbienceVolume;
+
+
+            if (!dangerAmbienceSource.isPlaying)
+            {
+                dangerAmbienceSource.Play();
+            }
+        }
+    }
+
+
+    // =========================================================
+    // STOP DANGER AUDIO
+    // =========================================================
+
+    public void StopDangerAudio()
+    {
+        if (!dangerAudioPlaying)
+            return;
+
+
+        if (dangerAudioFadeCoroutine != null)
+        {
+            StopCoroutine(
+                dangerAudioFadeCoroutine
+            );
+        }
+
+
+        dangerAudioFadeCoroutine =
+            StartCoroutine(
+                FadeDangerAudioOut()
+            );
+    }
+
+
+    // =========================================================
+    // FADE DANGER AUDIO
+    // =========================================================
+
+    private IEnumerator FadeDangerAudioOut()
+    {
+        float thunderStartVolume = 0f;
+
+        float ambienceStartVolume = 0f;
+
+
+        if (thunderSource != null)
+        {
+            thunderStartVolume =
+                thunderSource.volume;
+        }
+
+
+        if (dangerAmbienceSource != null)
+        {
+            ambienceStartVolume =
+                dangerAmbienceSource.volume;
+        }
+
+
+        float fadeTime = 0f;
+
+
+        // -----------------------------------------------------
+        // FADE BOTH TOGETHER
+        // -----------------------------------------------------
+
+        while (
+            fadeTime < 1f
+        )
+        {
+            fadeTime +=
+                Time.deltaTime *
+                dangerAudioFadeSpeed;
+
+
+            float fadeAmount =
+                Mathf.Clamp01(
+                    fadeTime
+                );
+
+
+            // -------------------------------------------------
+            // THUNDER
+            // -------------------------------------------------
+
+            if (thunderSource != null)
+            {
+                thunderSource.volume =
+                    Mathf.Lerp(
+                        thunderStartVolume,
+                        0f,
+                        fadeAmount
+                    );
+            }
+
+
+            // -------------------------------------------------
+            // DANGER AMBIENCE
+            // -------------------------------------------------
+
+            if (dangerAmbienceSource != null)
+            {
+                dangerAmbienceSource.volume =
+                    Mathf.Lerp(
+                        ambienceStartVolume,
+                        0f,
+                        fadeAmount
+                    );
+            }
+
+
+            yield return null;
+        }
+
+
+        // =====================================================
+        // STOP THUNDER
+        // =====================================================
+
+        if (thunderSource != null)
+        {
+            thunderSource.volume = 0f;
+
+            thunderSource.Stop();
+        }
+
+
+        // =====================================================
+        // STOP DANGER AMBIENCE
+        // =====================================================
+
+        if (dangerAmbienceSource != null)
+        {
+            dangerAmbienceSource.volume = 0f;
+
+            dangerAmbienceSource.Stop();
+        }
+
+
+        dangerAudioPlaying = false;
+
+        dangerAudioFadeCoroutine = null;
     }
 
 
@@ -162,26 +481,28 @@ public class RouteDangerSystem : MonoBehaviour
         float damageChance = 0f;
 
 
-        // -----------------------------------------------------
-        // GET DAMAGE CHANCE
-        // -----------------------------------------------------
-
         switch (dangerLevel)
         {
             case 0:
+
                 damageChance = 0f;
+
                 break;
 
 
             case 1:
+
                 damageChance =
                     dangerousFragileDamageChance;
+
                 break;
 
 
             case 2:
+
                 damageChance =
                     veryDangerousFragileDamageChance;
+
                 break;
         }
 
@@ -189,10 +510,6 @@ public class RouteDangerSystem : MonoBehaviour
         if (damageChance <= 0f)
             return;
 
-
-        // -----------------------------------------------------
-        // FIND REQUESTS CURRENTLY ON THE SHIP
-        // -----------------------------------------------------
 
         RequestPaper[] requests =
             FindObjectsOfType<RequestPaper>();
@@ -207,30 +524,21 @@ public class RouteDangerSystem : MonoBehaviour
                 continue;
 
 
-            // Request must currently be accepted.
             if (!request.IsAccepted())
                 continue;
 
 
-            // Only fragile requests are affected.
             if (!request.IsFragile())
                 continue;
 
 
-            // Completed requests cannot be damaged.
             if (request.IsCompleted())
                 continue;
 
 
-            // Already broken cargo can't get
-            // any more broken.
             if (request.IsFragileBroken())
                 continue;
 
-
-            // -------------------------------------------------
-            // DAMAGE ROLL
-            // -------------------------------------------------
 
             float roll =
                 Random.value;
@@ -239,6 +547,7 @@ public class RouteDangerSystem : MonoBehaviour
             if (roll <= damageChance)
             {
                 request.DamageFragileCargo();
+
 
                 Debug.Log(
                     "Route danger damaged fragile cargo: " +
@@ -264,10 +573,6 @@ public class RouteDangerSystem : MonoBehaviour
 
         switch (eventType)
         {
-            // -------------------------------------------------
-            // CARGO LOSS
-            // -------------------------------------------------
-
             case 0:
 
                 LoseRandomCargo();
@@ -275,20 +580,12 @@ public class RouteDangerSystem : MonoBehaviour
                 break;
 
 
-            // -------------------------------------------------
-            // FUEL LOSS
-            // -------------------------------------------------
-
             case 1:
 
                 LoseFuel();
 
                 break;
 
-
-            // -------------------------------------------------
-            // SHIP INCIDENT
-            // -------------------------------------------------
 
             case 2:
 
@@ -317,10 +614,6 @@ public class RouteDangerSystem : MonoBehaviour
             "weapons"
         };
 
-
-        // -----------------------------------------------------
-        // FIND A RESOURCE THE SHIP ACTUALLY HAS
-        // -----------------------------------------------------
 
         for (
             int attempt = 0;
