@@ -1364,6 +1364,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8497338510363282966, guid: 2c6d9bbcd9248b84ba9128cd2b1373a1, type: 3}
   m_PrefabInstance: {fileID: 8091478642543122944}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &4193408765482809125 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5366971314171931941, guid: 2c6d9bbcd9248b84ba9128cd2b1373a1, type: 3}
+  m_PrefabInstance: {fileID: 8091478642543122944}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8557965888548722726
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1494,6 +1499,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
+      propertyPath: FootstepsSnd
+      value: 
+      objectReference: {fileID: 4193408765482809125}
     - target: {fileID: 11400014, guid: 7d046b1de5c6f45de8f20035cfb42c08, type: 3}
       propertyPath: enableRunning
       value: 0
