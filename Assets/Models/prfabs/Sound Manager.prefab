@@ -574,8 +574,8 @@ MonoBehaviour:
   SFXSource: {fileID: 6838906606529513606}
   Request: {fileID: 8300000, guid: bbc43f9833f38dc4998fdd60aa5137af, type: 3}
   RequestComplete: {fileID: 8300000, guid: 45243d31ed8688e4daa0ebbb90f2b6ce, type: 3}
-  Button: {fileID: 0}
-  Lever: {fileID: 0}
+  Button: {fileID: 8300000, guid: bcde9f5f31bb26545ab3e6fb68b44b27, type: 3}
+  Lever: {fileID: 8300000, guid: 6cf86e6e04cf41541a8e0c0c8385bd94, type: 3}
   FaxPrint: {fileID: 8300000, guid: d8245574d5885194d83cab782cd617a3, type: 3}
   FaxPurchase: {fileID: 8300000, guid: 8dc62523a246b174387feb08850f0a4f, type: 3}
   Thunder: {fileID: 8300000, guid: 95ba1c4bd7cac6b40a4dbd1b18b2ea50, type: 3}

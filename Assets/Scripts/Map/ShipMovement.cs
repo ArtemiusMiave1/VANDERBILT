@@ -40,6 +40,7 @@ public class ShipMovement : MonoBehaviour
     [Range(0f, 1f)]
     public float minimumSpeedMultiplier = 0.25f;
 
+
     private ShipCargo shipCargo;
 
     private bool moving = false;
@@ -113,14 +114,7 @@ public class ShipMovement : MonoBehaviour
         {
             moving = false;
 
-
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
-
+            StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
 
@@ -142,14 +136,7 @@ public class ShipMovement : MonoBehaviour
         {
             moving = false;
 
-
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
-
+            StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
 
@@ -158,12 +145,21 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // SPEED LEVEL 0 = STOPPED
+        // SPEED LEVEL 0
         // -----------------------------------------------------
 
         if (currentSpeedLevel == 0)
         {
             currentSpeed = 0f;
+
+            /*
+             * IMPORTANT:
+             *
+             * We do NOT stop danger audio here.
+             *
+             * The ship may be stopped halfway through
+             * a dangerous route.
+             */
 
             UpdateResourceDepotPaper();
 
@@ -180,19 +176,10 @@ public class ShipMovement : MonoBehaviour
         )
         {
             currentSpeed = 0f;
-
             moving = false;
-
             targetLocation = null;
 
-
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
-
+            StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
 
@@ -254,14 +241,7 @@ public class ShipMovement : MonoBehaviour
         {
             moving = false;
 
-
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
-
+            StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
 
@@ -325,7 +305,7 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // PREVENT TARGET = CURRENT LOCATION
+        // PREVENT TARGET = CURRENT
         // -----------------------------------------------------
 
         if (
@@ -338,42 +318,31 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // CHECK NEXT ROUTE DANGER
-        // -----------------------------------------------------
-        //
-        // IMPORTANT:
-        //
-        // We check the NEXT route before deciding that
-        // the danger sequence has ended.
-        //
-        // Therefore:
-        //
-        // DANGER -> LANDMARK -> DANGER
-        //
-        // keeps the audio playing without restarting.
+        // ROUTE DANGER
         // -----------------------------------------------------
 
         if (targetLocation != null)
         {
+            /*
+             * Check the NEXT route connection.
+             *
+             * If it is dangerous, the existing danger
+             * audio continues without restarting.
+             *
+             * If it is normal, the danger audio fades out.
+             */
+
             CheckNextRouteDanger();
         }
         else
         {
-            // -------------------------------------------------
-            // THERE IS NO NEXT ROUTE
-            // -------------------------------------------------
-            //
-            // The player has reached the END of their route.
-            //
-            // Fade out the danger audio.
-            // -------------------------------------------------
+            /*
+             * There is no next route.
+             *
+             * The dangerous section has ended.
+             */
 
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
+            StopDangerAudio();
         }
 
 
@@ -388,6 +357,8 @@ public class ShipMovement : MonoBehaviour
         else
         {
             moving = false;
+
+            StopDangerIfNotOnDangerRoute();
         }
 
 
@@ -410,12 +381,7 @@ public class ShipMovement : MonoBehaviour
             targetLocation == null
         )
         {
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
+            StopDangerIfNotOnDangerRoute();
 
             return;
         }
@@ -427,12 +393,7 @@ public class ShipMovement : MonoBehaviour
 
         if (locationManager == null)
         {
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
+            StopDangerIfNotOnDangerRoute();
 
             return;
         }
@@ -447,12 +408,7 @@ public class ShipMovement : MonoBehaviour
 
         if (connection == null)
         {
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
+            StopDangerIfNotOnDangerRoute();
 
             return;
         }
@@ -464,6 +420,102 @@ public class ShipMovement : MonoBehaviour
                 connection
             );
         }
+    }
+
+
+    // =========================================================
+    // CHECK CURRENT DANGER ROUTE
+    // =========================================================
+    //
+    // This is used when the ship stops.
+    //
+    // If the ship has stopped halfway between two
+    // locations, currentLocation/targetLocation still
+    // describe the dangerous connection.
+    //
+    // Therefore the danger audio stays active.
+    //
+    // =========================================================
+
+    private void StopDangerIfNotOnDangerRoute()
+    {
+        if (routeDangerSystem == null)
+            return;
+
+
+        if (
+            currentLocation == null ||
+            targetLocation == null
+        )
+        {
+            StopDangerAudio();
+
+            return;
+        }
+
+
+        LocationManager locationManager =
+            LocationManager.Instance;
+
+
+        if (locationManager == null)
+        {
+            StopDangerAudio();
+
+            return;
+        }
+
+
+        RouteConnection connection =
+            locationManager.GetConnection(
+                currentLocation,
+                targetLocation
+            );
+
+
+        if (connection == null)
+        {
+            StopDangerAudio();
+
+            return;
+        }
+
+
+        /*
+         * If the current connection is dangerous,
+         * keep the danger audio playing.
+         */
+
+        if (connection.dangerLevel > 0)
+        {
+            routeDangerSystem.CheckRouteDanger(
+                connection
+            );
+
+            return;
+        }
+
+
+        /*
+         * Otherwise the ship is no longer on a
+         * dangerous route.
+         */
+
+        StopDangerAudio();
+    }
+
+
+    // =========================================================
+    // STOP DANGER AUDIO
+    // =========================================================
+
+    private void StopDangerAudio()
+    {
+        if (soundManager == null)
+            return;
+
+
+        soundManager.StopDangerAudio();
     }
 
 
@@ -607,16 +659,13 @@ public class ShipMovement : MonoBehaviour
     public void StartRoute()
     {
         if (shipRouteSystem == null)
-        {
             return;
-        }
 
 
         if (moving)
-        {
             return;
-        }
 
+        soundManager.PlaySFX(soundManager.Button);
 
         targetLocation =
             shipRouteSystem.GetNextLocation();
@@ -626,14 +675,7 @@ public class ShipMovement : MonoBehaviour
         {
             moving = false;
 
-
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
-
+            StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
 
@@ -644,17 +686,9 @@ public class ShipMovement : MonoBehaviour
         if (targetLocation == currentLocation)
         {
             targetLocation = null;
-
             moving = false;
 
-
-            if (routeDangerSystem != null)
-            {
-                routeDangerSystem.SetStorm(false);
-
-                routeDangerSystem.StopDangerAudio();
-            }
-
+            StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
 
@@ -663,7 +697,7 @@ public class ShipMovement : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // START MOVING
+        // START TRAVELLING
         // -----------------------------------------------------
 
         moving = true;
@@ -671,10 +705,6 @@ public class ShipMovement : MonoBehaviour
 
         UpdateResourceDepotPaper();
 
-
-        // -----------------------------------------------------
-        // CHECK FIRST ROUTE
-        // -----------------------------------------------------
 
         CheckNextRouteDanger();
     }
@@ -693,12 +723,16 @@ public class ShipMovement : MonoBehaviour
         currentSpeed = 0f;
 
 
-        if (routeDangerSystem != null)
-        {
-            routeDangerSystem.SetStorm(false);
-
-            routeDangerSystem.StopDangerAudio();
-        }
+        // -----------------------------------------------------
+        // DO NOT STOP DANGER AUDIO HERE.
+        // -----------------------------------------------------
+        //
+        // The player may have stopped in the middle of a
+        // dangerous route.
+        //
+        // Therefore Thunder and DangerAmbience must continue
+        // playing until the danger route has actually ended.
+        // -----------------------------------------------------
 
 
         UpdateResourceDepotPaper();
@@ -765,7 +799,6 @@ public class ShipMovement : MonoBehaviour
         if (speedControl == null)
         {
             currentSpeedLevel = 5;
-
             currentFuelCost = 5;
 
             return;
@@ -814,9 +847,7 @@ public class ShipMovement : MonoBehaviour
     private float CalculateCurrentSpeed()
     {
         if (currentSpeedLevel == 0)
-        {
             return 0f;
-        }
 
 
         float speedPercentage =

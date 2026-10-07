@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class RouteDangerSystem : MonoBehaviour
 {
@@ -39,38 +38,8 @@ public class RouteDangerSystem : MonoBehaviour
     public StormTrigger stormTrigger;
 
 
-    [Header("Danger Audio")]
-    [Tooltip("How quickly both danger sounds fade out.")]
-    public float dangerAudioFadeSpeed = 1f;
-
-    [Range(0f, 1f)]
-    public float thunderVolume = 1f;
-
-    [Range(0f, 1f)]
-    public float dangerAmbienceVolume = 0.5f;
-
-
     private ShipCargo shipCargo;
-
     private SoundManager soundManager;
-
-
-    // =========================================================
-    // DANGER AUDIO SOURCES
-    // =========================================================
-
-    private AudioSource thunderSource;
-
-    private AudioSource dangerAmbienceSource;
-
-
-    // =========================================================
-    // AUDIO STATE
-    // =========================================================
-
-    private bool dangerAudioPlaying = false;
-
-    private Coroutine dangerAudioFadeCoroutine;
 
 
     // =========================================================
@@ -90,10 +59,6 @@ public class RouteDangerSystem : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
-        // FIND SOUND MANAGER
-        // -----------------------------------------------------
-
         GameObject audioObject =
             GameObject.FindGameObjectWithTag("Audio");
 
@@ -102,48 +67,6 @@ public class RouteDangerSystem : MonoBehaviour
         {
             soundManager =
                 audioObject.GetComponent<SoundManager>();
-        }
-
-
-        // -----------------------------------------------------
-        // CREATE THUNDER SOURCE
-        // -----------------------------------------------------
-
-        if (soundManager != null)
-        {
-            thunderSource =
-                gameObject.AddComponent<AudioSource>();
-
-
-            thunderSource.playOnAwake = false;
-
-            thunderSource.loop = true;
-
-            thunderSource.clip =
-                soundManager.Thunder;
-
-            thunderSource.volume = 0f;
-        }
-
-
-        // -----------------------------------------------------
-        // CREATE DANGER AMBIENCE SOURCE
-        // -----------------------------------------------------
-
-        if (soundManager != null)
-        {
-            dangerAmbienceSource =
-                gameObject.AddComponent<AudioSource>();
-
-
-            dangerAmbienceSource.playOnAwake = false;
-
-            dangerAmbienceSource.loop = true;
-
-            dangerAmbienceSource.clip =
-                soundManager.DangerAmbience;
-
-            dangerAmbienceSource.volume = 0f;
         }
     }
 
@@ -156,55 +79,29 @@ public class RouteDangerSystem : MonoBehaviour
         RouteConnection route
     )
     {
-        // -----------------------------------------------------
-        // NO ROUTE
-        // -----------------------------------------------------
-
         if (route == null)
         {
             SetStorm(false);
-
-            StopDangerAudio();
-
             return;
         }
 
 
-        // -----------------------------------------------------
-        // SAFE ROUTE
-        // -----------------------------------------------------
+        // =====================================================
+        // NORMAL ROUTE
+        // =====================================================
 
         if (route.dangerLevel <= 0)
         {
             SetStorm(false);
-
-            StopDangerAudio();
-
             return;
         }
 
 
-        // -----------------------------------------------------
+        // =====================================================
         // DANGEROUS ROUTE
-        // -----------------------------------------------------
+        // =====================================================
 
         SetStorm(true);
-
-
-        // -----------------------------------------------------
-        // START DANGER AUDIO
-        // -----------------------------------------------------
-        //
-        // If the audio is already playing, this does nothing.
-        //
-        // This is what allows:
-        //
-        // Danger -> Danger -> Danger
-        //
-        // without restarting either sound.
-        // -----------------------------------------------------
-
-        StartDangerAudio();
 
 
         // =====================================================
@@ -217,18 +114,14 @@ public class RouteDangerSystem : MonoBehaviour
         switch (route.dangerLevel)
         {
             case 1:
-
                 eventChance =
                     dangerLevel1Chance;
-
                 break;
 
 
             case 2:
-
                 eventChance =
                     dangerLevel2Chance;
-
                 break;
         }
 
@@ -254,223 +147,6 @@ public class RouteDangerSystem : MonoBehaviour
 
 
     // =========================================================
-    // START DANGER AUDIO
-    // =========================================================
-
-    private void StartDangerAudio()
-    {
-        // -----------------------------------------------------
-        // ALREADY PLAYING
-        // -----------------------------------------------------
-        //
-        // Do NOT restart either sound.
-        // -----------------------------------------------------
-
-        if (dangerAudioPlaying)
-        {
-            return;
-        }
-
-
-        // -----------------------------------------------------
-        // CANCEL ANY FADE
-        // -----------------------------------------------------
-
-        if (dangerAudioFadeCoroutine != null)
-        {
-            StopCoroutine(
-                dangerAudioFadeCoroutine
-            );
-
-            dangerAudioFadeCoroutine = null;
-        }
-
-
-        dangerAudioPlaying = true;
-
-
-        // =====================================================
-        // THUNDER
-        // =====================================================
-
-        if (
-            thunderSource != null &&
-            thunderSource.clip != null
-        )
-        {
-            thunderSource.loop = true;
-
-            thunderSource.volume =
-                thunderVolume;
-
-
-            if (!thunderSource.isPlaying)
-            {
-                thunderSource.Play();
-            }
-        }
-
-
-        // =====================================================
-        // DANGER AMBIENCE
-        // =====================================================
-
-        if (
-            dangerAmbienceSource != null &&
-            dangerAmbienceSource.clip != null
-        )
-        {
-            dangerAmbienceSource.loop = true;
-
-            dangerAmbienceSource.volume =
-                dangerAmbienceVolume;
-
-
-            if (!dangerAmbienceSource.isPlaying)
-            {
-                dangerAmbienceSource.Play();
-            }
-        }
-    }
-
-
-    // =========================================================
-    // STOP DANGER AUDIO
-    // =========================================================
-
-    public void StopDangerAudio()
-    {
-        if (!dangerAudioPlaying)
-            return;
-
-
-        if (dangerAudioFadeCoroutine != null)
-        {
-            StopCoroutine(
-                dangerAudioFadeCoroutine
-            );
-        }
-
-
-        dangerAudioFadeCoroutine =
-            StartCoroutine(
-                FadeDangerAudioOut()
-            );
-    }
-
-
-    // =========================================================
-    // FADE DANGER AUDIO
-    // =========================================================
-
-    private IEnumerator FadeDangerAudioOut()
-    {
-        float thunderStartVolume = 0f;
-
-        float ambienceStartVolume = 0f;
-
-
-        if (thunderSource != null)
-        {
-            thunderStartVolume =
-                thunderSource.volume;
-        }
-
-
-        if (dangerAmbienceSource != null)
-        {
-            ambienceStartVolume =
-                dangerAmbienceSource.volume;
-        }
-
-
-        float fadeTime = 0f;
-
-
-        // -----------------------------------------------------
-        // FADE BOTH TOGETHER
-        // -----------------------------------------------------
-
-        while (
-            fadeTime < 1f
-        )
-        {
-            fadeTime +=
-                Time.deltaTime *
-                dangerAudioFadeSpeed;
-
-
-            float fadeAmount =
-                Mathf.Clamp01(
-                    fadeTime
-                );
-
-
-            // -------------------------------------------------
-            // THUNDER
-            // -------------------------------------------------
-
-            if (thunderSource != null)
-            {
-                thunderSource.volume =
-                    Mathf.Lerp(
-                        thunderStartVolume,
-                        0f,
-                        fadeAmount
-                    );
-            }
-
-
-            // -------------------------------------------------
-            // DANGER AMBIENCE
-            // -------------------------------------------------
-
-            if (dangerAmbienceSource != null)
-            {
-                dangerAmbienceSource.volume =
-                    Mathf.Lerp(
-                        ambienceStartVolume,
-                        0f,
-                        fadeAmount
-                    );
-            }
-
-
-            yield return null;
-        }
-
-
-        // =====================================================
-        // STOP THUNDER
-        // =====================================================
-
-        if (thunderSource != null)
-        {
-            thunderSource.volume = 0f;
-
-            thunderSource.Stop();
-        }
-
-
-        // =====================================================
-        // STOP DANGER AMBIENCE
-        // =====================================================
-
-        if (dangerAmbienceSource != null)
-        {
-            dangerAmbienceSource.volume = 0f;
-
-            dangerAmbienceSource.Stop();
-        }
-
-
-        dangerAudioPlaying = false;
-
-        dangerAudioFadeCoroutine = null;
-    }
-
-
-    // =========================================================
     // FRAGILE CARGO
     // =========================================================
 
@@ -484,25 +160,19 @@ public class RouteDangerSystem : MonoBehaviour
         switch (dangerLevel)
         {
             case 0:
-
                 damageChance = 0f;
-
                 break;
 
 
             case 1:
-
                 damageChance =
                     dangerousFragileDamageChance;
-
                 break;
 
 
             case 2:
-
                 damageChance =
                     veryDangerousFragileDamageChance;
-
                 break;
         }
 
@@ -574,23 +244,17 @@ public class RouteDangerSystem : MonoBehaviour
         switch (eventType)
         {
             case 0:
-
                 LoseRandomCargo();
-
                 break;
 
 
             case 1:
-
                 LoseFuel();
-
                 break;
 
 
             case 2:
-
                 TriggerShipIncident();
-
                 break;
         }
     }
@@ -771,24 +435,40 @@ public class RouteDangerSystem : MonoBehaviour
 
 
     // =========================================================
-    // STORM
+    // STORM + DANGER AUDIO
     // =========================================================
 
     public void SetStorm(
         bool active
     )
     {
-        if (stormTrigger == null)
-            return;
-
-
-        if (active)
+        if (stormTrigger != null)
         {
-            stormTrigger.ActivateStorm();
+            if (active)
+            {
+                stormTrigger.ActivateStorm();
+            }
+            else
+            {
+                stormTrigger.DeactivateStorm();
+            }
         }
-        else
+
+
+        // -----------------------------------------------------
+        // DANGER AUDIO
+        // -----------------------------------------------------
+
+        if (soundManager != null)
         {
-            stormTrigger.DeactivateStorm();
+            if (active)
+            {
+                soundManager.StartDangerAudio();
+            }
+            else
+            {
+                soundManager.StopDangerAudio();
+            }
         }
     }
 }
