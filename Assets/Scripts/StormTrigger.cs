@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class StormTrigger : MonoBehaviour
     Color colorlarp;
     Material skyboxreal;
     public Vector2 skyboxSpeed;
+    //public V2WarningLight v2warningLight;
+    private Array lights;
 
 
     public float cloudintensity;
@@ -26,6 +29,8 @@ public class StormTrigger : MonoBehaviour
         RenderSettings.skybox = skyboxreal;
         skybox = skyboxreal;
         skyboxSpeed = skybox.GetVector("_FanSpeed");
+        lights = FindObjectsByType(typeof(V2WarningLight),FindObjectsSortMode.InstanceID);
+        //print(lights);
 
     }
 
@@ -62,6 +67,10 @@ public class StormTrigger : MonoBehaviour
             skybox.SetInt("_ThunderToggle", 1);
             skybox.SetColor("_ColorDark", colorlarp);
             skybox.SetColor("_ColorBright", colorlarp);
+            foreach (V2WarningLight light in lights)
+            {
+                light.CurrentColor = "Purple";
+            }
 
             yield return null;
             
@@ -84,6 +93,10 @@ public class StormTrigger : MonoBehaviour
             skybox.SetInt("_ThunderToggle", 0);
             skybox.SetColor("_ColorDark", colorlarp);
             skybox.SetColor("_ColorBright", colorlarp);
+            foreach (V2WarningLight light in lights)
+            {
+                light.CurrentColor = "Neither";
+            }
 
             yield return null;
         }
