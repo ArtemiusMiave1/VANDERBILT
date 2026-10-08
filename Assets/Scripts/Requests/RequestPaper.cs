@@ -65,10 +65,10 @@ public class RequestPaper : MonoBehaviour
 
     [Header("Sound")]
     public AudioSource audioSource;
-    public AudioClip requestAcceptedSound;
-    public AudioClip requestCompletedSound;
 
     private RequestVisualIndicator requestVisual;
+
+    SoundManager soundManager;
 
 
     // =========================================================
@@ -78,6 +78,7 @@ public class RequestPaper : MonoBehaviour
     private void Awake()
     {
         LoadStampMaterials();
+        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
     }
 
 
@@ -504,16 +505,7 @@ public class RequestPaper : MonoBehaviour
         if (requestVisual != null)
             requestVisual.SetActive();
 
-        if (
-            audioSource != null &&
-            requestAcceptedSound != null
-        )
-        {
-            audioSource.PlayOneShot(
-                requestAcceptedSound
-            );
-        }
-
+ 
         Debug.Log(
             "Request accepted: " +
             GetRequestTitle()
@@ -532,15 +524,7 @@ public class RequestPaper : MonoBehaviour
         if (requestVisual != null)
             requestVisual.SetActive();
 
-        if (
-            audioSource != null &&
-            requestAcceptedSound != null
-        )
-        {
-            audioSource.PlayOneShot(
-                requestAcceptedSound
-            );
-        }
+        soundManager.PlaySFX(soundManager.RequestAccepted);
 
         Debug.Log(
             "Request accepted from corkboard: " +
@@ -663,6 +647,7 @@ public class RequestPaper : MonoBehaviour
     {
         if (completed)
             return;
+        //soundManager.PlaySFX(soundManager.RequestDeliveryHatch); (Sound effect for it goes here)
 
         if (requestData == null)
         {
@@ -846,15 +831,7 @@ public class RequestPaper : MonoBehaviour
         // SOUND
         // -----------------------------------------------------
 
-        if (
-            audioSource != null &&
-            requestCompletedSound != null
-        )
-        {
-            audioSource.PlayOneShot(
-                requestCompletedSound
-            );
-        }
+  
 
         Debug.Log(
             "Request delivered: " +
@@ -882,6 +859,8 @@ public class RequestPaper : MonoBehaviour
             " gold from request: " +
             GetRequestTitle()
         );
+
+        soundManager.PlaySFX(soundManager.RequestComplete);
 
         return goldToCollect;
     }
