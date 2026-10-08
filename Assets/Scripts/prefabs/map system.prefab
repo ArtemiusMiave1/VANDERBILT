@@ -149,6 +149,9 @@ MonoBehaviour:
   currentFuelCost: 0
   maximumCargoWeight: 2500
   minimumSpeedMultiplier: 0.25
+  Engine: {fileID: 0}
+  engineAudioSource: {fileID: 0}
+  engineFadeOutTime: 1
 --- !u!114 &7621336041208706445
 MonoBehaviour:
   m_ObjectHideFlags: 0

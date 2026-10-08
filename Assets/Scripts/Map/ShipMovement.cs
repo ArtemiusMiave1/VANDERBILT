@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ShipMovement : MonoBehaviour
@@ -52,6 +53,9 @@ public class ShipMovement : MonoBehaviour
     [Tooltip("AudioSource located on the ship's engine. Set Spatial Blend to 3D.")]
     public AudioSource engineAudioSource;
 
+    [Tooltip("How long the Engine sound takes to fade out when the ship stops.")]
+    public float engineFadeOutTime = 0.5f;
+
 
     private ShipCargo shipCargo;
 
@@ -60,6 +64,8 @@ public class ShipMovement : MonoBehaviour
     private bool wasMoving = false;
 
     private SoundManager soundManager;
+
+    private Coroutine engineFadeCoroutine;
 
 
     // =========================================================
@@ -166,27 +172,15 @@ public class ShipMovement : MonoBehaviour
 
         if (moving && !wasMoving)
         {
-            // Start looping Moving sound
+            // Start Moving sound
             if (soundManager != null)
             {
                 soundManager.StartMovingAudio();
             }
 
 
-            // Start 3D Engine sound
-            if (
-                engineAudioSource != null &&
-                Engine != null
-            )
-            {
-                engineAudioSource.clip = Engine;
-
-
-                if (!engineAudioSource.isPlaying)
-                {
-                    engineAudioSource.Play();
-                }
-            }
+            // Start Engine sound
+            StartEngineAudio();
         }
 
 
@@ -196,7 +190,7 @@ public class ShipMovement : MonoBehaviour
 
         if (!moving && wasMoving)
         {
-            // Stop looping Moving sound
+            // Fade Moving sound
             if (soundManager != null)
             {
                 soundManager.StopMovingAudio();
@@ -209,14 +203,8 @@ public class ShipMovement : MonoBehaviour
             }
 
 
-            // Stop 3D Engine sound
-            if (
-                engineAudioSource != null &&
-                engineAudioSource.isPlaying
-            )
-            {
-                engineAudioSource.Stop();
-            }
+            // Fade Engine sound
+            StopEngineAudio();
         }
 
 
@@ -225,6 +213,175 @@ public class ShipMovement : MonoBehaviour
         // -----------------------------------------------------
 
         wasMoving = moving;
+    }
+
+
+    // =========================================================
+    // START ENGINE AUDIO
+    // =========================================================
+
+    private void StartEngineAudio()
+    {
+        if (
+            engineAudioSource == null ||
+            Engine == null
+        )
+        {
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // CANCEL ENGINE FADE
+        // -----------------------------------------------------
+
+        if (engineFadeCoroutine != null)
+        {
+            StopCoroutine(
+                engineFadeCoroutine
+            );
+
+            engineFadeCoroutine = null;
+        }
+
+
+        // -----------------------------------------------------
+        // SETUP ENGINE AUDIO
+        // -----------------------------------------------------
+
+        engineAudioSource.clip =
+            Engine;
+
+        engineAudioSource.loop = true;
+
+
+        // Restore full volume.
+
+        engineAudioSource.volume = 1f;
+
+
+        // -----------------------------------------------------
+        // START IF NOT ALREADY PLAYING
+        // -----------------------------------------------------
+
+        if (!engineAudioSource.isPlaying)
+        {
+            engineAudioSource.Play();
+        }
+    }
+
+
+    // =========================================================
+    // STOP ENGINE AUDIO
+    // =========================================================
+
+    private void StopEngineAudio()
+    {
+        if (engineAudioSource == null)
+            return;
+
+
+        if (!engineAudioSource.isPlaying)
+            return;
+
+
+        // -----------------------------------------------------
+        // CANCEL EXISTING FADE
+        // -----------------------------------------------------
+
+        if (engineFadeCoroutine != null)
+        {
+            StopCoroutine(
+                engineFadeCoroutine
+            );
+        }
+
+
+        // -----------------------------------------------------
+        // START FADE
+        // -----------------------------------------------------
+
+        engineFadeCoroutine =
+            StartCoroutine(
+                FadeOutEngineAudio()
+            );
+    }
+
+
+    // =========================================================
+    // FADE OUT ENGINE AUDIO
+    // =========================================================
+
+    private IEnumerator FadeOutEngineAudio()
+    {
+        float startingVolume =
+            engineAudioSource != null
+                ? engineAudioSource.volume
+                : 0f;
+
+
+        float timer = 0f;
+
+
+        // -----------------------------------------------------
+        // FADE OUT
+        // -----------------------------------------------------
+
+        while (
+            timer <
+            engineFadeOutTime
+        )
+        {
+            if (engineAudioSource == null)
+                yield break;
+
+
+            timer +=
+                Time.deltaTime;
+
+
+            float percentage;
+
+
+            if (engineFadeOutTime <= 0f)
+            {
+                percentage = 1f;
+            }
+            else
+            {
+                percentage =
+                    Mathf.Clamp01(
+                        timer /
+                        engineFadeOutTime
+                    );
+            }
+
+
+            engineAudioSource.volume =
+                Mathf.Lerp(
+                    startingVolume,
+                    0f,
+                    percentage
+                );
+
+
+            yield return null;
+        }
+
+
+        // -----------------------------------------------------
+        // STOP AFTER FADE
+        // -----------------------------------------------------
+
+        if (engineAudioSource != null)
+        {
+            engineAudioSource.volume = 0f;
+            engineAudioSource.Stop();
+            engineAudioSource.volume = 1f;
+        }
+
+
+        engineFadeCoroutine = null;
     }
 
 
@@ -558,8 +715,6 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // Keep danger audio playing if on dangerous route.
-
         if (connection.dangerLevel > 0)
         {
             routeDangerSystem.CheckRouteDanger(
@@ -735,7 +890,10 @@ public class ShipMovement : MonoBehaviour
             return;
 
 
-        // Play button sound
+        // -----------------------------------------------------
+        // PLAY BUTTON SOUND
+        // -----------------------------------------------------
+
         if (soundManager != null)
         {
             soundManager.PlaySFX(
