@@ -572,10 +572,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   SFXSource: {fileID: 6838906606529513606}
-  Request: {fileID: 8300000, guid: bbc43f9833f38dc4998fdd60aa5137af, type: 3}
-  RequestComplete: {fileID: 8300000, guid: 45243d31ed8688e4daa0ebbb90f2b6ce, type: 3}
+  Request: {fileID: 8300000, guid: 821ad76cc26bbb947a2d3f5146dbc920, type: 3}
+  RequestAccepted: {fileID: 8300000, guid: 753ff69127989bc40811b8b1dbb55c67, type: 3}
+  RequestComplete: {fileID: 8300000, guid: 19536d41652804048ac83fa7135d9c9d, type: 3}
   Button: {fileID: 8300000, guid: bcde9f5f31bb26545ab3e6fb68b44b27, type: 3}
   Lever: {fileID: 8300000, guid: 6cf86e6e04cf41541a8e0c0c8385bd94, type: 3}
+  RequestDeliveryHatch: {fileID: 8300000, guid: d3a365fbdbbb3e149afb39c3f5976787, type: 3}
   FaxPrint: {fileID: 8300000, guid: d8245574d5885194d83cab782cd617a3, type: 3}
   FaxPurchase: {fileID: 8300000, guid: 8dc62523a246b174387feb08850f0a4f, type: 3}
   Thunder: {fileID: 8300000, guid: 95ba1c4bd7cac6b40a4dbd1b18b2ea50, type: 3}

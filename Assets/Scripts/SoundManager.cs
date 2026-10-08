@@ -10,9 +10,11 @@ public class SoundManager : MonoBehaviour
 
     [Header("Request Sounds")]
     public AudioClip Request;
+    public AudioClip RequestAccepted;
     public AudioClip RequestComplete;
     public AudioClip Button;
     public AudioClip Lever;
+    public AudioClip RequestDeliveryHatch;
 
 
     [Header("Fax Sounds")]

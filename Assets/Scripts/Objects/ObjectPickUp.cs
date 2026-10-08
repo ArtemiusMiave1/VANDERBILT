@@ -30,6 +30,13 @@ public class ObjectPickUp : MonoBehaviour
     // START
     // =========================================================
 
+    SoundManager soundManager;
+
+    private void Awake()
+    {
+        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
+    }
+
     void Start()
     {
         LayerNumber =
@@ -178,6 +185,7 @@ public class ObjectPickUp : MonoBehaviour
                     pickUpObj
                 );
             }
+            soundManager.PlaySFX(soundManager.Request);
         }
 
 
