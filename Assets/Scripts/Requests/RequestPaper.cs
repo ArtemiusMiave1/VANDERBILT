@@ -1,3 +1,4 @@
+
 using TMPro;
 using UnityEngine;
 
@@ -18,8 +19,21 @@ public class RequestPaper : MonoBehaviour
     public TMP_Text condtionText;
 
     [Header("Delivered Stamp")]
-    [Tooltip("Image/GameObject shown when the request is successfully delivered.")]
+    [Tooltip("Shown when the request is successfully delivered.")]
     public GameObject deliveredStamp;
+
+    // =========================================================
+    // STAMPS
+    // =========================================================
+
+    [Header("Stamp Renderers")]
+    public Renderer requirementStampRenderer;
+    public Renderer conditionStampRenderer;
+
+    private Material urgentStamp;
+    private Material fragileStamp;
+    private Material damagedStamp;
+    private Material brokenStamp;
 
     [Header("Request Requirement")]
     public RequestRequirement requirement =
@@ -30,7 +44,7 @@ public class RequestPaper : MonoBehaviour
         FragileCondition.Safe;
 
     [Range(0f, 1f)]
-    [Tooltip("Reward multiplier if the fragile cargo is damaged.")]
+    [Tooltip("Reward multiplier if fragile cargo is damaged.")]
     public float damagedRewardMultiplier = 0.5f;
 
     [Header("Request Destination")]
@@ -46,9 +60,7 @@ public class RequestPaper : MonoBehaviour
     public int pendingGold = 0;
 
     [Header("Deadline")]
-    [Tooltip("Deadline in total GameClock minutes.")]
     private int deadlineMinutes;
-
     private bool deadlineSet = false;
 
     [Header("Sound")]
@@ -57,6 +69,16 @@ public class RequestPaper : MonoBehaviour
     public AudioClip requestCompletedSound;
 
     private RequestVisualIndicator requestVisual;
+
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
+
+    private void Awake()
+    {
+        LoadStampMaterials();
+    }
 
 
     // =========================================================
@@ -69,6 +91,127 @@ public class RequestPaper : MonoBehaviour
         {
             deliveredStamp.SetActive(false);
         }
+
+        UpdateRequirementStamp();
+        UpdateConditionStamp();
+    }
+
+
+    // =========================================================
+    // LOAD STAMP MATERIALS
+    // =========================================================
+
+    private void LoadStampMaterials()
+    {
+        urgentStamp =
+            Resources.Load<Material>("Stamps/Urgent");
+
+        fragileStamp =
+            Resources.Load<Material>("Stamps/Fragile");
+
+        damagedStamp =
+            Resources.Load<Material>("Stamps/Damaged");
+
+        brokenStamp =
+            Resources.Load<Material>("Stamps/Broken");
+
+        if (urgentStamp == null)
+            Debug.LogWarning("Urgent stamp material missing!");
+
+        if (fragileStamp == null)
+            Debug.LogWarning("Fragile stamp material missing!");
+
+        if (damagedStamp == null)
+            Debug.LogWarning("Damaged stamp material missing!");
+
+        if (brokenStamp == null)
+            Debug.LogWarning("Broken stamp material missing!");
+    }
+
+
+    // =========================================================
+    // UPDATE REQUIREMENT STAMP
+    // =========================================================
+
+    private void UpdateRequirementStamp()
+    {
+        if (requirementStampRenderer == null)
+            return;
+
+        Material selectedMaterial = null;
+
+        switch (requirement)
+        {
+            case RequestRequirement.UrgentDelivery:
+                selectedMaterial = urgentStamp;
+                break;
+
+            case RequestRequirement.Fragile:
+                selectedMaterial = fragileStamp;
+                break;
+        }
+
+        requirementStampRenderer.gameObject.SetActive(
+            selectedMaterial != null
+        );
+
+        if (selectedMaterial != null)
+        {
+            requirementStampRenderer.sharedMaterial =
+                selectedMaterial;
+        }
+    }
+
+
+    // =========================================================
+    // UPDATE CONDITION STAMP
+    // =========================================================
+
+    private void UpdateConditionStamp()
+    {
+        if (conditionStampRenderer == null)
+            return;
+
+        Material selectedMaterial = null;
+
+        if (IsFragile())
+        {
+            switch (fragileCondition)
+            {
+                case FragileCondition.Damaged:
+                    selectedMaterial = damagedStamp;
+                    break;
+
+                case FragileCondition.Broken:
+                    selectedMaterial = brokenStamp;
+                    break;
+            }
+        }
+
+        conditionStampRenderer.gameObject.SetActive(
+            selectedMaterial != null
+        );
+
+        if (selectedMaterial != null)
+        {
+            conditionStampRenderer.sharedMaterial =
+                selectedMaterial;
+        }
+
+        // Keep the existing condition text updated.
+        if (condtionText != null)
+        {
+            if (IsFragile())
+            {
+                condtionText.text =
+                    "CONDITION: " +
+                    fragileCondition.ToString().ToUpper();
+            }
+            else
+            {
+                condtionText.text = "";
+            }
+        }
     }
 
 
@@ -76,16 +219,13 @@ public class RequestPaper : MonoBehaviour
     // DISPLAY REQUEST
     // =========================================================
 
-    public void DisplayRequest(
-        RequestData data
-    )
+    public void DisplayRequest(RequestData data)
     {
         if (data == null)
         {
             Debug.LogError(
                 "RequestPaper: RequestData is null!"
             );
-
             return;
         }
 
@@ -96,17 +236,13 @@ public class RequestPaper : MonoBehaviour
         acceptedFromBoard = false;
 
         pendingGold = 0;
-
         requestVisual = null;
-
 
         // -----------------------------------------------------
         // REQUIREMENT
         // -----------------------------------------------------
 
-        requirement =
-            data.Requirement;
-
+        requirement = data.Requirement;
 
         if (requirementText != null)
         {
@@ -115,24 +251,30 @@ public class RequestPaper : MonoBehaviour
                 requirement.ToString().ToUpper();
         }
 
+        // New fragile requests always start safe.
+        fragileCondition = FragileCondition.Safe;
 
-        fragileCondition =
-            FragileCondition.Safe;
+        UpdateRequirementStamp();
+        UpdateConditionStamp();
 
+        // -----------------------------------------------------
+        // DELIVERED STAMP
+        // -----------------------------------------------------
 
         if (deliveredStamp != null)
         {
             deliveredStamp.SetActive(false);
         }
 
+        // -----------------------------------------------------
+        // TEXT
+        // -----------------------------------------------------
 
         if (titleText != null)
             titleText.text = data.Title;
 
-
         if (factionText != null)
             factionText.text = data.Faction;
-
 
         if (resourceText != null)
         {
@@ -141,7 +283,6 @@ public class RequestPaper : MonoBehaviour
                 " x " +
                 data.RequestedAmount;
         }
-
 
         if (rewardText != null)
         {
@@ -152,18 +293,12 @@ public class RequestPaper : MonoBehaviour
                 data.RewardAmount;
         }
 
-
         if (dialogueText != null)
-        {
-            dialogueText.text =
-                data.Dialogue;
-        }
-
+            dialogueText.text = data.Dialogue;
 
         UpdateDestinationDisplay();
 
         deadlineSet = false;
-
         UpdateArrivalDisplay();
     }
 
@@ -172,28 +307,21 @@ public class RequestPaper : MonoBehaviour
     // ASSIGN LOCATION
     // =========================================================
 
-    public void AssignLocation(
-        Location location
-    )
+    public void AssignLocation(Location location)
     {
         if (location == null)
         {
             Debug.LogWarning(
                 "RequestPaper: Tried to assign a null location."
             );
-
             return;
         }
 
-
-        targetLocation =
-            location;
-
+        targetLocation = location;
 
         requestVisual =
             targetLocation.GetComponentInChildren
             <RequestVisualIndicator>(true);
-
 
         if (requestVisual == null)
         {
@@ -204,9 +332,7 @@ public class RequestPaper : MonoBehaviour
             );
         }
 
-
         UpdateDestinationDisplay();
-
 
         Debug.Log(
             "Request assigned to " +
@@ -224,15 +350,11 @@ public class RequestPaper : MonoBehaviour
         if (destinationText == null)
             return;
 
-
         if (targetLocation == null)
         {
-            destinationText.text =
-                "DESTINATION: --";
-
+            destinationText.text = "DESTINATION: --";
             return;
         }
-
 
         destinationText.text =
             "DESTINATION: " +
@@ -251,33 +373,19 @@ public class RequestPaper : MonoBehaviour
             Debug.LogError(
                 "RequestPaper: GameClock not found!"
             );
-
             return;
         }
-
 
         int currentTime =
             GameClock.Instance.GetTotalMinutes();
 
-
-        // Round current time up to nearest 15 minutes.
         int roundedTime =
-            Mathf.CeilToInt(
-                currentTime / 15f
-            ) * 15;
-
+            Mathf.CeilToInt(currentTime / 15f) * 15;
 
         roundedTime %= 1440;
 
-
-        // -----------------------------------------------------
-        // DELIVERY TIME
-        // -----------------------------------------------------
-
         int deliveryTime = 180;
 
-
-        // Urgent deliveries only have 1 hour.
         if (
             requirement ==
             RequestRequirement.UrgentDelivery
@@ -286,21 +394,12 @@ public class RequestPaper : MonoBehaviour
             deliveryTime = 60;
         }
 
-
-        // -----------------------------------------------------
-        // SET DEADLINE
-        // -----------------------------------------------------
-
         deadlineMinutes =
-            (roundedTime + deliveryTime)
-            % 1440;
-
+            (roundedTime + deliveryTime) % 1440;
 
         deadlineSet = true;
 
-
         UpdateArrivalDisplay();
-
 
         Debug.Log(
             GetRequestTitle() +
@@ -316,39 +415,23 @@ public class RequestPaper : MonoBehaviour
         if (arrivalTimeText == null)
             return;
 
-
         if (!deadlineSet)
         {
             arrivalTimeText.text =
                 "EST. ARRIVAL: --:--";
-
             return;
         }
 
-
-        int hour =
-            deadlineMinutes / 60;
-
-
-        int minute =
-            deadlineMinutes % 60;
-
+        int hour = deadlineMinutes / 60;
+        int minute = deadlineMinutes % 60;
 
         string period =
-            hour >= 12
-                ? "PM"
-                : "AM";
+            hour >= 12 ? "PM" : "AM";
 
-
-        int displayHour =
-            hour % 12;
-
+        int displayHour = hour % 12;
 
         if (displayHour == 0)
-        {
             displayHour = 12;
-        }
-
 
         arrivalTimeText.text =
             string.Format(
@@ -372,7 +455,6 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
-
         CheckDeadline();
     }
 
@@ -382,24 +464,15 @@ public class RequestPaper : MonoBehaviour
         if (GameClock.Instance == null)
             return;
 
-
         int currentTime =
             GameClock.Instance.GetTotalMinutes();
 
-
         int minutesUntilDeadline =
-            (
-                deadlineMinutes -
-                currentTime +
-                1440
-            )
+            (deadlineMinutes - currentTime + 1440)
             % 1440;
 
-
         if (minutesUntilDeadline == 0)
-        {
             DeadlineReached();
-        }
     }
 
 
@@ -408,12 +481,10 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
-
         Debug.Log(
             "Request deadline reached: " +
             GetRequestTitle()
         );
-
 
         // Add failure/consequence system here later.
     }
@@ -428,15 +499,10 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
-
         activeRequest = true;
 
-
         if (requestVisual != null)
-        {
             requestVisual.SetActive();
-        }
-
 
         if (
             audioSource != null &&
@@ -447,7 +513,6 @@ public class RequestPaper : MonoBehaviour
                 requestAcceptedSound
             );
         }
-
 
         Debug.Log(
             "Request accepted: " +
@@ -461,16 +526,11 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
-
         acceptedFromBoard = true;
         activeRequest = true;
 
-
         if (requestVisual != null)
-        {
             requestVisual.SetActive();
-        }
-
 
         if (
             audioSource != null &&
@@ -481,7 +541,6 @@ public class RequestPaper : MonoBehaviour
                 requestAcceptedSound
             );
         }
-
 
         Debug.Log(
             "Request accepted from corkboard: " +
@@ -520,14 +579,11 @@ public class RequestPaper : MonoBehaviour
         if (!IsFragile())
             return;
 
-
         if (!activeRequest)
             return;
 
-
         if (completed)
             return;
-
 
         // -----------------------------------------------------
         // SAFE -> DAMAGED
@@ -541,16 +597,15 @@ public class RequestPaper : MonoBehaviour
             fragileCondition =
                 FragileCondition.Damaged;
 
+            UpdateConditionStamp();
 
             Debug.Log(
                 "Fragile cargo DAMAGED: " +
                 GetRequestTitle()
             );
 
-
             return;
         }
-
 
         // -----------------------------------------------------
         // DAMAGED -> BROKEN
@@ -564,23 +619,13 @@ public class RequestPaper : MonoBehaviour
             fragileCondition =
                 FragileCondition.Broken;
 
+            UpdateConditionStamp();
 
             Debug.Log(
                 "Fragile cargo BROKEN: " +
                 GetRequestTitle()
             );
 
-
-            return;
-        }
-
-
-        // Already broken.
-        if (
-            fragileCondition ==
-            FragileCondition.Broken
-        )
-        {
             return;
         }
     }
@@ -597,19 +642,14 @@ public class RequestPaper : MonoBehaviour
         if (arrivedLocation == null)
             return;
 
-
-        // Request must actually be active.
         if (!activeRequest)
             return;
-
 
         if (targetLocation != arrivedLocation)
             return;
 
-
         if (completed)
             return;
-
 
         CompleteRequest();
     }
@@ -624,31 +664,25 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
-
         if (requestData == null)
         {
             Debug.LogError(
                 "RequestPaper: Cannot complete request. " +
                 "RequestData is missing."
             );
-
             return;
         }
 
-
         ShipCargo shipCargo =
             FindObjectOfType<ShipCargo>();
-
 
         if (shipCargo == null)
         {
             Debug.LogError(
                 "RequestPaper: ShipCargo not found!"
             );
-
             return;
         }
-
 
         // -----------------------------------------------------
         // DELIVER REQUESTED RESOURCE
@@ -657,20 +691,14 @@ public class RequestPaper : MonoBehaviour
         string requestedResource =
             requestData.RequestedResources;
 
-
         int requestedAmount =
             requestData.RequestedAmount;
 
-
         if (
-            !string.IsNullOrEmpty(
-                requestedResource
-            ) &&
+            !string.IsNullOrEmpty(requestedResource) &&
             requestedAmount > 0
         )
         {
-            // Gold is a reward,
-            // not a delivered cargo resource.
             if (
                 !requestedResource.Equals(
                     "gold",
@@ -683,27 +711,20 @@ public class RequestPaper : MonoBehaviour
                         requestedResource
                     );
 
-
-                if (
-                    currentAmount <
-                    requestedAmount
-                )
+                if (currentAmount < requestedAmount)
                 {
                     Debug.LogWarning(
                         "RequestPaper: Not enough " +
                         requestedResource +
                         " to complete request."
                     );
-
                     return;
                 }
-
 
                 shipCargo.AddOrRemoveResource(
                     requestedResource,
                     -requestedAmount
                 );
-
 
                 Debug.Log(
                     "Delivered " +
@@ -716,14 +737,12 @@ public class RequestPaper : MonoBehaviour
             }
         }
 
-
         // -----------------------------------------------------
         // REQUEST COMPLETED
         // -----------------------------------------------------
 
         completed = true;
         activeRequest = false;
-
 
         // -----------------------------------------------------
         // CALCULATE REWARD
@@ -732,14 +751,8 @@ public class RequestPaper : MonoBehaviour
         int finalReward =
             requestData.RewardAmount;
 
-
-        // -----------------------------------------------------
-        // FRAGILE REWARD
-        // -----------------------------------------------------
-
         if (IsFragile())
         {
-            // SAFE
             if (
                 fragileCondition ==
                 FragileCondition.Safe
@@ -748,15 +761,10 @@ public class RequestPaper : MonoBehaviour
                 finalReward =
                     requestData.RewardAmount;
 
-
                 Debug.Log(
-                    "Fragile cargo delivered safely. " +
-                    "Full reward."
+                    "Fragile cargo delivered safely. Full reward."
                 );
             }
-
-
-            // DAMAGED
             else if (
                 fragileCondition ==
                 FragileCondition.Damaged
@@ -768,17 +776,12 @@ public class RequestPaper : MonoBehaviour
                         damagedRewardMultiplier
                     );
 
-
                 Debug.Log(
                     "Fragile cargo delivered damaged. " +
                     "Reward reduced to " +
-                    finalReward +
-                    " gold."
+                    finalReward + " gold."
                 );
             }
-
-
-            // BROKEN
             else if (
                 fragileCondition ==
                 FragileCondition.Broken
@@ -786,22 +789,17 @@ public class RequestPaper : MonoBehaviour
             {
                 finalReward = 0;
 
-
                 Debug.Log(
-                    "Fragile cargo was broken. " +
-                    "No reward."
+                    "Fragile cargo was broken. No reward."
                 );
             }
         }
-
 
         // -----------------------------------------------------
         // STORE GOLD AS PENDING
         // -----------------------------------------------------
 
-        pendingGold =
-            finalReward;
-
+        pendingGold = finalReward;
 
         Debug.Log(
             "Request completed. " +
@@ -809,14 +807,9 @@ public class RequestPaper : MonoBehaviour
             " gold is waiting at Vanderbilt."
         );
 
-
-        // -----------------------------------------------------
-        // UPDATE ALL VANDERBILT PAYMENT LIGHTS
-        // -----------------------------------------------------
-
+        // Update all Vanderbilt payment lights.
         RequestVisualIndicator
             .RefreshVanderbiltPaymentLights();
-
 
         // -----------------------------------------------------
         // SHOW DELIVERED STAMP
@@ -827,7 +820,6 @@ public class RequestPaper : MonoBehaviour
             deliveredStamp.SetActive(true);
         }
 
-
         // -----------------------------------------------------
         // DESTINATION LOCATION VISUAL
         // -----------------------------------------------------
@@ -837,7 +829,6 @@ public class RequestPaper : MonoBehaviour
             requestVisual.SetInactive();
         }
 
-
         if (targetLocation != null)
         {
             if (
@@ -845,15 +836,11 @@ public class RequestPaper : MonoBehaviour
                 targetLocation.activeRequests.Contains(this)
             )
             {
-                targetLocation.activeRequests.Remove(
-                    this
-                );
+                targetLocation.activeRequests.Remove(this);
             }
-
 
             targetLocation.ClearHighlight();
         }
-
 
         // -----------------------------------------------------
         // SOUND
@@ -868,7 +855,6 @@ public class RequestPaper : MonoBehaviour
                 requestCompletedSound
             );
         }
-
 
         Debug.Log(
             "Request delivered: " +
@@ -886,13 +872,9 @@ public class RequestPaper : MonoBehaviour
         if (pendingGold <= 0)
             return 0;
 
-
-        int goldToCollect =
-            pendingGold;
-
+        int goldToCollect = pendingGold;
 
         pendingGold = 0;
-
 
         Debug.Log(
             "Collected " +
@@ -901,9 +883,7 @@ public class RequestPaper : MonoBehaviour
             GetRequestTitle()
         );
 
-        
         return goldToCollect;
-
     }
 
 
@@ -920,10 +900,7 @@ public class RequestPaper : MonoBehaviour
     public string GetRequestTitle()
     {
         if (requestData == null)
-        {
             return gameObject.name;
-        }
-
 
         return requestData.Title;
     }
@@ -938,10 +915,7 @@ public class RequestPaper : MonoBehaviour
     public string GetDestinationID()
     {
         if (targetLocation == null)
-        {
             return "";
-        }
-
 
         return targetLocation.GetDisplayName();
     }
@@ -952,10 +926,13 @@ public class RequestPaper : MonoBehaviour
         return deadlineMinutes;
     }
 
+
     public void DeletedSelf()
     {
         Destroy(gameObject);
     }
+
+
     public bool IsCompleted()
     {
         return completed;
