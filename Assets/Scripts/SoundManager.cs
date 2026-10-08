@@ -26,6 +26,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip DangerAmbience;
     public AudioClip Moving;
     public AudioClip StopMoving;
+    
 
 
     [Header("Danger Audio")]

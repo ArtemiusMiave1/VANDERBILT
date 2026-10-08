@@ -7,6 +7,7 @@ public class FuelTankVisual : MonoBehaviour
     public Transform fuelLiquid;
 
     [Header("Fuel")]
+    [Tooltip("Maximum amount of fuel the tank can hold.")]
     public float maximumFuel = 100f;
 
     [Header("Liquid")]
@@ -15,39 +16,69 @@ public class FuelTankVisual : MonoBehaviour
 
     private Vector3 originalScale;
 
+
+    // =========================================================
+    // START
+    // =========================================================
+
     private void Start()
     {
         if (shipCargo == null)
         {
-            shipCargo = FindObjectOfType<ShipCargo>();
+            shipCargo =
+                FindObjectOfType<ShipCargo>();
         }
+
 
         if (fuelLiquid != null)
         {
-            originalScale = fuelLiquid.localScale;
+            originalScale =
+                fuelLiquid.localScale;
         }
+
 
         UpdateFuelVisual();
     }
+
+
+    // =========================================================
+    // UPDATE
+    // =========================================================
 
     private void Update()
     {
         UpdateFuelVisual();
     }
 
+
+    // =========================================================
+    // UPDATE FUEL VISUAL
+    // =========================================================
+
     private void UpdateFuelVisual()
     {
         if (shipCargo == null)
             return;
 
+
         if (fuelLiquid == null)
             return;
 
+
+        if (maximumFuel <= 0f)
+            return;
+
+
         float fuelPercentage =
-            shipCargo.fuel / maximumFuel;
+            shipCargo.fuel /
+            maximumFuel;
+
 
         fuelPercentage =
-            Mathf.Clamp01(fuelPercentage);
+            Mathf.Clamp01(
+                fuelPercentage
+            );
+
 
         float height =
             Mathf.Lerp(
@@ -56,10 +87,14 @@ public class FuelTankVisual : MonoBehaviour
                 fuelPercentage
             );
 
+
         Vector3 newScale =
             originalScale;
 
-        newScale.y = height;
+
+        newScale.y =
+            height;
+
 
         fuelLiquid.localScale =
             newScale;

@@ -34,6 +34,9 @@ public class ShipMovement : MonoBehaviour
     [Tooltip("Current fuel cost based on the throttle level.")]
     public int currentFuelCost = 0;
 
+    [Tooltip("Maximum amount of fuel the ship can hold.")]
+    public float maximumFuel = 100f;
+
     [Header("Cargo Weight")]
     public float maximumCargoWeight = 750f;
 
@@ -57,6 +60,30 @@ public class ShipMovement : MonoBehaviour
     public float engineFadeOutTime = 0.5f;
 
 
+    // =========================================================
+    // LOW FUEL AUDIO
+    // =========================================================
+
+    [Header("Low Fuel Audio")]
+    [Tooltip("3D AudioSource used for the low fuel warning.")]
+    public AudioSource lowFuelAlarmSource;
+
+    [Tooltip("Sound played when the ship reaches a low fuel warning.")]
+    public AudioClip LowFuelAlarm;
+
+    [Tooltip("First warning percentage. Example: 0.20 = 20%.")]
+    [Range(0f, 1f)]
+    public float firstFuelWarningPercentage = 0.20f;
+
+    [Tooltip("Second warning percentage. Example: 0.10 = 10%.")]
+    [Range(0f, 1f)]
+    public float secondFuelWarningPercentage = 0.10f;
+
+
+    // =========================================================
+    // PRIVATE VARIABLES
+    // =========================================================
+
     private ShipCargo shipCargo;
 
     private bool moving = false;
@@ -66,6 +93,12 @@ public class ShipMovement : MonoBehaviour
     private SoundManager soundManager;
 
     private Coroutine engineFadeCoroutine;
+
+    // Has the 20% warning already played?
+    private bool firstFuelWarningPlayed = false;
+
+    // Has the 10% warning already played?
+    private bool secondFuelWarningPlayed = false;
 
 
     // =========================================================
@@ -82,7 +115,6 @@ public class ShipMovement : MonoBehaviour
         {
             shipRouteSystem =
                 GetComponent<ShipRouteSystem>();
-
 
             if (shipRouteSystem == null)
             {
@@ -125,6 +157,18 @@ public class ShipMovement : MonoBehaviour
         }
 
 
+        // -----------------------------------------------------
+        // LOW FUEL AUDIO SETUP
+        // -----------------------------------------------------
+
+        if (lowFuelAlarmSource != null)
+        {
+            lowFuelAlarmSource.playOnAwake = false;
+            lowFuelAlarmSource.loop = false;
+            lowFuelAlarmSource.clip = LowFuelAlarm;
+        }
+
+
         UpdateResourceDepotPaper();
     }
 
@@ -138,6 +182,8 @@ public class ShipMovement : MonoBehaviour
         UpdateSpeedLevel();
 
         HandleMovementAudio();
+
+        HandleLowFuelAlarm();
 
 
         if (!moving)
@@ -161,6 +207,118 @@ public class ShipMovement : MonoBehaviour
 
 
     // =========================================================
+    // LOW FUEL ALARM
+    // =========================================================
+
+    private void HandleLowFuelAlarm()
+    {
+        if (
+            lowFuelAlarmSource == null ||
+            LowFuelAlarm == null ||
+            shipCargo == null
+        )
+        {
+            return;
+        }
+
+
+        if (maximumFuel <= 0f)
+            return;
+
+
+        // -----------------------------------------------------
+        // CALCULATE CURRENT FUEL PERCENTAGE
+        // -----------------------------------------------------
+
+        float fuelPercentage =
+            shipCargo.fuel /
+            maximumFuel;
+
+
+        fuelPercentage =
+            Mathf.Clamp01(
+                fuelPercentage
+            );
+
+
+        // -----------------------------------------------------
+        // RESET WARNINGS AFTER REFUELING
+        // -----------------------------------------------------
+
+        // When the fuel goes back above 20%,
+        // both warnings become available again.
+
+        if (
+            fuelPercentage >
+            firstFuelWarningPercentage
+        )
+        {
+            firstFuelWarningPlayed = false;
+            secondFuelWarningPlayed = false;
+        }
+
+
+        // -----------------------------------------------------
+        // 20% WARNING
+        // -----------------------------------------------------
+
+        if (
+            fuelPercentage <=
+            firstFuelWarningPercentage &&
+            !firstFuelWarningPlayed
+        )
+        {
+            firstFuelWarningPlayed = true;
+
+            PlayLowFuelAlarm();
+        }
+
+
+        // -----------------------------------------------------
+        // 10% WARNING
+        // -----------------------------------------------------
+
+        if (
+            fuelPercentage <=
+            secondFuelWarningPercentage &&
+            !secondFuelWarningPlayed
+        )
+        {
+            secondFuelWarningPlayed = true;
+
+            PlayLowFuelAlarm();
+        }
+    }
+
+
+    // =========================================================
+    // PLAY LOW FUEL ALARM
+    // =========================================================
+
+    private void PlayLowFuelAlarm()
+    {
+        if (
+            lowFuelAlarmSource == null ||
+            LowFuelAlarm == null
+        )
+        {
+            return;
+        }
+
+
+        // Don't interrupt an alarm that is already playing.
+
+        if (lowFuelAlarmSource.isPlaying)
+            return;
+
+
+        lowFuelAlarmSource.PlayOneShot(
+            LowFuelAlarm
+        );
+    }
+
+
+    // =========================================================
     // MOVEMENT AUDIO
     // =========================================================
 
@@ -172,14 +330,11 @@ public class ShipMovement : MonoBehaviour
 
         if (moving && !wasMoving)
         {
-            // Start Moving sound
             if (soundManager != null)
             {
                 soundManager.StartMovingAudio();
             }
 
-
-            // Start Engine sound
             StartEngineAudio();
         }
 
@@ -190,20 +345,15 @@ public class ShipMovement : MonoBehaviour
 
         if (!moving && wasMoving)
         {
-            // Fade Moving sound
             if (soundManager != null)
             {
                 soundManager.StopMovingAudio();
 
-
-                // Play StopMoving once
                 soundManager.PlaySFX(
                     soundManager.StopMoving
                 );
             }
 
-
-            // Fade Engine sound
             StopEngineAudio();
         }
 
@@ -231,10 +381,6 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
-        // CANCEL ENGINE FADE
-        // -----------------------------------------------------
-
         if (engineFadeCoroutine != null)
         {
             StopCoroutine(
@@ -245,24 +391,13 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
-        // SETUP ENGINE AUDIO
-        // -----------------------------------------------------
-
         engineAudioSource.clip =
             Engine;
 
         engineAudioSource.loop = true;
 
-
-        // Restore full volume.
-
         engineAudioSource.volume = 1f;
 
-
-        // -----------------------------------------------------
-        // START IF NOT ALREADY PLAYING
-        // -----------------------------------------------------
 
         if (!engineAudioSource.isPlaying)
         {
@@ -285,10 +420,6 @@ public class ShipMovement : MonoBehaviour
             return;
 
 
-        // -----------------------------------------------------
-        // CANCEL EXISTING FADE
-        // -----------------------------------------------------
-
         if (engineFadeCoroutine != null)
         {
             StopCoroutine(
@@ -296,10 +427,6 @@ public class ShipMovement : MonoBehaviour
             );
         }
 
-
-        // -----------------------------------------------------
-        // START FADE
-        // -----------------------------------------------------
 
         engineFadeCoroutine =
             StartCoroutine(
@@ -322,10 +449,6 @@ public class ShipMovement : MonoBehaviour
 
         float timer = 0f;
 
-
-        // -----------------------------------------------------
-        // FADE OUT
-        // -----------------------------------------------------
 
         while (
             timer <
@@ -369,10 +492,6 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        // -----------------------------------------------------
-        // STOP AFTER FADE
-        // -----------------------------------------------------
-
         if (engineAudioSource != null)
         {
             engineAudioSource.volume = 0f;
@@ -410,15 +529,6 @@ public class ShipMovement : MonoBehaviour
         if (currentSpeedLevel == 0)
         {
             currentSpeed = 0f;
-
-            /*
-             * IMPORTANT:
-             *
-             * We do NOT stop danger audio here.
-             *
-             * The ship may be stopped halfway through
-             * a dangerous route.
-             */
 
             UpdateResourceDepotPaper();
 
@@ -958,17 +1068,9 @@ public class ShipMovement : MonoBehaviour
         currentSpeed = 0f;
 
 
-        // -----------------------------------------------------
-        // DO NOT STOP DANGER AUDIO HERE.
-        // -----------------------------------------------------
-        //
-        // The player may have stopped in the middle of a
+        // Danger audio intentionally isn't stopped here.
+        // The ship may be stopped in the middle of a
         // dangerous route.
-        //
-        // Thunder and DangerAmbience therefore continue
-        // until the danger route has actually ended.
-        // -----------------------------------------------------
-
 
         UpdateResourceDepotPaper();
     }

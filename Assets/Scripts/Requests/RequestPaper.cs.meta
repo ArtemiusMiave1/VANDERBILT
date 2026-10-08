@@ -1,2 +1,25 @@
 fileFormatVersion: 2
 guid: b0747733616f7934bbc5d6fd7ea8741d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - titleText: {instanceID: 0}
+  - factionText: {instanceID: 0}
+  - resourceText: {instanceID: 0}
+  - rewardText: {instanceID: 0}
+  - dialogueText: {instanceID: 0}
+  - arrivalTimeText: {instanceID: 0}
+  - destinationText: {instanceID: 0}
+  - requirementText: {instanceID: 0}
+  - condtionText: {instanceID: 0}
+  - deliveredStamp: {instanceID: 0}
+  - targetLocation: {instanceID: 0}
+  - audioSource: {instanceID: 0}
+  - requestAcceptedSound: {instanceID: 0}
+  - requestCompletedSound: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
