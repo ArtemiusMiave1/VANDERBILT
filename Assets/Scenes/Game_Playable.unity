@@ -217,6 +217,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1404533105 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 791614862612091284, guid: 2043282b239b37545857c62b02c55303, type: 3}
+  m_PrefabInstance: {fileID: 1952028075}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1587713318
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +411,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Office Space
       objectReference: {fileID: 0}
+    - target: {fileID: 5144199872627529541, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144199872627529541, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.26
+      objectReference: {fileID: 0}
     - target: {fileID: 5692002652954122315, guid: 2043282b239b37545857c62b02c55303, type: 3}
       propertyPath: AlarmSnd
       value: 
@@ -532,6 +545,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3567037778028469401, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: Engine
+      value: 
+      objectReference: {fileID: 8300000, guid: d7546bae4ca57764484c1d5ca976f85d, type: 3}
+    - target: {fileID: 3567037778028469401, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: engineAudioSource
+      value: 
+      objectReference: {fileID: 1404533105}
     - target: {fileID: 3918498901872258775, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.157

@@ -41,9 +41,23 @@ public class ShipMovement : MonoBehaviour
     public float minimumSpeedMultiplier = 0.25f;
 
 
+    // =========================================================
+    // ENGINE AUDIO
+    // =========================================================
+
+    [Header("Engine Audio")]
+    [Tooltip("3D engine sound that plays while the ship is moving.")]
+    public AudioClip Engine;
+
+    [Tooltip("AudioSource located on the ship's engine. Set Spatial Blend to 3D.")]
+    public AudioSource engineAudioSource;
+
+
     private ShipCargo shipCargo;
 
     private bool moving = false;
+
+    private bool wasMoving = false;
 
     private SoundManager soundManager;
 
@@ -93,6 +107,18 @@ public class ShipMovement : MonoBehaviour
         }
 
 
+        // -----------------------------------------------------
+        // ENGINE AUDIO SETUP
+        // -----------------------------------------------------
+
+        if (engineAudioSource != null)
+        {
+            engineAudioSource.playOnAwake = false;
+            engineAudioSource.loop = true;
+            engineAudioSource.clip = Engine;
+        }
+
+
         UpdateResourceDepotPaper();
     }
 
@@ -104,6 +130,8 @@ public class ShipMovement : MonoBehaviour
     private void Update()
     {
         UpdateSpeedLevel();
+
+        HandleMovementAudio();
 
 
         if (!moving)
@@ -123,6 +151,80 @@ public class ShipMovement : MonoBehaviour
 
 
         UpdateMovement();
+    }
+
+
+    // =========================================================
+    // MOVEMENT AUDIO
+    // =========================================================
+
+    private void HandleMovementAudio()
+    {
+        // -----------------------------------------------------
+        // SHIP JUST STARTED MOVING
+        // -----------------------------------------------------
+
+        if (moving && !wasMoving)
+        {
+            // Start looping Moving sound
+            if (soundManager != null)
+            {
+                soundManager.StartMovingAudio();
+            }
+
+
+            // Start 3D Engine sound
+            if (
+                engineAudioSource != null &&
+                Engine != null
+            )
+            {
+                engineAudioSource.clip = Engine;
+
+
+                if (!engineAudioSource.isPlaying)
+                {
+                    engineAudioSource.Play();
+                }
+            }
+        }
+
+
+        // -----------------------------------------------------
+        // SHIP JUST STOPPED
+        // -----------------------------------------------------
+
+        if (!moving && wasMoving)
+        {
+            // Stop looping Moving sound
+            if (soundManager != null)
+            {
+                soundManager.StopMovingAudio();
+
+
+                // Play StopMoving once
+                soundManager.PlaySFX(
+                    soundManager.StopMoving
+                );
+            }
+
+
+            // Stop 3D Engine sound
+            if (
+                engineAudioSource != null &&
+                engineAudioSource.isPlaying
+            )
+            {
+                engineAudioSource.Stop();
+            }
+        }
+
+
+        // -----------------------------------------------------
+        // STORE CURRENT MOVEMENT STATE
+        // -----------------------------------------------------
+
+        wasMoving = moving;
     }
 
 
@@ -323,25 +425,10 @@ public class ShipMovement : MonoBehaviour
 
         if (targetLocation != null)
         {
-            /*
-             * Check the NEXT route connection.
-             *
-             * If it is dangerous, the existing danger
-             * audio continues without restarting.
-             *
-             * If it is normal, the danger audio fades out.
-             */
-
             CheckNextRouteDanger();
         }
         else
         {
-            /*
-             * There is no next route.
-             *
-             * The dangerous section has ended.
-             */
-
             StopDangerAudio();
         }
 
@@ -426,16 +513,6 @@ public class ShipMovement : MonoBehaviour
     // =========================================================
     // CHECK CURRENT DANGER ROUTE
     // =========================================================
-    //
-    // This is used when the ship stops.
-    //
-    // If the ship has stopped halfway between two
-    // locations, currentLocation/targetLocation still
-    // describe the dangerous connection.
-    //
-    // Therefore the danger audio stays active.
-    //
-    // =========================================================
 
     private void StopDangerIfNotOnDangerRoute()
     {
@@ -481,10 +558,7 @@ public class ShipMovement : MonoBehaviour
         }
 
 
-        /*
-         * If the current connection is dangerous,
-         * keep the danger audio playing.
-         */
+        // Keep danger audio playing if on dangerous route.
 
         if (connection.dangerLevel > 0)
         {
@@ -495,11 +569,6 @@ public class ShipMovement : MonoBehaviour
             return;
         }
 
-
-        /*
-         * Otherwise the ship is no longer on a
-         * dangerous route.
-         */
 
         StopDangerAudio();
     }
@@ -665,7 +734,15 @@ public class ShipMovement : MonoBehaviour
         if (moving)
             return;
 
-        soundManager.PlaySFX(soundManager.Button);
+
+        // Play button sound
+        if (soundManager != null)
+        {
+            soundManager.PlaySFX(
+                soundManager.Button
+            );
+        }
+
 
         targetLocation =
             shipRouteSystem.GetNextLocation();
@@ -730,8 +807,8 @@ public class ShipMovement : MonoBehaviour
         // The player may have stopped in the middle of a
         // dangerous route.
         //
-        // Therefore Thunder and DangerAmbience must continue
-        // playing until the danger route has actually ended.
+        // Thunder and DangerAmbience therefore continue
+        // until the danger route has actually ended.
         // -----------------------------------------------------
 
 

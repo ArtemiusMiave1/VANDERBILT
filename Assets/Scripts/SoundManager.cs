@@ -24,13 +24,18 @@ public class SoundManager : MonoBehaviour
     public AudioClip Thunder;
     public AudioClip Landing;
     public AudioClip DangerAmbience;
-    public AudioClip Engine;
     public AudioClip Moving;
+    public AudioClip StopMoving;
 
 
     [Header("Danger Audio")]
     [Tooltip("How long Thunder and Danger Ambience take to fade out.")]
     public float dangerFadeOutTime = 2f;
+
+
+    [Header("Moving Audio")]
+    [Tooltip("How long the Moving sound takes to fade out when the ship stops.")]
+    public float movingFadeOutTime = 0.5f;
 
 
     // =========================================================
@@ -40,7 +45,16 @@ public class SoundManager : MonoBehaviour
     private AudioSource thunderSource;
     private AudioSource dangerAmbienceSource;
 
+
+    // =========================================================
+    // MOVING AUDIO SOURCE
+    // =========================================================
+
+    private AudioSource movingSource;
+
+
     private Coroutine dangerFadeCoroutine;
+    private Coroutine movingFadeCoroutine;
 
 
     // =========================================================
@@ -50,6 +64,7 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         CreateDangerAudioSources();
+        CreateMovingAudioSource();
     }
 
 
@@ -109,6 +124,37 @@ public class SoundManager : MonoBehaviour
 
 
     // =========================================================
+    // CREATE MOVING AUDIO SOURCE
+    // =========================================================
+
+    private void CreateMovingAudioSource()
+    {
+        if (movingSource != null)
+            return;
+
+
+        GameObject movingObject =
+            new GameObject(
+                "Moving Audio Source"
+            );
+
+
+        movingObject.transform.SetParent(
+            transform
+        );
+
+
+        movingSource =
+            movingObject.AddComponent<AudioSource>();
+
+
+        movingSource.playOnAwake = false;
+        movingSource.loop = true;
+        movingSource.volume = 1f;
+    }
+
+
+    // =========================================================
     // NORMAL SOUND EFFECTS
     // =========================================================
 
@@ -119,12 +165,184 @@ public class SoundManager : MonoBehaviour
         if (SFXSource == null)
             return;
 
+
         if (clip == null)
             return;
+
 
         SFXSource.PlayOneShot(
             clip
         );
+    }
+
+
+    // =========================================================
+    // START MOVING AUDIO
+    // =========================================================
+
+    public void StartMovingAudio()
+    {
+        if (movingSource == null)
+        {
+            CreateMovingAudioSource();
+        }
+
+
+        if (Moving == null)
+            return;
+
+
+        // -----------------------------------------------------
+        // CANCEL FADE IF SHIP STARTS MOVING AGAIN
+        // -----------------------------------------------------
+
+        if (movingFadeCoroutine != null)
+        {
+            StopCoroutine(
+                movingFadeCoroutine
+            );
+
+            movingFadeCoroutine = null;
+        }
+
+
+        // -----------------------------------------------------
+        // SETUP MOVING AUDIO
+        // -----------------------------------------------------
+
+        movingSource.clip =
+            Moving;
+
+        movingSource.loop = true;
+
+
+        // Restore full volume.
+
+        movingSource.volume = 1f;
+
+
+        // -----------------------------------------------------
+        // DON'T RESTART IF ALREADY PLAYING
+        // -----------------------------------------------------
+
+        if (!movingSource.isPlaying)
+        {
+            movingSource.Play();
+        }
+    }
+
+
+    // =========================================================
+    // STOP MOVING AUDIO
+    // =========================================================
+
+    public void StopMovingAudio()
+    {
+        if (movingSource == null)
+            return;
+
+
+        if (!movingSource.isPlaying)
+            return;
+
+
+        // -----------------------------------------------------
+        // CANCEL EXISTING FADE
+        // -----------------------------------------------------
+
+        if (movingFadeCoroutine != null)
+        {
+            StopCoroutine(
+                movingFadeCoroutine
+            );
+        }
+
+
+        // -----------------------------------------------------
+        // START FADE
+        // -----------------------------------------------------
+
+        movingFadeCoroutine =
+            StartCoroutine(
+                FadeOutMovingAudio()
+            );
+    }
+
+
+    // =========================================================
+    // FADE OUT MOVING AUDIO
+    // =========================================================
+
+    private IEnumerator FadeOutMovingAudio()
+    {
+        float startingVolume =
+            movingSource != null
+                ? movingSource.volume
+                : 0f;
+
+
+        float timer = 0f;
+
+
+        // -----------------------------------------------------
+        // FADE OUT
+        // -----------------------------------------------------
+
+        while (
+            timer <
+            movingFadeOutTime
+        )
+        {
+            if (movingSource == null)
+                yield break;
+
+
+            timer +=
+                Time.deltaTime;
+
+
+            float percentage;
+
+
+            if (movingFadeOutTime <= 0f)
+            {
+                percentage = 1f;
+            }
+            else
+            {
+                percentage =
+                    Mathf.Clamp01(
+                        timer /
+                        movingFadeOutTime
+                    );
+            }
+
+
+            movingSource.volume =
+                Mathf.Lerp(
+                    startingVolume,
+                    0f,
+                    percentage
+                );
+
+
+            yield return null;
+        }
+
+
+        // -----------------------------------------------------
+        // STOP AFTER FADE
+        // -----------------------------------------------------
+
+        if (movingSource != null)
+        {
+            movingSource.volume = 0f;
+            movingSource.Stop();
+            movingSource.volume = 1f;
+        }
+
+
+        movingFadeCoroutine = null;
     }
 
 
@@ -169,9 +387,6 @@ public class SoundManager : MonoBehaviour
             thunderSource.volume = 1f;
 
 
-            // IMPORTANT:
-            // Don't restart Thunder if it is already playing.
-
             if (!thunderSource.isPlaying)
             {
                 thunderSource.Play();
@@ -190,9 +405,6 @@ public class SoundManager : MonoBehaviour
 
             dangerAmbienceSource.volume = 1f;
 
-
-            // IMPORTANT:
-            // Don't restart Danger Ambience if it is already playing.
 
             if (!dangerAmbienceSource.isPlaying)
             {
@@ -250,6 +462,7 @@ public class SoundManager : MonoBehaviour
             thunderSource != null
                 ? thunderSource.volume
                 : 0f;
+
 
         float startingAmbienceVolume =
             dangerAmbienceSource != null
