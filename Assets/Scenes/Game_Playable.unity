@@ -217,6 +217,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1120961455 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 705987766573808105, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+  m_PrefabInstance: {fileID: 4612726792270359985}
+  m_PrefabAsset: {fileID: 0}
 --- !u!82 &1315513916 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 5786167325502731375, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
@@ -562,6 +567,10 @@ PrefabInstance:
       propertyPath: engineAudioSource
       value: 
       objectReference: {fileID: 1404533105}
+    - target: {fileID: 3567037778028469401, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
+      propertyPath: faxMachineAnimator
+      value: 
+      objectReference: {fileID: 1120961455}
     - target: {fileID: 3567037778028469401, guid: 3f005d8d6d9fbc64b864a194985068e8, type: 3}
       propertyPath: lowFuelAlarmSource
       value: 

@@ -79,6 +79,17 @@ public class ShipMovement : MonoBehaviour
     [Range(0f, 1f)]
     public float secondFuelWarningPercentage = 0.10f;
 
+    [Header("Fax Machine Animation")]
+    [Tooltip("Animator attached to the fax machine.")]
+    public Animator faxMachineAnimator;
+
+    [Tooltip("Trigger that starts the printing animation.")]
+    public string faxAppearTrigger = "Appear";
+
+    [Tooltip("Trigger that hides the fax machine.")]
+    public string faxHideTrigger = "Hide";
+
+    private bool wasAtResourceDepot = false; 
 
     // =========================================================
     // PRIVATE VARIABLES
@@ -1085,27 +1096,44 @@ public class ShipMovement : MonoBehaviour
         if (resourceDepotPaper == null)
             return;
 
-
         bool atResourceDepot =
             currentLocation != null &&
             currentLocation.locationType != null &&
             currentLocation.locationType.LocationType ==
             "ResourceDepot";
 
+        bool shipStopped = !moving;
 
-        bool shipStopped =
-            !moving;
+        bool shouldShowFax =
+            atResourceDepot && shipStopped;
 
+        // -----------------------------------------------------
+        // SHIP HAS ARRIVED AT A RESOURCE DEPOT AND IS STOPPED
+        // -----------------------------------------------------
 
-        if (
-            atResourceDepot &&
-            shipStopped
-        )
+        if (shouldShowFax)
         {
+            // Only trigger the animation once on arrival.
+            if (!wasAtResourceDepot)
+            {
+                if (faxMachineAnimator != null)
+                {
+                    faxMachineAnimator.ResetTrigger(
+                        faxHideTrigger
+                    );
+
+                    faxMachineAnimator.SetTrigger(
+                        faxAppearTrigger
+                    );
+                }
+
+                wasAtResourceDepot = true;
+            }
+
+            // Preserve your existing paper UI and sound.
             if (!resourceDepotPaper.activeSelf)
             {
                 resourceDepotPaper.SetActive(true);
-
 
                 if (soundManager != null)
                 {
@@ -1115,18 +1143,35 @@ public class ShipMovement : MonoBehaviour
                 }
             }
 
-
             return;
         }
 
+        // -----------------------------------------------------
+        // SHIP HAS LEFT THE RESOURCE DEPOT
+        // -----------------------------------------------------
 
+        if (wasAtResourceDepot)
+        {
+            if (faxMachineAnimator != null)
+            {
+                faxMachineAnimator.ResetTrigger(
+                    faxAppearTrigger
+                );
+
+                faxMachineAnimator.SetTrigger(
+                    faxHideTrigger
+                );
+            }
+
+            wasAtResourceDepot = false;
+        }
+
+        // Preserve your existing paper UI behavior.
         if (resourceDepotPaper.activeSelf)
         {
             resourceDepotPaper.SetActive(false);
         }
     }
-
-
     // =========================================================
     // SPEED LEVEL
     // =========================================================
