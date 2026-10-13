@@ -417,6 +417,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 479602244759142575, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.239
+      objectReference: {fileID: 0}
+    - target: {fileID: 2249603961832637935, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.411
+      objectReference: {fileID: 0}
+    - target: {fileID: 2249603961832637935, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2249603961832637935, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.645
+      objectReference: {fileID: 0}
     - target: {fileID: 3487098901359766581, guid: 2043282b239b37545857c62b02c55303, type: 3}
       propertyPath: m_Name
       value: Office Space

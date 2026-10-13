@@ -130,7 +130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.637
+      value: -1.486
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
       propertyPath: m_LocalRotation.w
@@ -163,6 +163,18 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
       propertyPath: m_Name
       value: ControlPanel_wheel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5039972624835168794, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.393
+      objectReference: {fileID: 0}
+    - target: {fileID: 6391855223765173792, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.07339597
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414113494207289508, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.19982708
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
