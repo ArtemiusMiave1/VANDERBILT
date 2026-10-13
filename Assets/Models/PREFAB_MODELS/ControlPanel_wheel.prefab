@@ -165,16 +165,40 @@ PrefabInstance:
       value: ControlPanel_wheel
       objectReference: {fileID: 0}
     - target: {fileID: 5039972624835168794, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.029
+      objectReference: {fileID: 0}
+    - target: {fileID: 5039972624835168794, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.095
+      objectReference: {fileID: 0}
+    - target: {fileID: 5039972624835168794, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.393
+      value: -0.496
+      objectReference: {fileID: 0}
+    - target: {fileID: 6391855223765173792, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.029000286
+      objectReference: {fileID: 0}
+    - target: {fileID: 6391855223765173792, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.15970567
       objectReference: {fileID: 0}
     - target: {fileID: 6391855223765173792, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.07339597
+      value: -0.029602766
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414113494207289508, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.029000286
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414113494207289508, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.031108856
       objectReference: {fileID: 0}
     - target: {fileID: 6414113494207289508, guid: dcd4f07f60b2f9f4e947bc8a21d663af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.19982708
+      value: -0.3028258
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
