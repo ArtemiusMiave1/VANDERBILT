@@ -326,7 +326,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1777464032776438860}
   originalMaterial: {fileID: 2100000, guid: 4fe4ed6db1b43464d8c02570abe95792, type: 2}
   activeMaterial: {fileID: 2100000, guid: a888c41b3be871442b42d73afc4a4d87, type: 2}
-  paymentReadyMaterial: {fileID: 0}
+  paymentReadyMaterial: {fileID: 2100000, guid: 7dc641ea799e8e84198a65bbf18e482d, type: 2}
   paymentReadyLightColour: {r: 0, g: 1, b: 0, a: 1}
   requestLight: {fileID: 3874049268803758445}
 --- !u!1 &3874049268803758445
