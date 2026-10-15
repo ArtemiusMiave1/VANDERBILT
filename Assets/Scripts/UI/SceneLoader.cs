@@ -8,4 +8,10 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("Game_Playable");
 
     }
+
+    public void MainMenuScene()
+    {
+        SceneManager.LoadScene("MainMenu");
+
+    }
 }
