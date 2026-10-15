@@ -1448,6 +1448,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: handbook
       objectReference: {fileID: 0}
+    - target: {fileID: 1372550745996854107, guid: 3a8ee5032f46990449874535bc3f7f6e, type: 3}
+      propertyPath: m_TagString
+      value: Interactable
+      objectReference: {fileID: 0}
     - target: {fileID: 4708689392601738893, guid: 3a8ee5032f46990449874535bc3f7f6e, type: 3}
       propertyPath: book
       value: 
