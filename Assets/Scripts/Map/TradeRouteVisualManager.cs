@@ -13,41 +13,30 @@ public class TradeRouteVisualManager : MonoBehaviour
     [Tooltip("Used for danger level 2.")]
     public GameObject veryDangerousRoutePrefab;
 
-
     [Header("References")]
     public LocationManager locationManager;
 
-    [Tooltip("Optional parent for all spawned route lines.")]
+    [Tooltip("Optional parent. Place this underneath the moving map.")]
     public Transform routeLineParent;
 
-
     [Header("Visual Settings")]
-    [Tooltip("Map object used to determine the height of the route lines.")]
+    [Tooltip("Also used as the route parent when Route Line Parent is empty.")]
     public Transform mapObject;
 
     [Tooltip("Height above the map.")]
     public float heightOffset = 0.01f;
 
-
     [Header("Generation")]
-    [Tooltip("Automatically generate route visuals on Start.")]
     public bool generateOnStart = true;
 
-
-    private List<GameObject> spawnedRouteLines =
+    private readonly List<GameObject> spawnedRouteLines =
         new List<GameObject>();
-
-
-    // =========================================================
-    // START
-    // =========================================================
 
     private void Start()
     {
         if (locationManager == null)
         {
-            locationManager =
-                FindObjectOfType<LocationManager>();
+            locationManager = FindObjectOfType<LocationManager>();
         }
 
         if (generateOnStart)
@@ -55,11 +44,6 @@ public class TradeRouteVisualManager : MonoBehaviour
             GenerateVisuals();
         }
     }
-
-
-    // =========================================================
-    // GENERATE VISUALS
-    // =========================================================
 
     public void GenerateVisuals()
     {
@@ -73,52 +57,29 @@ public class TradeRouteVisualManager : MonoBehaviour
         HashSet<RouteConnection> processedConnections =
             new HashSet<RouteConnection>();
 
-
-        foreach (
-            Location location
-            in locationManager.locations
-        )
+        foreach (Location location in locationManager.locations)
         {
-            if (location == null)
+            if (location == null || location.connections == null)
+            {
                 continue;
+            }
 
-            if (location.connections == null)
-                continue;
-
-
-            foreach (
-                RouteConnection connection
-                in location.connections
-            )
+            foreach (RouteConnection connection in location.connections)
             {
                 if (connection == null)
-                    continue;
-
-
-                // Each connection exists in both locations'
-                // connection lists, so only create the visual once.
-
-                if (
-                    processedConnections.Contains(
-                        connection
-                    )
-                )
                 {
                     continue;
                 }
 
+                // Avoid generating the same connection twice.
+                if (!processedConnections.Add(connection))
+                {
+                    continue;
+                }
 
-                processedConnections.Add(
-                    connection
-                );
-
-
-                SpawnRouteLine(
-                    connection
-                );
+                SpawnRouteLine(connection);
             }
         }
-
 
         Debug.Log(
             "TradeRouteVisualManager: Generated " +
@@ -127,23 +88,15 @@ public class TradeRouteVisualManager : MonoBehaviour
         );
     }
 
-
-    // =========================================================
-    // SPAWN ROUTE LINE
-    // =========================================================
-
-    private void SpawnRouteLine(
-        RouteConnection connection
-    )
+    private void SpawnRouteLine(RouteConnection connection)
     {
         if (connection == null)
+        {
             return;
+        }
 
-
-        if (
-            connection.locationA == null ||
-            connection.locationB == null
-        )
+        if (connection.locationA == null ||
+            connection.locationB == null)
         {
             Debug.LogWarning(
                 "TradeRouteVisualManager: " +
@@ -153,12 +106,7 @@ public class TradeRouteVisualManager : MonoBehaviour
             return;
         }
 
-
-        GameObject prefab =
-            GetRoutePrefab(
-                connection.dangerLevel
-            );
-
+        GameObject prefab = GetRoutePrefab(connection.dangerLevel);
 
         if (prefab == null)
         {
@@ -171,19 +119,18 @@ public class TradeRouteVisualManager : MonoBehaviour
             return;
         }
 
+        Transform parent = routeLineParent != null
+            ? routeLineParent
+            : (mapObject != null ? mapObject : transform);
 
-        GameObject routeObject =
-            Instantiate(
-                prefab,
-                Vector3.zero,
-                Quaternion.identity,
-                routeLineParent
-            );
+        // Instantiate relative to the parent.
+        GameObject routeObject = Instantiate(prefab, parent, false);
 
+        routeObject.transform.localPosition = Vector3.zero;
+        routeObject.transform.localRotation = Quaternion.identity;
+        routeObject.transform.localScale = Vector3.one;
 
-        RouteLine routeLine =
-            routeObject.GetComponent<RouteLine>();
-
+        RouteLine routeLine = routeObject.GetComponent<RouteLine>();
 
         if (routeLine == null)
         {
@@ -193,27 +140,20 @@ public class TradeRouteVisualManager : MonoBehaviour
                 " does not have a RouteLine component!"
             );
 
-            Destroy(
-                routeObject
-            );
-
+            Destroy(routeObject);
             return;
         }
 
+        // Set local space before Setup calculates the positions.
+        SetLocalSpace(routeObject);
 
-        routeLine.mapObject =
-            mapObject;
-
-
-        routeLine.heightOffset =
-            heightOffset;
-
+        routeLine.mapObject = mapObject;
+        routeLine.heightOffset = heightOffset;
 
         routeLine.Setup(
             connection.locationA,
             connection.locationB
         );
-
 
         routeObject.name =
             "Route_" +
@@ -221,40 +161,36 @@ public class TradeRouteVisualManager : MonoBehaviour
             "_" +
             connection.locationB.GetDisplayName();
 
-
-        spawnedRouteLines.Add(
-            routeObject
-        );
+        spawnedRouteLines.Add(routeObject);
     }
 
+    private void SetLocalSpace(GameObject routeObject)
+    {
+        LineRenderer[] lineRenderers =
+            routeObject.GetComponentsInChildren<LineRenderer>(true);
 
-    // =========================================================
-    // GET ROUTE PREFAB
-    // =========================================================
+        foreach (LineRenderer lineRenderer in lineRenderers)
+        {
+            lineRenderer.useWorldSpace = false;
+        }
+    }
 
-    private GameObject GetRoutePrefab(
-        int dangerLevel
-    )
+    private GameObject GetRoutePrefab(int dangerLevel)
     {
         switch (dangerLevel)
         {
             case 0:
                 return normalRoutePrefab;
 
-
             case 1:
                 return dangerousRoutePrefab;
-
 
             case 2:
                 return veryDangerousRoutePrefab;
 
-
             default:
-
                 Debug.LogWarning(
-                    "TradeRouteVisualManager: " +
-                    "Unknown danger level: " +
+                    "TradeRouteVisualManager: Unknown danger level: " +
                     dangerLevel +
                     ". Using normal route."
                 );
@@ -263,50 +199,33 @@ public class TradeRouteVisualManager : MonoBehaviour
         }
     }
 
-
-    // =========================================================
-    // CLEAR VISUALS
-    // =========================================================
-
     public void ClearVisuals()
     {
-        foreach (
-            GameObject routeLine
-            in spawnedRouteLines
-        )
+        foreach (GameObject routeLine in spawnedRouteLines)
         {
             if (routeLine != null)
             {
-                Destroy(
-                    routeLine
-                );
+                // Hide immediately while Destroy is pending.
+                routeLine.SetActive(false);
+                Destroy(routeLine);
             }
         }
 
-
         spawnedRouteLines.Clear();
     }
-
-
-    // =========================================================
-    // VALIDATE SETUP
-    // =========================================================
 
     private bool ValidateSetup()
     {
         bool valid = true;
 
-
         if (locationManager == null)
         {
             Debug.LogError(
-                "TradeRouteVisualManager: " +
-                "LocationManager not found!"
+                "TradeRouteVisualManager: LocationManager not found!"
             );
 
             valid = false;
         }
-
 
         if (normalRoutePrefab == null)
         {
@@ -318,7 +237,6 @@ public class TradeRouteVisualManager : MonoBehaviour
             valid = false;
         }
 
-
         if (dangerousRoutePrefab == null)
         {
             Debug.LogError(
@@ -328,7 +246,6 @@ public class TradeRouteVisualManager : MonoBehaviour
 
             valid = false;
         }
-
 
         if (veryDangerousRoutePrefab == null)
         {
@@ -340,14 +257,8 @@ public class TradeRouteVisualManager : MonoBehaviour
             valid = false;
         }
 
-
         return valid;
     }
-
-
-    // =========================================================
-    // PUBLIC INFORMATION
-    // =========================================================
 
     public int GetRouteVisualCount()
     {
