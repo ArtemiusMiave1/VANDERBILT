@@ -4,8 +4,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     [Header("Audio Source")]
-    [SerializeField]
-    private AudioSource SFXSource;
+    [SerializeField] private AudioSource SFXSource;
 
 
     [Header("Request Sounds")]
@@ -16,10 +15,22 @@ public class SoundManager : MonoBehaviour
     public AudioClip Lever;
     public AudioClip RequestDeliveryHatch;
 
+    [Header("Request Sound Volumes")]
+    [Range(0f, 1f)] public float RequestVolume = 1f;
+    [Range(0f, 1f)] public float RequestAcceptedVolume = 1f;
+    [Range(0f, 1f)] public float RequestCompleteVolume = 1f;
+    [Range(0f, 1f)] public float ButtonVolume = 1f;
+    [Range(0f, 1f)] public float LeverVolume = 1f;
+    [Range(0f, 1f)] public float RequestDeliveryHatchVolume = 1f;
+
 
     [Header("Fax Sounds")]
     public AudioClip FaxPrint;
     public AudioClip FaxPurchase;
+
+    [Header("Fax Sound Volumes")]
+    [Range(0f, 1f)] public float FaxPrintVolume = 1f;
+    [Range(0f, 1f)] public float FaxPurchaseVolume = 1f;
 
 
     [Header("World Sounds")]
@@ -28,13 +39,18 @@ public class SoundManager : MonoBehaviour
     public AudioClip DangerAmbience;
     public AudioClip Moving;
     public AudioClip StopMoving;
-    
+
+    [Header("World Sound Volumes")]
+    [Range(0f, 1f)] public float ThunderVolume = 1f;
+    [Range(0f, 1f)] public float LandingVolume = 1f;
+    [Range(0f, 1f)] public float DangerAmbienceVolume = 1f;
+    [Range(0f, 1f)] public float MovingVolume = 1f;
+    [Range(0f, 1f)] public float StopMovingVolume = 1f;
 
 
     [Header("Danger Audio")]
     [Tooltip("How long Thunder and Danger Ambience take to fade out.")]
     public float dangerFadeOutTime = 2f;
-
 
     [Header("Moving Audio")]
     [Tooltip("How long the Moving sound takes to fade out when the ship stops.")]
@@ -42,19 +58,12 @@ public class SoundManager : MonoBehaviour
 
 
     // =========================================================
-    // DANGER AUDIO SOURCES
+    // AUDIO SOURCES
     // =========================================================
 
     private AudioSource thunderSource;
     private AudioSource dangerAmbienceSource;
-
-
-    // =========================================================
-    // MOVING AUDIO SOURCE
-    // =========================================================
-
     private AudioSource movingSource;
-
 
     private Coroutine dangerFadeCoroutine;
     private Coroutine movingFadeCoroutine;
@@ -77,51 +86,34 @@ public class SoundManager : MonoBehaviour
 
     private void CreateDangerAudioSources()
     {
-        // -----------------------------------------------------
-        // THUNDER
-        // -----------------------------------------------------
-
         if (thunderSource == null)
         {
             GameObject thunderObject =
-                new GameObject(
-                    "Thunder Audio Source"
-                );
+                new GameObject("Thunder Audio Source");
 
-            thunderObject.transform.SetParent(
-                transform
-            );
+            thunderObject.transform.SetParent(transform);
 
             thunderSource =
                 thunderObject.AddComponent<AudioSource>();
 
             thunderSource.playOnAwake = false;
             thunderSource.loop = true;
-            thunderSource.volume = 1f;
+            thunderSource.volume = ThunderVolume;
         }
-
-
-        // -----------------------------------------------------
-        // DANGER AMBIENCE
-        // -----------------------------------------------------
 
         if (dangerAmbienceSource == null)
         {
             GameObject ambienceObject =
-                new GameObject(
-                    "Danger Ambience Audio Source"
-                );
+                new GameObject("Danger Ambience Audio Source");
 
-            ambienceObject.transform.SetParent(
-                transform
-            );
+            ambienceObject.transform.SetParent(transform);
 
             dangerAmbienceSource =
                 ambienceObject.AddComponent<AudioSource>();
 
             dangerAmbienceSource.playOnAwake = false;
             dangerAmbienceSource.loop = true;
-            dangerAmbienceSource.volume = 1f;
+            dangerAmbienceSource.volume = DangerAmbienceVolume;
         }
     }
 
@@ -135,25 +127,17 @@ public class SoundManager : MonoBehaviour
         if (movingSource != null)
             return;
 
-
         GameObject movingObject =
-            new GameObject(
-                "Moving Audio Source"
-            );
+            new GameObject("Moving Audio Source");
 
-
-        movingObject.transform.SetParent(
-            transform
-        );
-
+        movingObject.transform.SetParent(transform);
 
         movingSource =
             movingObject.AddComponent<AudioSource>();
 
-
         movingSource.playOnAwake = false;
         movingSource.loop = true;
-        movingSource.volume = 1f;
+        movingSource.volume = MovingVolume;
     }
 
 
@@ -161,21 +145,35 @@ public class SoundManager : MonoBehaviour
     // NORMAL SOUND EFFECTS
     // =========================================================
 
-    public void PlaySFX(
-        AudioClip clip
-    )
+    public void PlaySFX(AudioClip clip)
     {
-        if (SFXSource == null)
+        if (SFXSource == null || clip == null)
             return;
 
+        float volume = 1f;
 
-        if (clip == null)
-            return;
+        if (clip == Request)
+            volume = RequestVolume;
+        else if (clip == RequestAccepted)
+            volume = RequestAcceptedVolume;
+        else if (clip == RequestComplete)
+            volume = RequestCompleteVolume;
+        else if (clip == Button)
+            volume = ButtonVolume;
+        else if (clip == Lever)
+            volume = LeverVolume;
+        else if (clip == RequestDeliveryHatch)
+            volume = RequestDeliveryHatchVolume;
+        else if (clip == FaxPrint)
+            volume = FaxPrintVolume;
+        else if (clip == FaxPurchase)
+            volume = FaxPurchaseVolume;
+        else if (clip == Landing)
+            volume = LandingVolume;
+        else if (clip == StopMoving)
+            volume = StopMovingVolume;
 
-
-        SFXSource.PlayOneShot(
-            clip
-        );
+        SFXSource.PlayOneShot(clip, volume);
     }
 
 
@@ -186,52 +184,24 @@ public class SoundManager : MonoBehaviour
     public void StartMovingAudio()
     {
         if (movingSource == null)
-        {
             CreateMovingAudioSource();
-        }
-
 
         if (Moving == null)
             return;
 
-
-        // -----------------------------------------------------
-        // CANCEL FADE IF SHIP STARTS MOVING AGAIN
-        // -----------------------------------------------------
-
+        // Cancel fade if the ship starts moving again.
         if (movingFadeCoroutine != null)
         {
-            StopCoroutine(
-                movingFadeCoroutine
-            );
-
+            StopCoroutine(movingFadeCoroutine);
             movingFadeCoroutine = null;
         }
 
-
-        // -----------------------------------------------------
-        // SETUP MOVING AUDIO
-        // -----------------------------------------------------
-
-        movingSource.clip =
-            Moving;
-
+        movingSource.clip = Moving;
         movingSource.loop = true;
-
-
-        // Restore full volume.
-
-        movingSource.volume = 1f;
-
-
-        // -----------------------------------------------------
-        // DON'T RESTART IF ALREADY PLAYING
-        // -----------------------------------------------------
+        movingSource.volume = MovingVolume;
 
         if (!movingSource.isPlaying)
-        {
             movingSource.Play();
-        }
     }
 
 
@@ -241,34 +211,14 @@ public class SoundManager : MonoBehaviour
 
     public void StopMovingAudio()
     {
-        if (movingSource == null)
+        if (movingSource == null || !movingSource.isPlaying)
             return;
-
-
-        if (!movingSource.isPlaying)
-            return;
-
-
-        // -----------------------------------------------------
-        // CANCEL EXISTING FADE
-        // -----------------------------------------------------
 
         if (movingFadeCoroutine != null)
-        {
-            StopCoroutine(
-                movingFadeCoroutine
-            );
-        }
-
-
-        // -----------------------------------------------------
-        // START FADE
-        // -----------------------------------------------------
+            StopCoroutine(movingFadeCoroutine);
 
         movingFadeCoroutine =
-            StartCoroutine(
-                FadeOutMovingAudio()
-            );
+            StartCoroutine(FadeOutMovingAudio());
     }
 
 
@@ -278,72 +228,40 @@ public class SoundManager : MonoBehaviour
 
     private IEnumerator FadeOutMovingAudio()
     {
-        float startingVolume =
-            movingSource != null
-                ? movingSource.volume
-                : 0f;
-
+        float startingVolume = movingSource != null
+            ? movingSource.volume
+            : 0f;
 
         float timer = 0f;
 
-
-        // -----------------------------------------------------
-        // FADE OUT
-        // -----------------------------------------------------
-
-        while (
-            timer <
-            movingFadeOutTime
-        )
+        while (timer < movingFadeOutTime)
         {
             if (movingSource == null)
+            {
+                movingFadeCoroutine = null;
                 yield break;
-
-
-            timer +=
-                Time.deltaTime;
-
-
-            float percentage;
-
-
-            if (movingFadeOutTime <= 0f)
-            {
-                percentage = 1f;
-            }
-            else
-            {
-                percentage =
-                    Mathf.Clamp01(
-                        timer /
-                        movingFadeOutTime
-                    );
             }
 
+            timer += Time.deltaTime;
 
-            movingSource.volume =
-                Mathf.Lerp(
-                    startingVolume,
-                    0f,
-                    percentage
-                );
+            float percentage = movingFadeOutTime <= 0f
+                ? 1f
+                : Mathf.Clamp01(timer / movingFadeOutTime);
 
+            movingSource.volume = Mathf.Lerp(
+                startingVolume,
+                0f,
+                percentage);
 
             yield return null;
         }
-
-
-        // -----------------------------------------------------
-        // STOP AFTER FADE
-        // -----------------------------------------------------
 
         if (movingSource != null)
         {
             movingSource.volume = 0f;
             movingSource.Stop();
-            movingSource.volume = 1f;
+            movingSource.volume = MovingVolume;
         }
-
 
         movingFadeCoroutine = null;
     }
@@ -355,64 +273,37 @@ public class SoundManager : MonoBehaviour
 
     public void StartDangerAudio()
     {
-        if (
-            thunderSource == null ||
-            dangerAmbienceSource == null
-        )
+        if (thunderSource == null ||
+            dangerAmbienceSource == null)
         {
             CreateDangerAudioSources();
         }
 
-
-        // -----------------------------------------------------
-        // CANCEL ANY FADE
-        // -----------------------------------------------------
-
+        // Cancel any fade.
         if (dangerFadeCoroutine != null)
         {
-            StopCoroutine(
-                dangerFadeCoroutine
-            );
-
+            StopCoroutine(dangerFadeCoroutine);
             dangerFadeCoroutine = null;
         }
 
-
-        // -----------------------------------------------------
-        // THUNDER
-        // -----------------------------------------------------
-
+        // Thunder.
         if (Thunder != null)
         {
-            thunderSource.clip =
-                Thunder;
-
-            thunderSource.volume = 1f;
-
+            thunderSource.clip = Thunder;
+            thunderSource.volume = ThunderVolume;
 
             if (!thunderSource.isPlaying)
-            {
                 thunderSource.Play();
-            }
         }
 
-
-        // -----------------------------------------------------
-        // DANGER AMBIENCE
-        // -----------------------------------------------------
-
+        // Danger ambience.
         if (DangerAmbience != null)
         {
-            dangerAmbienceSource.clip =
-                DangerAmbience;
-
-            dangerAmbienceSource.volume = 1f;
-
+            dangerAmbienceSource.clip = DangerAmbience;
+            dangerAmbienceSource.volume = DangerAmbienceVolume;
 
             if (!dangerAmbienceSource.isPlaying)
-            {
                 dangerAmbienceSource.Play();
-            }
         }
     }
 
@@ -423,35 +314,17 @@ public class SoundManager : MonoBehaviour
 
     public void StopDangerAudio()
     {
-        if (
-            thunderSource == null &&
-            dangerAmbienceSource == null
-        )
+        if (thunderSource == null &&
+            dangerAmbienceSource == null)
         {
             return;
         }
 
-
-        // -----------------------------------------------------
-        // CANCEL EXISTING FADE
-        // -----------------------------------------------------
-
         if (dangerFadeCoroutine != null)
-        {
-            StopCoroutine(
-                dangerFadeCoroutine
-            );
-        }
-
-
-        // -----------------------------------------------------
-        // START FADE
-        // -----------------------------------------------------
+            StopCoroutine(dangerFadeCoroutine);
 
         dangerFadeCoroutine =
-            StartCoroutine(
-                FadeOutDangerAudio()
-            );
+            StartCoroutine(FadeOutDangerAudio());
     }
 
 
@@ -461,85 +334,87 @@ public class SoundManager : MonoBehaviour
 
     private IEnumerator FadeOutDangerAudio()
     {
-        float startingThunderVolume =
-            thunderSource != null
-                ? thunderSource.volume
-                : 0f;
+        float startingThunderVolume = thunderSource != null
+            ? thunderSource.volume
+            : 0f;
 
-
-        float startingAmbienceVolume =
-            dangerAmbienceSource != null
-                ? dangerAmbienceSource.volume
-                : 0f;
-
+        float startingAmbienceVolume = dangerAmbienceSource != null
+            ? dangerAmbienceSource.volume
+            : 0f;
 
         float timer = 0f;
 
-
-        // -----------------------------------------------------
-        // FADE BOTH TOGETHER
-        // -----------------------------------------------------
-
-        while (
-            timer <
-            dangerFadeOutTime
-        )
+        while (timer < dangerFadeOutTime)
         {
-            timer +=
-                Time.deltaTime;
+            timer += Time.deltaTime;
 
-
-            float percentage =
-                Mathf.Clamp01(
-                    timer /
-                    dangerFadeOutTime
-                );
-
+            float percentage = dangerFadeOutTime <= 0f
+                ? 1f
+                : Mathf.Clamp01(timer / dangerFadeOutTime);
 
             if (thunderSource != null)
             {
-                thunderSource.volume =
-                    Mathf.Lerp(
-                        startingThunderVolume,
-                        0f,
-                        percentage
-                    );
+                thunderSource.volume = Mathf.Lerp(
+                    startingThunderVolume,
+                    0f,
+                    percentage);
             }
-
 
             if (dangerAmbienceSource != null)
             {
-                dangerAmbienceSource.volume =
-                    Mathf.Lerp(
-                        startingAmbienceVolume,
-                        0f,
-                        percentage
-                    );
+                dangerAmbienceSource.volume = Mathf.Lerp(
+                    startingAmbienceVolume,
+                    0f,
+                    percentage);
             }
-
 
             yield return null;
         }
-
-
-        // -----------------------------------------------------
-        // STOP BOTH
-        // -----------------------------------------------------
 
         if (thunderSource != null)
         {
             thunderSource.volume = 0f;
             thunderSource.Stop();
+            thunderSource.volume = ThunderVolume;
         }
-
 
         if (dangerAmbienceSource != null)
         {
             dangerAmbienceSource.volume = 0f;
             dangerAmbienceSource.Stop();
+            dangerAmbienceSource.volume = DangerAmbienceVolume;
         }
 
-
         dangerFadeCoroutine = null;
+    }
+
+
+    // =========================================================
+    // UPDATE VOLUMES DURING PLAY MODE
+    // =========================================================
+
+    private void Update()
+    {
+        // Update looping audio volumes without overriding fades.
+        if (movingSource != null &&
+            movingSource.isPlaying &&
+            movingFadeCoroutine == null)
+        {
+            movingSource.volume = MovingVolume;
+        }
+
+        if (thunderSource != null &&
+            thunderSource.isPlaying &&
+            dangerFadeCoroutine == null)
+        {
+            thunderSource.volume = ThunderVolume;
+        }
+
+        if (dangerAmbienceSource != null &&
+            dangerAmbienceSource.isPlaying &&
+            dangerFadeCoroutine == null)
+        {
+            dangerAmbienceSource.volume = DangerAmbienceVolume;
+        }
     }
 }
