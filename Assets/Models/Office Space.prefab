@@ -136,6 +136,7 @@ Transform:
   m_Children:
   - {fileID: 2249603961832637935}
   - {fileID: 479602244759142575}
+  - {fileID: 3606702500024299440}
   m_Father: {fileID: 562587780417077995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &84823809452156740
@@ -492,6 +493,80 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 12135474879246825, guid: 57360abdd03f3cd4e86bf5b21b22322a, type: 3}
   m_PrefabInstance: {fileID: 1053692189452702351}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1069070923569044559
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7297267844775236794}
+    m_Modifications:
+    - target: {fileID: 52146051414800399, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0cad04c8edd572e4794422dd8b206822, type: 2}
+    - target: {fileID: 4003803608210368837, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_Name
+      value: NORMAL_ControlPanel_wheel
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.433359
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.594
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.23503113
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5490107078490136597, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0cad04c8edd572e4794422dd8b206822, type: 2}
+    - target: {fileID: 8155658369880718329, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0cad04c8edd572e4794422dd8b206822, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+--- !u!4 &3606702500024299440 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4385255375658431487, guid: 172d158deffc8fb4bb33aacb80714839, type: 3}
+  m_PrefabInstance: {fileID: 1069070923569044559}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1099393338488052374
 PrefabInstance:
@@ -854,6 +929,10 @@ PrefabInstance:
     - target: {fileID: 3960104245991800528, guid: e9c1bf9e94f9c97478066af85f7f3ea6, type: 3}
       propertyPath: m_Name
       value: ControlPanel_wheel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3960104245991800528, guid: e9c1bf9e94f9c97478066af85f7f3ea6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4449219397661959274, guid: e9c1bf9e94f9c97478066af85f7f3ea6, type: 3}
       propertyPath: m_LocalPosition.x

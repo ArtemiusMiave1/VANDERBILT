@@ -11,11 +11,14 @@ public class StormTrigger : MonoBehaviour
     public float ShaderDuration = 2f;
     float cloudintense;
     float thunderlerp;
+    float wheellarp;
     Color colorlarp;
     Material skyboxreal;
     public Vector2 skyboxSpeed;
     //public V2WarningLight v2warningLight;
     private Array lights;
+    public Animator robotAnimator;
+    public Animator wheelAnimator;
 
 
     public float cloudintensity;
@@ -67,6 +70,9 @@ public class StormTrigger : MonoBehaviour
             skybox.SetInt("_ThunderToggle", 1);
             skybox.SetColor("_ColorDark", colorlarp);
             skybox.SetColor("_ColorBright", colorlarp);
+            wheellarp = Mathf.Lerp(0, 1, elapsed / ShaderDuration);
+            robotAnimator.SetFloat("STORM", wheellarp);
+            wheelAnimator.SetFloat("STORM", wheellarp);
             foreach (V2WarningLight light in lights)
             {
                 light.CurrentColor = "Purple";
@@ -87,12 +93,15 @@ public class StormTrigger : MonoBehaviour
 
             cloudintense = Mathf.Lerp(1, 0.89f, elapsed / ShaderDuration);
             thunderlerp = Mathf.Lerp(1, 0, elapsed / ShaderDuration);
+            wheellarp = Mathf.Lerp(1, 0, elapsed/ ShaderDuration);
             colorlarp = Color.Lerp(skybox.GetColor("_ColorDark"), new Color(0.3675542f, 0.6019195f, 0.7886792f), elapsed / ShaderDuration);
             colorlarp = Color.Lerp(skybox.GetColor("_ColorBright"), new Color(0.2055891f, 0.5685202f, 0.6226414f), elapsed / ShaderDuration);
             skybox.SetFloat("_CloudIntensity", cloudintense);
             skybox.SetInt("_ThunderToggle", 0);
             skybox.SetColor("_ColorDark", colorlarp);
             skybox.SetColor("_ColorBright", colorlarp);
+            robotAnimator.SetFloat("STORM", wheellarp);
+            wheelAnimator.SetFloat("STORM", wheellarp);
             foreach (V2WarningLight light in lights)
             {
                 light.CurrentColor = "Neither";
