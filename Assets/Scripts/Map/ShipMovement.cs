@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ShipMovement : MonoBehaviour
 {
@@ -196,10 +197,28 @@ public class ShipMovement : MonoBehaviour
 
         HandleLowFuelAlarm();
 
+        // Check fuel, but allow the player to refuel
+        // when stopped at a Resource Depot.
+        if (shipCargo != null &&
+            shipCargo.GetResourceAmount("fuel") <= 0)
+        {
+            bool atResourceDepot =
+                currentLocation != null &&
+                currentLocation.locationType != null &&
+                currentLocation.locationType.LocationType ==
+                "ResourceDepot";
+
+            // Only trigger Game Over if the ship is not
+            // stopped at a Resource Depot.
+            if (!atResourceDepot || moving)
+            {
+                TriggerGameOver();
+                return;
+            }
+        }
 
         if (!moving)
             return;
-
 
         if (targetLocation == null)
         {
@@ -211,7 +230,6 @@ public class ShipMovement : MonoBehaviour
 
             return;
         }
-
 
         UpdateMovement();
     }
@@ -445,6 +463,17 @@ public class ShipMovement : MonoBehaviour
             );
     }
 
+    private bool isGameOver = false;
+
+    private void TriggerGameOver()
+    {
+        if (isGameOver)
+            return;
+
+        isGameOver = true;
+
+        SceneManager.LoadScene("GameOver");
+    }
 
     // =========================================================
     // FADE OUT ENGINE AUDIO
@@ -562,6 +591,8 @@ public class ShipMovement : MonoBehaviour
             StopDangerIfNotOnDangerRoute();
 
             UpdateResourceDepotPaper();
+
+            TriggerGameOver();
 
             return;
         }
