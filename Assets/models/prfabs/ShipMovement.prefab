@@ -289,6 +289,18 @@ PrefabInstance:
       propertyPath: AlarmSnd
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7878836550818246915, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.236
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878836550818246915, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.316
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878836550818246915, guid: 2043282b239b37545857c62b02c55303, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -14.724
+      objectReference: {fileID: 0}
     - target: {fileID: 8589552123940099570, guid: 2043282b239b37545857c62b02c55303, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
