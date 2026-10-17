@@ -734,11 +734,23 @@ public class ShipMovement : MonoBehaviour
 
         if (targetLocation != null)
         {
+            // Check the next route.
+            // Safe routes fade out the shake;
+            // dangerous routes keep it active.
             CheckNextRouteDanger();
         }
         else
         {
-            StopDangerAudio();
+            // The ship has arrived at its destination.
+            // Fade out the danger effects.
+            if (routeDangerSystem != null)
+            {
+                routeDangerSystem.SetStorm(false);
+            }
+            else
+            {
+                StopDangerAudio();
+            }
         }
 
 

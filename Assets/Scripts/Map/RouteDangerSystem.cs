@@ -41,6 +41,9 @@ public class RouteDangerSystem : MonoBehaviour
     private ShipCargo shipCargo;
     private SoundManager soundManager;
 
+    [Header("Camera Shake")]
+    public RouteCameraShake routeCameraShake;
+
 
     // =========================================================
     // START
@@ -67,6 +70,12 @@ public class RouteDangerSystem : MonoBehaviour
         {
             soundManager =
                 audioObject.GetComponent<SoundManager>();
+        }
+
+        if (routeCameraShake == null)
+        {
+            routeCameraShake =
+                FindObjectOfType<RouteCameraShake>();
         }
     }
 
@@ -454,6 +463,11 @@ public class RouteDangerSystem : MonoBehaviour
             }
         }
 
+        // Camera shake follows the dangerous route state.
+        if (routeCameraShake != null)
+        {
+            routeCameraShake.SetShakeActive(active);
+        }
 
         // -----------------------------------------------------
         // DANGER AUDIO
