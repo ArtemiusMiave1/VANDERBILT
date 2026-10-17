@@ -593,9 +593,9 @@ MonoBehaviour:
   DangerAmbience: {fileID: 8300000, guid: 82cef8e7830f13f40aed01daabd2dcdd, type: 3}
   Moving: {fileID: 8300000, guid: bc595a600eb1d92479424ca061b0476b, type: 3}
   StopMoving: {fileID: 8300000, guid: 7bd055b2e42647c4bbd2afab12d6bf65, type: 3}
-  ThunderVolume: 0.078
+  ThunderVolume: 0.718
   LandingVolume: 0.718
-  DangerAmbienceVolume: 0.126
+  DangerAmbienceVolume: 0.194
   MovingVolume: 0.563
   StopMovingVolume: 0.718
   dangerFadeOutTime: 1.5
