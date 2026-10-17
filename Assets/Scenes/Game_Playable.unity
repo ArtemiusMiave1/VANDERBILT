@@ -290,6 +290,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1595112549 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6946563443612337383, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1595112559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595112549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b535a3f64fd2fe54cb2ea8efb45fdd6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RouteCameraShake
+  shakeIntensity: 0.035
+  shakeSpeed: 15
+  fadeInSpeed: 1.5
+  fadeOutSpeed: 1
 --- !u!1 &1860990954
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,12 +452,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 990210535760057072, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1557553569296354213, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2697145038053416248, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: routeCameraShake
+      value: 
+      objectReference: {fileID: 1595112559}
     - target: {fileID: 3223664380969652253, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -483,7 +508,7 @@ PrefabInstance:
       objectReference: {fileID: 1182420374}
     - target: {fileID: 4390967815447741737, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4578517753760179685, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_Enabled
@@ -503,11 +528,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6999694620301505128, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7034397127346875776, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8629512349842078877, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: tutorialPrompt
@@ -525,6 +550,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6946563443612337383, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1595112559}
     - targetCorrespondingSourceObject: {fileID: 409396181673818661, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
