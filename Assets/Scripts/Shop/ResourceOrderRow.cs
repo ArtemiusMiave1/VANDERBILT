@@ -29,33 +29,27 @@ public class ResourceOrderRow : MonoBehaviour
 
     public void Setup()
     {
-        resourceNameText.text =
-            resourceType;
+        resourceNameText.text = resourceType;
 
+        priceText.text = price + " Gold";
 
-        priceText.text =
-            price +
-            " Gold";
-
-
+        // Allow integer input only.
         quantityInput.contentType =
             TMP_InputField.ContentType.IntegerNumber;
 
+        // Limit input to 3 characters (0-999).
+        quantityInput.characterLimit = 3;
 
-        quantityInput.onValidateInput +=
-            ValidateNumberInput;
+        // Prevent non-numeric characters.
+        quantityInput.onValidateInput -= ValidateNumberInput;
+        quantityInput.onValidateInput += ValidateNumberInput;
 
+        // Set initial quantity.
+        quantityInput.text = "0";
 
-        quantityInput.text =
-            "0";
-
-
-        // Update depot whenever the player
-        // changes the quantity.
-
-        quantityInput.onValueChanged.AddListener(
-            OnQuantityChanged
-        );
+        // Update depot whenever quantity changes.
+        quantityInput.onValueChanged.RemoveListener(OnQuantityChanged);
+        quantityInput.onValueChanged.AddListener(OnQuantityChanged);
     }
 
 
@@ -79,13 +73,10 @@ public class ResourceOrderRow : MonoBehaviour
     // QUANTITY CHANGED
     // =========================================================
 
-    private void OnQuantityChanged(
-        string value
-    )
+    private void OnQuantityChanged(string value)
     {
         ResourceDepotPaper paper =
             GetComponentInParent<ResourceDepotPaper>();
-
 
         if (paper != null)
         {
@@ -100,19 +91,10 @@ public class ResourceOrderRow : MonoBehaviour
 
     public int GetAmount()
     {
-        if (
-            int.TryParse(
-                quantityInput.text,
-                out int amount
-            )
-        )
+        if (int.TryParse(quantityInput.text, out int amount))
         {
-            return Mathf.Max(
-                0,
-                amount
-            );
+            return Mathf.Clamp(amount, 0, 999);
         }
-
 
         return 0;
     }
@@ -124,8 +106,7 @@ public class ResourceOrderRow : MonoBehaviour
 
     public int GetTotalCost()
     {
-        return GetAmount() *
-               price;
+        return GetAmount() * price;
     }
 
 
@@ -135,7 +116,6 @@ public class ResourceOrderRow : MonoBehaviour
 
     public void ClearAmount()
     {
-        quantityInput.text =
-            "0";
+        quantityInput.text = "0";
     }
 }

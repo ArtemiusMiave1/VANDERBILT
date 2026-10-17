@@ -173,7 +173,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -744,7 +744,7 @@ GameObject:
   - component: {fileID: 1788814289202719316}
   - component: {fileID: 7842590337803353545}
   - component: {fileID: 6415544792631437986}
-  - component: {fileID: 4861261776886357146}
+  - component: {fileID: 6063193149554962789}
   m_Layer: 0
   m_Name: Apply
   m_TagString: Untagged
@@ -838,7 +838,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4861261776886357146
+--- !u!114 &6063193149554962789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -847,11 +847,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3675306240569132609}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightRawImage
-  highlightRawImage: {fileID: 3248977561852905656}
-  pressedRawImage: {fileID: 7104755096262080800}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 4471999821602189678}
+  hoverFontSize: 27
+  clickedColor: {r: 0.3009078, g: 0.9245283, b: 0.33994102, a: 1}
 --- !u!1 &4273791392184496649
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,7 +864,7 @@ GameObject:
   - component: {fileID: 7313475527144683720}
   - component: {fileID: 1406537577661917498}
   - component: {fileID: 4427897225524063420}
-  - component: {fileID: 4292691019293108989}
+  - component: {fileID: 3179732445111670185}
   m_Layer: 0
   m_Name: Back
   m_TagString: Untagged
@@ -957,7 +958,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4292691019293108989
+--- !u!114 &3179732445111670185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -966,11 +967,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4273791392184496649}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightRawImage
-  highlightRawImage: {fileID: 5759353804368583942}
-  pressedRawImage: {fileID: 1746588002077198646}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 4297285713878597278}
+  hoverFontSize: 27
+  clickedColor: {r: 0.46666667, g: 0.67058825, b: 0.9647059, a: 1}
 --- !u!1 &5759353804368583942
 GameObject:
   m_ObjectHideFlags: 0

@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 4903291243468644994}
   - component: {fileID: 851005678242374330}
   - component: {fileID: 6664970209705672144}
-  - component: {fileID: 8055903964257367982}
+  - component: {fileID: 3318334619420107005}
   m_Layer: 0
   m_Name: 'Controls '
   m_TagString: Untagged
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8055903964257367982
+--- !u!114 &3318334619420107005
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -318,11 +318,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1293912725960877513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightRawImage
-  highlightRawImage: {fileID: 427441233729078392}
-  pressedRawImage: {fileID: 7306466269841211898}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 2164425703522368322}
+  hoverFontSize: 27
+  clickedColor: {r: 0.48627454, g: 0.69803923, b: 1, a: 1}
 --- !u!1 &1597764250755759803
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +407,7 @@ GameObject:
   - component: {fileID: 3902493909731636539}
   - component: {fileID: 7202124497678574880}
   - component: {fileID: 4763758945852527811}
-  - component: {fileID: 8096723296840434140}
+  - component: {fileID: 834869189872481389}
   m_Layer: 0
   m_Name: Settings
   m_TagString: Untagged
@@ -488,7 +489,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8096723296840434140
+--- !u!114 &834869189872481389
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -497,11 +498,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1771056233327583966}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightRawImage
-  highlightRawImage: {fileID: 9151175312407760136}
-  pressedRawImage: {fileID: 2083746973154460894}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 723655429756114154}
+  hoverFontSize: 27
+  clickedColor: {r: 0.46666667, g: 0.67058825, b: 0.9647059, a: 1}
 --- !u!1 &2066990705025803184
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,7 +575,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000066757, y: 0}
+  m_AnchoredPosition: {x: -0, y: 0}
   m_SizeDelta: {x: 160, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7037055731145244728
@@ -622,7 +624,7 @@ GameObject:
   - component: {fileID: 3154512728378400674}
   - component: {fileID: 6497188799925488758}
   - component: {fileID: 6532253658278418953}
-  - component: {fileID: 5870924539300348470}
+  - component: {fileID: 3151328274593923146}
   m_Layer: 0
   m_Name: Resume
   m_TagString: Untagged
@@ -704,7 +706,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5870924539300348470
+--- !u!114 &3151328274593923146
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -713,11 +715,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2122919694326791990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightImage
-  highlightRawImage: {fileID: 1597764250755759803}
-  pressedRawImage: {fileID: 6915774708602021500}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 8056266574378210751}
+  hoverFontSize: 27
+  clickedColor: {r: 0.46666667, g: 0.67058825, b: 0.9647059, a: 1}
 --- !u!1 &2124406511438499225
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,7 +819,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -866,7 +869,7 @@ GameObject:
   - component: {fileID: 6055581700098002099}
   - component: {fileID: 1084279329402188482}
   - component: {fileID: 2875260706818476733}
-  - component: {fileID: 855594405656820518}
+  - component: {fileID: 1033146101372437768}
   m_Layer: 0
   m_Name: Exit
   m_TagString: Untagged
@@ -948,7 +951,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &855594405656820518
+--- !u!114 &1033146101372437768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -957,11 +960,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3457028143796158661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightRawImage
-  highlightRawImage: {fileID: 370218232662131591}
-  pressedRawImage: {fileID: 393671599078874266}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 7471593692645894792}
+  hoverFontSize: 27
+  clickedColor: {r: 0.4666667, g: 0.67058825, b: 0.96470594, a: 1}
 --- !u!1 &4314968519107280119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,7 +1064,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1269,7 +1273,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1478,7 +1482,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

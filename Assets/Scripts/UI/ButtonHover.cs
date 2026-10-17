@@ -1,8 +1,13 @@
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class ButtonHover : MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler,
+    IPointerDownHandler,
+    IPointerUpHandler
 {
     [Header("Text")]
     [SerializeField] private TMP_Text text;
@@ -18,22 +23,29 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         originalColor = text.color;
     }
 
-    // When mouse enters obj
+    // When mouse enters object
     public void OnPointerEnter(PointerEventData eventData)
     {
         text.fontSize = hoverFontSize;
         text.fontStyle |= FontStyles.Underline;
     }
 
-    // When mouse leaves obj
+    // When mouse leaves object
     public void OnPointerExit(PointerEventData eventData)
     {
         text.fontSize = originalFontSize;
         text.fontStyle &= ~FontStyles.Underline;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    // When player presses and holds the button
+    public void OnPointerDown(PointerEventData eventData)
     {
         text.color = clickedColor;
+    }
+
+    // When player releases the button
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        text.color = originalColor;
     }
 }

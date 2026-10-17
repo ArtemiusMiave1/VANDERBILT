@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 7177694923518946602}
   - component: {fileID: 5786588083944106942}
   - component: {fileID: 4486447088728301942}
-  - component: {fileID: 8972532724602350656}
+  - component: {fileID: 1033897651831915648}
   m_Layer: 0
   m_Name: Back
   m_TagString: Untagged
@@ -386,7 +386,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8972532724602350656
+--- !u!114 &1033897651831915648
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -395,11 +395,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1474750673451905904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092889aa40bfe4b40b732052a45ac065, type: 3}
+  m_Script: {fileID: 11500000, guid: e53ee4908596b524db8ff775e11c5213, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonHighlightRawImage
-  highlightRawImage: {fileID: 1274493209558737663}
-  pressedRawImage: {fileID: 1935664414751913274}
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHover
+  text: {fileID: 5424028948541835114}
+  hoverFontSize: 27
+  clickedColor: {r: 0.46666667, g: 0.67058825, b: 0.9647059, a: 1}
 --- !u!1 &1935664414751913274
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,7 +571,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
