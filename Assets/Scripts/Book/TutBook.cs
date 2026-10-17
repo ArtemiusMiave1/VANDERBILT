@@ -4,8 +4,11 @@ using UnityEngine.UI;
 
 public class TutBook : BookBase
 {
-          [Header("Book Canvas")]
+    [Header("Book Canvas")]
     public GameObject bookCanvas;
+
+    [Header("Tutorial Prompt")]
+    public TutorialBookPrompt tutorialPrompt;
 
     [Header("Pages")]
     public GameObject[] pages;
@@ -47,17 +50,22 @@ public class TutBook : BookBase
 
     public override void OpenBook()
     {
-        bookCanvas.SetActive(true);
+        // Open the book UI
+        if (bookCanvas != null)
+            bookCanvas.SetActive(true);
+
+        // Hide the tutorial arrow and highlight
+        if (tutorialPrompt != null)
+            tutorialPrompt.HidePrompt();
 
         currentPage = 0;
 
         UpdatePages();
 
+        // Switch player to book state
         if (playerState != null)
         {
-            playerState.SetState(
-                PlayerState.State.Book
-            );
+            playerState.SetState(PlayerState.State.Book);
         }
     }
 

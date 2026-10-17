@@ -234,6 +234,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6946563443612571845, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
   m_PrefabInstance: {fileID: 4349624929307356314}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1426463325 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3030225006216408764, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3b675618e3a0f479c4b9f5afcd9456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialBookPrompt
 --- !u!1 &1587713318
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,6 +490,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8629512349842078877, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: tutorialPrompt
+      value: 
+      objectReference: {fileID: 1426463325}
     - target: {fileID: 8759002194097206960, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_IsActive
       value: 1

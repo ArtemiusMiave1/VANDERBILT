@@ -6,8 +6,6 @@ public class TutorialBookPrompt : MonoBehaviour
     public GameObject arrow;
     public GameObject highlight;
 
-    private bool promptActive = true;
-
     private void Start()
     {
         ShowPrompt();
@@ -15,8 +13,6 @@ public class TutorialBookPrompt : MonoBehaviour
 
     public void ShowPrompt()
     {
-        promptActive = true;
-
         if (arrow != null)
             arrow.SetActive(true);
 
@@ -26,8 +22,6 @@ public class TutorialBookPrompt : MonoBehaviour
 
     public void HidePrompt()
     {
-        promptActive = false;
-
         if (arrow != null)
             arrow.SetActive(false);
 

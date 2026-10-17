@@ -10,6 +10,10 @@ public class TutorialArrowMarker : MonoBehaviour
     public Transform player;
     public float rotationSpeed = 5f;
 
+    [Header("Arrow Orientation")]
+    [Tooltip("Fixed downward tilt of the arrow, in degrees.")]
+    public float downwardTilt = 90f;
+
     private Vector3 startPosition;
 
     private void Awake()
@@ -19,14 +23,14 @@ public class TutorialArrowMarker : MonoBehaviour
 
     private void Update()
     {
-        // Bob up and down
+        // Bob up and down without changing the starting position.
         float bobOffset =
             Mathf.Sin(Time.time * bobSpeed) * bobHeight;
 
         transform.localPosition =
             startPosition + Vector3.up * bobOffset;
 
-        // Rotate horizontally toward the player
+        // Rotate horizontally toward the player.
         if (player != null)
         {
             Vector3 direction =
@@ -36,13 +40,22 @@ public class TutorialArrowMarker : MonoBehaviour
 
             if (direction.sqrMagnitude > 0.001f)
             {
-                Quaternion targetRotation =
-                    Quaternion.LookRotation(direction);
+                float targetY =
+                    Quaternion.LookRotation(direction).eulerAngles.y;
 
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    targetRotation,
+                Vector3 currentEuler = transform.eulerAngles;
+
+                float newY = Mathf.LerpAngle(
+                    currentEuler.y,
+                    targetY,
                     rotationSpeed * Time.deltaTime
+                );
+
+                // Keep the downward tilt fixed.
+                transform.rotation = Quaternion.Euler(
+                    downwardTilt,
+                    newY,
+                    0f
                 );
             }
         }
