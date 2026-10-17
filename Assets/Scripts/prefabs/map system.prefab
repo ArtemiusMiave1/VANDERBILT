@@ -147,11 +147,19 @@ MonoBehaviour:
   routeDangerSystem: {fileID: 2674260369968726789}
   resourceDepotPaper: {fileID: 0}
   currentFuelCost: 0
+  maximumFuel: 100
   maximumCargoWeight: 2500
   minimumSpeedMultiplier: 0.25
   Engine: {fileID: 0}
   engineAudioSource: {fileID: 0}
   engineFadeOutTime: 1
+  lowFuelAlarmSource: {fileID: 0}
+  LowFuelAlarm: {fileID: 0}
+  firstFuelWarningPercentage: 0.2
+  secondFuelWarningPercentage: 0.1
+  faxMachineAnimator: {fileID: 0}
+  faxAppearTrigger: Appear
+  faxHideTrigger: Hide
 --- !u!114 &7621336041208706445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +271,7 @@ Transform:
   m_GameObject: {fileID: 2378468785151838521}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.38511002, y: 0.06873006, z: 0.81552994}
+  m_LocalPosition: {x: 0.341, y: 0.06873006, z: 0.81552994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
