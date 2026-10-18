@@ -1,4 +1,4 @@
-
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameClock : MonoBehaviour
@@ -154,7 +154,10 @@ public class GameClock : MonoBehaviour
         if (DailyStatsManager.Instance != null)
         {
             DailyStatsManager.Instance.EndDay();
+            print("stats");
         }
+
+        SceneManager.LoadScene("GameEnd");
     }
 
     // ==================================================

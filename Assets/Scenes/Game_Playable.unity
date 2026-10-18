@@ -229,6 +229,65 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6946563443612571845, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
   m_PrefabInstance: {fileID: 4349624929307356314}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1287656230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1287656232}
+  - component: {fileID: 1287656231}
+  m_Layer: 0
+  m_Name: StatsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1287656231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287656230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6de4c4ea1b2c4442a8b77329dd7e85a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DailyStatsManager
+  currentDay: 1
+  currentStats:
+    dayNumber: 1
+    requests:
+      accepted: 0
+      completed: 0
+      discarded: 0
+      damaged: 0
+      expired: 0
+    economy:
+      moneyEarned: 0
+      moneySpent: 0
+      fuelConsumed: 0
+      locationsVisited: 0
+  dailyHistory: []
+--- !u!4 &1287656232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287656230}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1403664193 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5129884681749808752, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
@@ -621,3 +680,4 @@ SceneRoots:
   - {fileID: 888892221}
   - {fileID: 1587713320}
   - {fileID: 990913736}
+  - {fileID: 1287656232}

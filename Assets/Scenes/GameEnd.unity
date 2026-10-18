@@ -912,8 +912,9 @@ GameObject:
   - component: {fileID: 778578255}
   - component: {fileID: 778578257}
   - component: {fileID: 778578256}
+  - component: {fileID: 778578258}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: EndStats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -984,6 +985,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 778578254}
   m_CullTransparentMesh: 1
+--- !u!114 &778578258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778578254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 346ec7fc35ce2cd41a7d0bcc8adf82f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndOfDayUI
+  dayText: {fileID: 0}
+  acceptedText: {fileID: 1126607872}
+  completedText: {fileID: 175571331}
+  discardedText: {fileID: 964736883}
+  damagedText: {fileID: 2141016309}
+  expiredText: {fileID: 0}
+  moneyEarnedText: {fileID: 1275114260}
+  moneySpentText: {fileID: 1504533815}
+  netProfitText: {fileID: 0}
+  fuelConsumedText: {fileID: 1262596948}
+  locationsVisitedText: {fileID: 1280310327}
+  gameplaySceneName: Game
 --- !u!1 &938767894
 GameObject:
   m_ObjectHideFlags: 0
