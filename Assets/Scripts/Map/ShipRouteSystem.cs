@@ -67,7 +67,7 @@ public class ShipRouteSystem : MonoBehaviour
 
         if (routeLine != null)
         {
-            routeLine.useWorldSpace = true;
+            routeLine.useWorldSpace = false;
         }
 
         UpdateRouteLine();
@@ -203,7 +203,14 @@ public class ShipRouteSystem : MonoBehaviour
         UpdateDraggingLine();
     }
 
+    private Vector3 GetLocalRoutePosition(Vector3 worldPosition)
+    {
+        // Maintain the route's height above the map.
+        worldPosition.y = GetRouteLineHeight();
 
+        // Convert world coordinates into the LineRenderer's local space.
+        return routeLine.transform.InverseTransformPoint(worldPosition);
+    }
     private void ContinueAddingRoute()
     {
         /*
@@ -630,49 +637,27 @@ public class ShipRouteSystem : MonoBehaviour
         if (route.Count == 0)
         {
             routeLine.positionCount = 0;
-
             return;
         }
 
-        /*
-         * Route locations + temporary mouse point.
-         */
-        routeLine.positionCount =
-            route.Count + 1;
+        routeLine.positionCount = route.Count + 1;
 
-        for (
-            int i = 0;
-            i < route.Count;
-            i++
-        )
+        // Existing route locations.
+        for (int i = 0; i < route.Count; i++)
         {
-            Vector3 position =
-                route[i].transform.position;
-
-            position.y =
-                GetRouteLineHeight();
-
-            routeLine.SetPosition(
-                i,
-                position
+            Vector3 position = GetLocalRoutePosition(
+                route[i].transform.position
             );
+
+            routeLine.SetPosition(i, position);
         }
 
-        /*
-         * If the mouse is on the map,
-         * extend the line toward it.
-         *
-         * If the mouse is outside the map,
-         * keep the temporary point at the
-         * final route location.
-         */
+        // Temporary line following the mouse.
         if (mouseOnMap)
         {
-            Vector3 mousePosition =
-                currentMapMousePosition;
-
-            mousePosition.y =
-                GetRouteLineHeight();
+            Vector3 mousePosition = GetLocalRoutePosition(
+                currentMapMousePosition
+            );
 
             routeLine.SetPosition(
                 route.Count,
@@ -681,13 +666,9 @@ public class ShipRouteSystem : MonoBehaviour
         }
         else
         {
-            Vector3 lastPosition =
-                route[
-                    route.Count - 1
-                ].transform.position;
-
-            lastPosition.y =
-                GetRouteLineHeight();
+            Vector3 lastPosition = GetLocalRoutePosition(
+                route[route.Count - 1].transform.position
+            );
 
             routeLine.SetPosition(
                 route.Count,
@@ -705,29 +686,18 @@ public class ShipRouteSystem : MonoBehaviour
         if (route.Count == 0)
         {
             routeLine.positionCount = 0;
-
             return;
         }
 
-        routeLine.positionCount =
-            route.Count;
+        routeLine.positionCount = route.Count;
 
-        for (
-            int i = 0;
-            i < route.Count;
-            i++
-        )
+        for (int i = 0; i < route.Count; i++)
         {
-            Vector3 position =
-                route[i].transform.position;
-
-            position.y =
-                GetRouteLineHeight();
-
-            routeLine.SetPosition(
-                i,
-                position
+            Vector3 position = GetLocalRoutePosition(
+                route[i].transform.position
             );
+
+            routeLine.SetPosition(i, position);
         }
     }
 

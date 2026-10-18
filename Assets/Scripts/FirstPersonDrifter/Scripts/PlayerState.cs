@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PlayerState : MonoBehaviour
@@ -30,31 +31,6 @@ public class PlayerState : MonoBehaviour
         SetState(State.Gameplay);
     }
 
-    private void Update()
-    {
-        // Escape opens the free cursor mode
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (currentState == State.Gameplay)
-            {
-                SetState(State.Menu);
-            }
-        }
-
-        // Clicking the screen returns to gameplay
-        // ONLY when in Menu state.
-        //
-        // This means clicking Book UI buttons will NOT
-        // lock the cursor because Book is a separate state.
-        if (currentState == State.Menu)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                SetState(State.Gameplay);
-            }
-        }
-    }
-
     public void SetState(State newState)
     {
         currentState = newState;
@@ -79,47 +55,57 @@ public class PlayerState : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // GAMEPLAY
+    // =========================================================
+
     private void EnableGameplay()
     {
-        // Enable mouse look
         if (mouseLook1 != null)
             mouseLook1.enabled = true;
 
         if (mouseLook2 != null)
             mouseLook2.enabled = true;
 
-        // Lock cursor
         if (lockMouse != null)
             lockMouse.LockCursor(true);
     }
 
+    // =========================================================
+    // BOOK
+    // =========================================================
+
     private void EnableBook()
     {
-        // Disable mouse look
         if (mouseLook1 != null)
             mouseLook1.enabled = false;
 
         if (mouseLook2 != null)
             mouseLook2.enabled = false;
 
-        // Unlock cursor
         if (lockMouse != null)
             lockMouse.LockCursor(false);
     }
+
+    // =========================================================
+    // MENU / DIALOGUE
+    // =========================================================
 
     private void EnableUI()
     {
-        // Disable mouse look
         if (mouseLook1 != null)
             mouseLook1.enabled = false;
 
         if (mouseLook2 != null)
             mouseLook2.enabled = false;
 
-        // Unlock cursor
         if (lockMouse != null)
             lockMouse.LockCursor(false);
     }
+
+    // =========================================================
+    // STATE CHECKS
+    // =========================================================
 
     public bool IsGameplay()
     {

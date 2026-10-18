@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -40,7 +41,6 @@ public class GameController : MonoBehaviour
             return;
 
         UpdatePlayTime();
-        HandleGameInput();
     }
 
     private void UpdatePlayTime()
@@ -49,14 +49,6 @@ public class GameController : MonoBehaviour
             return;
 
         playTime += Time.unscaledDeltaTime;
-    }
-
-    private void HandleGameInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePause();
-        }
     }
 
     public void StartGame()
@@ -113,16 +105,15 @@ public class GameController : MonoBehaviour
         );
     }
 
-    // Returns play time in seconds.
     public float GetPlayTime()
     {
         return playTime;
     }
 
-    // Returns play time as HH:MM:SS.
     public string GetFormattedPlayTime()
     {
-        int hours = Mathf.FloorToInt(playTime / 3600f);
+        int hours =
+            Mathf.FloorToInt(playTime / 3600f);
 
         int minutes =
             Mathf.FloorToInt(

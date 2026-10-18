@@ -165,27 +165,36 @@ public class ObjectPickUp : MonoBehaviour
         // =====================================================
 
         RequestPaper request =
-            pickUpObj.GetComponent<RequestPaper>();
-
+    pickUpObj.GetComponent<RequestPaper>();
 
         if (request != null)
         {
-            // Remove request from the TOP request line
-            // immediately when picked up.
             if (requestLineManager == null)
             {
                 requestLineManager =
                     FindObjectOfType<RequestLineManager>();
             }
 
-
-            if (requestLineManager != null)
+            // Only allow requests that are currently
+            // on the incoming request line.
+            if (requestLineManager == null ||
+                !requestLineManager.requests.Contains(pickUpObj))
             {
-                requestLineManager.RemoveRequest(
-                    pickUpObj
+                Debug.Log(
+                    "This request cannot be picked up. " +
+                    "It is no longer on the incoming line."
                 );
+
+                return;
             }
-            soundManager.PlaySFX(soundManager.Request);
+
+            // Remove it from the incoming line.
+            requestLineManager.RemoveRequest(pickUpObj);
+
+            if (soundManager != null)
+            {
+                soundManager.PlaySFX(soundManager.Request);
+            }
         }
 
 
@@ -369,13 +378,17 @@ public class ObjectPickUp : MonoBehaviour
             }
 
 
-            requestLineManager.MoveRequestToOldLine(
-                request.gameObject
-            );
+            // Stop treating this request as a held object.
+            GameObject discardedRequest = heldObj;
 
-
-            // Successfully moved to bottom line.
+            // Release the player's held-object references first.
             FinalizeHeldObject();
+
+            // Move the request to the discard line.
+            // This reparents it to RequestParent.
+            requestLineManager.MoveRequestToOldLine(
+                discardedRequest
+            );
 
             Debug.Log(
                 "Request moved to old request line."

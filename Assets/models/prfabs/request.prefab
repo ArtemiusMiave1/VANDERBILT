@@ -1835,6 +1835,7 @@ MonoBehaviour:
   requirementText: {fileID: 2347596890639729757}
   condtionText: {fileID: 0}
   deliveredStamp: {fileID: 3181134954245172168}
+  resourceIconRenderer: {fileID: 1370106894101606566}
   requirementStampRenderer: {fileID: 716910080569867766}
   conditionStampRenderer: {fileID: 815070981188004160}
   requirement: 0
@@ -1846,8 +1847,6 @@ MonoBehaviour:
   acceptedFromBoard: 0
   pendingGold: 0
   audioSource: {fileID: 0}
-  requestAcceptedSound: {fileID: 0}
-  requestCompletedSound: {fileID: 0}
 --- !u!65 &3693382856378918346
 BoxCollider:
   m_ObjectHideFlags: 0

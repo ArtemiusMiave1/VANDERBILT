@@ -376,7 +376,7 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 10
   FootstepsSnd: {fileID: 0}
-  enableRunning: 1
+  enableRunning: 0
   jumpSpeed: 4
   gravity: 10
   slideWhenOverSlopeLimit: 0

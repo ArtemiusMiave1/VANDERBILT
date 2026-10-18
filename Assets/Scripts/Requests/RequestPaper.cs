@@ -21,6 +21,14 @@ public class RequestPaper : MonoBehaviour
     [Header("Delivered Stamp")]
     [Tooltip("Shown when the request is successfully delivered.")]
     public GameObject deliveredStamp;
+    
+    // =========================================================
+    // RESOURCE ICON
+    // =========================================================
+
+    [Header("Resource Icon")]
+    [Tooltip("Plane that displays the requested resource icon.")]
+    public Renderer resourceIconRenderer;
 
     // =========================================================
     // STAMPS
@@ -215,6 +223,53 @@ public class RequestPaper : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // UPDATE RESOURCE ICON
+    // =========================================================
+
+    private void UpdateResourceIcon()
+    {
+        if (resourceIconRenderer == null)
+            return;
+
+        if (requestData == null)
+        {
+            resourceIconRenderer.gameObject.SetActive(false);
+            return;
+        }
+
+        string resourceName =
+            requestData.RequestedResources;
+
+        if (string.IsNullOrEmpty(resourceName))
+        {
+            resourceIconRenderer.gameObject.SetActive(false);
+            return;
+        }
+
+        // Load the material matching the requested resource.
+        Material resourceMaterial =
+            Resources.Load<Material>(
+                "ResourceIcons/" + resourceName.Trim()
+            );
+
+        if (resourceMaterial == null)
+        {
+            Debug.LogWarning(
+                "RequestPaper: Resource icon material not found: " +
+                resourceName
+            );
+
+            resourceIconRenderer.gameObject.SetActive(false);
+            return;
+        }
+
+        // Apply the material to the plane.
+        resourceIconRenderer.sharedMaterial =
+            resourceMaterial;
+
+        resourceIconRenderer.gameObject.SetActive(true);
+    }
 
     // =========================================================
     // DISPLAY REQUEST
@@ -251,6 +306,9 @@ public class RequestPaper : MonoBehaviour
                 "REQUIREMENT: " +
                 requirement.ToString().ToUpper();
         }
+
+        // Update the requested resource icon.
+        UpdateResourceIcon();
 
         // New fragile requests always start safe.
         fragileCondition = FragileCondition.Safe;

@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RequestLineManager : MonoBehaviour
 {
     [Header("Active Requests - Top Line")]
-    public List<GameObject> requests =
-        new List<GameObject>();
+    public List<GameObject> requests = new List<GameObject>();
 
     [Header("Request Limit")]
     public int maxRequests = 3;
+
+    [Header("Request Parent")]
+    [Tooltip("Parent containing the requests. Should move and rock with the ship.")]
+    public Transform requestParent;
 
     [Header("Top Line")]
     public Transform topSpawnPoint;
@@ -25,24 +29,54 @@ public class RequestLineManager : MonoBehaviour
     public float bottomRequestSpacing = 1.5f;
 
     [Header("Bottom Line Requests")]
-    public List<GameObject> bottomRequests =
-        new List<GameObject>();
+    public List<GameObject> bottomRequests = new List<GameObject>();
 
     [Header("Movement")]
     public float moveSpeed = 2f;
 
     [Header("Request Rotation")]
-    [Tooltip("Rotation of requests while they are on the request lines.")]
-    public Vector3 requestRotation =
-        new Vector3(180f, 0f, 0f);
+    public Vector3 requestRotation = new Vector3(180f, 0f, 0f);
 
     [Header("Bottom Request Lifetime")]
-    [Tooltip("How long a request stays on the bottom line before being destroyed.")]
     public float oldRequestTime = 30f;
 
     private List<RequestMovement> movingRequests =
         new List<RequestMovement>();
 
+    private void Awake()
+    {
+        if (requestParent == null)
+            requestParent = transform;
+    }
+
+    // =========================================================
+    // LOCAL POSITION HELPERS
+    // =========================================================
+
+    private Vector3 GetLocalPosition(Transform point)
+    {
+        return requestParent.InverseTransformPoint(point.position);
+    }
+
+    private Vector3 GetTopQueuePositionLocal(int queuePosition)
+    {
+        Vector3 start = GetLocalPosition(topSpawnPoint);
+        Vector3 end = GetLocalPosition(topEndPoint);
+
+        Vector3 direction = (end - start).normalized;
+
+        return end - direction * (queuePosition * topRequestSpacing);
+    }
+
+    private Vector3 GetBottomQueuePositionLocal(int queuePosition)
+    {
+        Vector3 start = GetLocalPosition(bottomStartPoint);
+        Vector3 end = GetLocalPosition(bottomEndPoint);
+
+        Vector3 direction = (end - start).normalized;
+
+        return start + direction * (queuePosition * bottomRequestSpacing);
+    }
 
     // =========================================================
     // ADD NEW REQUEST
@@ -57,9 +91,7 @@ public class RequestLineManager : MonoBehaviour
         {
             Debug.Log(
                 "Request line is full! " +
-                requests.Count +
-                "/" +
-                maxRequests
+                requests.Count + "/" + maxRequests
             );
 
             return false;
@@ -68,31 +100,28 @@ public class RequestLineManager : MonoBehaviour
         if (requests.Contains(request))
             return false;
 
+        // Keep requests in the ship's moving coordinate space.
+        request.transform.SetParent(requestParent, true);
+
         requests.Add(request);
 
         RequestMovement movement =
             request.GetComponent<RequestMovement>();
 
         if (movement == null)
-        {
-            movement =
-                request.AddComponent<RequestMovement>();
-        }
+            movement = request.AddComponent<RequestMovement>();
 
         if (!movingRequests.Contains(movement))
-        {
             movingRequests.Add(movement);
-        }
 
-        int queuePosition =
-            requests.IndexOf(request);
+        int queuePosition = requests.IndexOf(request);
 
         Vector3 targetPosition =
-            GetTopQueuePositionWorld(queuePosition);
+            GetTopQueuePositionLocal(queuePosition);
 
         movement.Setup(
             request,
-            topSpawnPoint.position,
+            GetLocalPosition(topSpawnPoint),
             targetPosition,
             moveSpeed,
             false,
@@ -106,37 +135,11 @@ public class RequestLineManager : MonoBehaviour
             "Request added to top line: " +
             request.name +
             " | Active: " +
-            requests.Count +
-            "/" +
-            maxRequests
+            requests.Count + "/" + maxRequests
         );
 
         return true;
     }
-
-
-    // =========================================================
-    // GET TOP QUEUE POSITION
-    // =========================================================
-
-    private Vector3 GetTopQueuePositionWorld(
-        int queuePosition
-    )
-    {
-        Vector3 direction =
-            (
-                topEndPoint.position -
-                topSpawnPoint.position
-            ).normalized;
-
-        return topEndPoint.position -
-               direction *
-               (
-                   queuePosition *
-                   topRequestSpacing
-               );
-    }
-
 
     // =========================================================
     // UPDATE TOP LINE
@@ -146,8 +149,7 @@ public class RequestLineManager : MonoBehaviour
     {
         for (int i = 0; i < requests.Count; i++)
         {
-            GameObject request =
-                requests[i];
+            GameObject request = requests[i];
 
             if (request == null)
                 continue;
@@ -158,19 +160,13 @@ public class RequestLineManager : MonoBehaviour
             if (movement == null)
                 continue;
 
-            Vector3 targetPosition =
-                GetTopQueuePositionWorld(i);
-
             movement.SetTargetPosition(
-                targetPosition
+                GetTopQueuePositionLocal(i)
             );
 
-            movement.SetLineRotation(
-                requestRotation
-            );
+            movement.SetLineRotation(requestRotation);
         }
     }
-
 
     // =========================================================
     // REMOVE REQUEST FROM TOP LINE
@@ -186,17 +182,12 @@ public class RequestLineManager : MonoBehaviour
 
         if (movement != null)
         {
-            movingRequests.Remove(
-                movement
-            );
-
+            movingRequests.Remove(movement);
             movement.StopMovement();
         }
 
         if (requests.Contains(request))
-        {
             requests.Remove(request);
-        }
 
         UpdateTopLine();
 
@@ -204,12 +195,9 @@ public class RequestLineManager : MonoBehaviour
             "Request removed from top line: " +
             request.name +
             " | Active: " +
-            requests.Count +
-            "/" +
-            maxRequests
+            requests.Count + "/" + maxRequests
         );
     }
-
 
     // =========================================================
     // CHECK IF TOP LINE HAS SPACE
@@ -220,7 +208,6 @@ public class RequestLineManager : MonoBehaviour
         return requests.Count < maxRequests;
     }
 
-
     // =========================================================
     // GET REQUEST COUNT
     // =========================================================
@@ -230,14 +217,11 @@ public class RequestLineManager : MonoBehaviour
         return requests.Count;
     }
 
-
     // =========================================================
     // MOVE REQUEST TO BOTTOM LINE
     // =========================================================
 
-    public void MoveRequestToOldLine(
-        GameObject request
-    )
+    public void MoveRequestToOldLine(GameObject request)
     {
         if (request == null)
             return;
@@ -245,12 +229,13 @@ public class RequestLineManager : MonoBehaviour
         if (bottomRequests.Contains(request))
             return;
 
-        // Remove from top line if it is still there.
         if (requests.Contains(request))
         {
             requests.Remove(request);
             UpdateTopLine();
         }
+
+        request.transform.SetParent(requestParent, true);
 
         bottomRequests.Add(request);
 
@@ -258,26 +243,17 @@ public class RequestLineManager : MonoBehaviour
             request.GetComponent<RequestMovement>();
 
         if (movement == null)
-        {
-            movement =
-                request.AddComponent<RequestMovement>();
-        }
+            movement = request.AddComponent<RequestMovement>();
 
         if (!movingRequests.Contains(movement))
-        {
             movingRequests.Add(movement);
-        }
 
-        Vector3 startPosition =
-            request.transform.position;
+        Vector3 startPosition = GetLocalPosition(bottomEndPoint);
 
-        int queuePosition =
-            bottomRequests.IndexOf(request);
+        int queuePosition = bottomRequests.IndexOf(request);
 
         Vector3 targetPosition =
-            GetBottomQueuePositionWorld(
-                queuePosition
-            );
+            GetBottomQueuePositionLocal(queuePosition);
 
         movement.Setup(
             request,
@@ -292,34 +268,9 @@ public class RequestLineManager : MonoBehaviour
         UpdateBottomLine();
 
         Debug.Log(
-            "Request moved to bottom line: " +
-            request.name
+            "Request moved to bottom line: " + request.name
         );
     }
-
-
-    // =========================================================
-    // GET BOTTOM QUEUE POSITION
-    // =========================================================
-
-    private Vector3 GetBottomQueuePositionWorld(
-        int queuePosition
-    )
-    {
-        Vector3 direction =
-            (
-                bottomEndPoint.position -
-                bottomStartPoint.position
-            ).normalized;
-
-        return bottomStartPoint.position +
-               direction *
-               (
-                   queuePosition *
-                   bottomRequestSpacing
-               );
-    }
-
 
     // =========================================================
     // UPDATE BOTTOM LINE
@@ -329,8 +280,7 @@ public class RequestLineManager : MonoBehaviour
     {
         for (int i = 0; i < bottomRequests.Count; i++)
         {
-            GameObject request =
-                bottomRequests[i];
+            GameObject request = bottomRequests[i];
 
             if (request == null)
                 continue;
@@ -341,27 +291,19 @@ public class RequestLineManager : MonoBehaviour
             if (movement == null)
                 continue;
 
-            Vector3 targetPosition =
-                GetBottomQueuePositionWorld(i);
-
             movement.SetTargetPosition(
-                targetPosition
+                GetBottomQueuePositionLocal(i)
             );
 
-            movement.SetLineRotation(
-                requestRotation
-            );
+            movement.SetLineRotation(requestRotation);
         }
     }
-
 
     // =========================================================
     // REMOVE BOTTOM REQUEST
     // =========================================================
 
-    public void RemoveBottomRequest(
-        GameObject request
-    )
+    public void RemoveBottomRequest(GameObject request)
     {
         if (request == null)
             return;
@@ -370,44 +312,31 @@ public class RequestLineManager : MonoBehaviour
             request.GetComponent<RequestMovement>();
 
         if (movement != null)
-        {
-            movingRequests.Remove(
-                movement
-            );
-        }
+            movingRequests.Remove(movement);
 
-        bottomRequests.Remove(
-            request
-        );
+        bottomRequests.Remove(request);
 
         UpdateBottomLine();
 
         Debug.Log(
-            "Removed bottom-line request: " +
-            request.name
+            "Removed bottom-line request: " + request.name
         );
     }
-
 
     // =========================================================
     // REMOVE MOVEMENT
     // =========================================================
 
-    public void RemoveMovement(
-        RequestMovement movement
-    )
+    public void RemoveMovement(RequestMovement movement)
     {
         if (movement == null)
             return;
 
-        movingRequests.Remove(
-            movement
-        );
+        movingRequests.Remove(movement);
 
         UpdateTopLine();
         UpdateBottomLine();
     }
-
 
     // =========================================================
     // CLEAR ALL REQUESTS
@@ -415,26 +344,16 @@ public class RequestLineManager : MonoBehaviour
 
     public void ClearRequests()
     {
-        foreach (
-            GameObject request
-            in requests
-        )
+        foreach (GameObject request in requests)
         {
             if (request != null)
-            {
                 Destroy(request);
-            }
         }
 
-        foreach (
-            GameObject request
-            in bottomRequests
-        )
+        foreach (GameObject request in bottomRequests)
         {
             if (request != null)
-            {
                 Destroy(request);
-            }
         }
 
         requests.Clear();

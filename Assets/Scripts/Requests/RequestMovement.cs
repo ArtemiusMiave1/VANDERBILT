@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class RequestMovement : MonoBehaviour
@@ -49,16 +50,17 @@ public class RequestMovement : MonoBehaviour
 
         oldRequestTimer = 0f;
 
-        // Use the rotation supplied by RequestLineManager.
+        // Rotation relative to the request parent.
         targetRotation =
             Quaternion.Euler(
                 lineRotation
             );
 
-        transform.position =
+        // Use local position so requests follow the ship.
+        transform.localPosition =
             startPosition;
 
-        transform.rotation =
+        transform.localRotation =
             targetRotation;
 
         moving = true;
@@ -106,29 +108,30 @@ public class RequestMovement : MonoBehaviour
 
     private void MoveRequest()
     {
-        transform.position =
+        // Move relative to the parent, not world space.
+        transform.localPosition =
             Vector3.MoveTowards(
-                transform.position,
+                transform.localPosition,
                 endPosition,
                 moveSpeed *
                 Time.deltaTime
             );
 
-        // Keep the selected rotation.
-        transform.rotation =
+        // Keep the selected local rotation.
+        transform.localRotation =
             targetRotation;
 
         if (
             Vector3.Distance(
-                transform.position,
+                transform.localPosition,
                 endPosition
             ) < 0.01f
         )
         {
-            transform.position =
+            transform.localPosition =
                 endPosition;
 
-            transform.rotation =
+            transform.localRotation =
                 targetRotation;
 
             moving = false;
@@ -164,7 +167,7 @@ public class RequestMovement : MonoBehaviour
                 newRotation
             );
 
-        transform.rotation =
+        transform.localRotation =
             targetRotation;
     }
 
