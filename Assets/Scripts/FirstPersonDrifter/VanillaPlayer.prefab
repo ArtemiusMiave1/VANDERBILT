@@ -361,6 +361,7 @@ MonoBehaviour:
   lockMouse: {fileID: 11400008}
   mouseLook1: {fileID: 11400010}
   mouseLook2: {fileID: 11400012}
+  grabbingSensitivity: 0.1
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 0

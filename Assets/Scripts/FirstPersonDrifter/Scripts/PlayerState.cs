@@ -8,7 +8,8 @@ public class PlayerState : MonoBehaviour
         Gameplay,
         Book,
         Menu,
-        Dialogue
+        Dialogue,
+        Grabbing
     }
 
     [Header("Current State")]
@@ -20,6 +21,11 @@ public class PlayerState : MonoBehaviour
     [Header("Mouse Look")]
     public MonoBehaviour mouseLook1;
     public MonoBehaviour mouseLook2;
+
+    [Header("Grabbing Settings")]
+    [Range(0.01f, 1f)]
+    [Tooltip("Multiplier for mouse movement when interacting with machinery.")]
+    public float grabbingSensitivity = 0.35f;
 
     private void Start()
     {
@@ -51,6 +57,10 @@ public class PlayerState : MonoBehaviour
 
             case State.Dialogue:
                 EnableUI();
+                break;
+
+            case State.Grabbing:
+                EnableGrabbing();
                 break;
         }
     }
@@ -104,6 +114,33 @@ public class PlayerState : MonoBehaviour
     }
 
     // =========================================================
+    // GRABBING
+    // =========================================================
+
+    private void EnableGrabbing()
+    {
+        // Disable camera movement.
+        if (mouseLook1 != null)
+            mouseLook1.enabled = false;
+
+        if (mouseLook2 != null)
+            mouseLook2.enabled = false;
+
+        // Unlock and show cursor.
+        if (lockMouse != null)
+            lockMouse.LockCursor(false);
+    }
+
+    // =========================================================
+    // GRABBING SENSITIVITY
+    // =========================================================
+
+    public float GetGrabbingSensitivity()
+    {
+        return grabbingSensitivity;
+    }
+
+    // =========================================================
     // STATE CHECKS
     // =========================================================
 
@@ -120,5 +157,10 @@ public class PlayerState : MonoBehaviour
     public bool IsMenu()
     {
         return currentState == State.Menu;
+    }
+
+    public bool IsGrabbing()
+    {
+        return currentState == State.Grabbing;
     }
 }
