@@ -207,7 +207,7 @@ MonoBehaviour:
   ShaderDuration: 2
   skyboxSpeed: {x: 0, y: 0}
   robotAnimator: {fileID: 672534942}
-  wheelAnimator: {fileID: 0}
+  wheelAnimator: {fileID: 1403664193}
   cloudintensity: 0
 --- !u!4 &990913736
 Transform:
@@ -227,6 +227,11 @@ Transform:
 --- !u!4 &1182420374 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6946563443612571845, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1403664193 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5129884681749808752, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
   m_PrefabInstance: {fileID: 4349624929307356314}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1426463325 stripped
