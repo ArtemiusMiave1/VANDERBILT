@@ -672,6 +672,13 @@ public class ShipMovement : MonoBehaviour
         currentLocation =
             arrivedLocation;
 
+        // Record one visit for each successful arrival.
+        // This also counts return visits to the same location.
+        if (DailyStatsManager.Instance != null)
+        {
+            DailyStatsManager.Instance.RecordLocationVisited();
+        }
+
 
         // -----------------------------------------------------
         // CONSUME FUEL
@@ -1038,6 +1045,12 @@ public class ShipMovement : MonoBehaviour
             "fuel",
             -currentFuelCost
         );
+
+        // Record fuel consumed for this completed route segment.
+        if (DailyStatsManager.Instance != null)
+        {
+            DailyStatsManager.Instance.RecordFuelConsumed(currentFuelCost);
+        }
     }
 
 

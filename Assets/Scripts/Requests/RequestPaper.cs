@@ -71,6 +71,12 @@ public class RequestPaper : MonoBehaviour
     private int deadlineMinutes;
     private bool deadlineSet = false;
 
+    [Header("Daily Statistics Tracking")]
+    [SerializeField] private bool acceptanceRecorded = false;
+    [SerializeField] private bool damageRecorded = false;
+    [SerializeField] private bool expirationRecorded = false;
+
+
     [Header("Sound")]
     public AudioSource audioSource;
 
@@ -291,6 +297,10 @@ public class RequestPaper : MonoBehaviour
         activeRequest = false;
         acceptedFromBoard = false;
 
+        acceptanceRecorded = false;
+        damageRecorded = false;
+        expirationRecorded = false;
+
         pendingGold = 0;
         requestVisual = null;
 
@@ -457,6 +467,7 @@ public class RequestPaper : MonoBehaviour
             (roundedTime + deliveryTime) % 1440;
 
         deadlineSet = true;
+        expirationRecorded = false;
 
         UpdateArrivalDisplay();
 
@@ -511,7 +522,7 @@ public class RequestPaper : MonoBehaviour
         if (!deadlineSet)
             return;
 
-        if (completed)
+        if (completed || expirationRecorded)
             return;
 
         CheckDeadline();
@@ -537,8 +548,14 @@ public class RequestPaper : MonoBehaviour
 
     private void DeadlineReached()
     {
-        if (completed)
+        if (completed || expirationRecorded)
             return;
+
+        expirationRecorded = true;
+        deadlineSet = false;
+
+        // Record expiry once. Existing delivery behaviour is unchanged.
+        DailyStatsManager.Instance?.RecordRequestExpired();
 
         Debug.Log(
             "Request deadline reached: " +
@@ -558,6 +575,7 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
+        RecordAcceptanceOnce();
         activeRequest = true;
 
         if (requestVisual != null)
@@ -576,6 +594,7 @@ public class RequestPaper : MonoBehaviour
         if (completed)
             return;
 
+        RecordAcceptanceOnce();
         acceptedFromBoard = true;
         activeRequest = true;
 
@@ -590,6 +609,28 @@ public class RequestPaper : MonoBehaviour
         );
     }
 
+
+    // =========================================================
+    // DAILY STATS HELPERS
+    // =========================================================
+
+    private void RecordAcceptanceOnce()
+    {
+        if (acceptanceRecorded)
+            return;
+
+        acceptanceRecorded = true;
+        DailyStatsManager.Instance?.RecordRequestAccepted();
+    }
+
+    private void RecordDamageOnce()
+    {
+        if (damageRecorded)
+            return;
+
+        damageRecorded = true;
+        DailyStatsManager.Instance?.RecordRequestDamaged();
+    }
 
     // =========================================================
     // FRAGILE CARGO
@@ -639,6 +680,7 @@ public class RequestPaper : MonoBehaviour
             fragileCondition =
                 FragileCondition.Damaged;
 
+            RecordDamageOnce();
             soundManager.PlaySFX(soundManager.Damaged);
           
             UpdateConditionStamp();
@@ -791,6 +833,8 @@ public class RequestPaper : MonoBehaviour
         completed = true;
         activeRequest = false;
 
+        DailyStatsManager.Instance?.RecordRequestCompleted();
+
         // -----------------------------------------------------
         // CALCULATE REWARD
         // -----------------------------------------------------
@@ -914,6 +958,9 @@ public class RequestPaper : MonoBehaviour
         int goldToCollect = pendingGold;
 
         pendingGold = 0;
+
+        // Record money when collected, not when delivery is completed.
+        DailyStatsManager.Instance?.RecordMoneyEarned(goldToCollect);
 
         Debug.Log(
             "Collected " +

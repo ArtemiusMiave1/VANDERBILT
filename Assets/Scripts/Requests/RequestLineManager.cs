@@ -303,10 +303,36 @@ public class RequestLineManager : MonoBehaviour
     // REMOVE BOTTOM REQUEST
     // =========================================================
 
+    // =========================================================
+    // REMOVE BOTTOM REQUEST
+    // =========================================================
+
     public void RemoveBottomRequest(GameObject request)
     {
         if (request == null)
             return;
+
+        // Only count requests actually on the bottom line.
+        if (!bottomRequests.Contains(request))
+            return;
+
+        RequestPaper requestPaper =
+            request.GetComponent<RequestPaper>();
+
+        // Record discarded request.
+        // Do not count requests already completed.
+        if (requestPaper != null && !requestPaper.completed)
+        {
+            if (DailyStatsManager.Instance != null)
+            {
+                DailyStatsManager.Instance.RecordRequestDiscarded();
+            }
+
+            Debug.Log(
+                "Request discarded: " +
+                requestPaper.GetRequestTitle()
+            );
+        }
 
         RequestMovement movement =
             request.GetComponent<RequestMovement>();

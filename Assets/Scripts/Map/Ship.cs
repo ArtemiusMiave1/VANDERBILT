@@ -239,7 +239,7 @@ public class Ship : MonoBehaviour
             ShipState.Stopped
         )
         {
-            GameClock.Instance.StopClock();
+            //GameClock.Instance.StopClock();
 
             Debug.Log(
                 "Ship stopped - GameClock stopped."

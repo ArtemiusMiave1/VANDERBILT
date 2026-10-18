@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -65,31 +66,25 @@ public class ResourceDepotPaper : MonoBehaviour
             return;
         }
 
-
         int total =
             CalculateTotal();
 
-
         int remainingGold =
             shipCargo.gold - total;
-
 
         totalText.text =
             "TOTAL: " +
             total +
             " Gold";
 
-
         goldText.text =
             "GOLD: " +
             shipCargo.gold;
-
 
         remainingGoldText.text =
             "AFTER PURCHASE: " +
             remainingGold +
             " Gold";
-
 
         purchaseWeight.text =
             "weight " +
@@ -147,7 +142,6 @@ public class ResourceDepotPaper : MonoBehaviour
     {
         int total = 0;
 
-
         foreach (
             ResourceOrderRow row
             in orderRows
@@ -159,7 +153,6 @@ public class ResourceDepotPaper : MonoBehaviour
                     row.GetTotalCost();
             }
         }
-
 
         return total;
     }
@@ -173,7 +166,6 @@ public class ResourceDepotPaper : MonoBehaviour
     {
         float tempWeight = 0f;
 
-
         foreach (
             ResourceOrderRow row
             in orderRows
@@ -182,22 +174,18 @@ public class ResourceDepotPaper : MonoBehaviour
             if (row == null)
                 continue;
 
-
             int amount =
                 row.GetAmount();
-
 
             float resourceWeight =
                 shipCargo.GetResourceWeight(
                     row.resourceType
                 );
 
-
             tempWeight +=
                 amount *
                 resourceWeight;
         }
-
 
         return tempWeight;
     }
@@ -217,7 +205,6 @@ public class ResourceDepotPaper : MonoBehaviour
             return true;
         }
 
-
         return false;
     }
 
@@ -228,10 +215,6 @@ public class ResourceDepotPaper : MonoBehaviour
 
     public void PurchaseOrder()
     {
-        if (CheckOverWeight())
-            return;
-
-
         if (shipCargo == null)
         {
             Debug.LogError(
@@ -241,6 +224,8 @@ public class ResourceDepotPaper : MonoBehaviour
             return;
         }
 
+        if (CheckOverWeight())
+            return;
 
         int total =
             CalculateTotal();
@@ -272,20 +257,16 @@ public class ResourceDepotPaper : MonoBehaviour
             if (row == null)
                 continue;
 
-
             int amount =
                 row.GetAmount();
 
-
             if (amount <= 0)
                 continue;
-
 
             shipCargo.AddOrRemoveResource(
                 row.resourceType,
                 amount
             );
-
 
             Debug.Log(
                 "Amount " +
@@ -304,6 +285,22 @@ public class ResourceDepotPaper : MonoBehaviour
             "gold",
             -total
         );
+
+
+        // -----------------------------------------------------
+        // DAILY STATISTICS - MONEY SPENT
+        // -----------------------------------------------------
+
+        if (DailyStatsManager.Instance != null && total > 0)
+        {
+            DailyStatsManager.Instance.RecordMoneySpent(total);
+
+            Debug.Log(
+                "Daily Stats: Recorded " +
+                total +
+                " gold spent."
+            );
+        }
 
 
         Debug.Log(
