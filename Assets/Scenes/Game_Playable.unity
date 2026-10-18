@@ -506,6 +506,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1182420374}
+    - target: {fileID: 3868455670956442532, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4390967815447741737, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -513,10 +517,6 @@ PrefabInstance:
     - target: {fileID: 4578517753760179685, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_Enabled
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4928883389546812505, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
-      propertyPath: m_Lightmapping
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5364223667900979869, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

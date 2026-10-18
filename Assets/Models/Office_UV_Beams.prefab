@@ -80,9 +80,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7794074760473933090, guid: 39491c72458757d4a954f3cfcc26837a, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7794074760473933090, guid: 39491c72458757d4a954f3cfcc26837a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 39491c72458757d4a954f3cfcc26837a, type: 3}
       propertyPath: m_Name
       value: Office_Model_Textured_Beams
+      objectReference: {fileID: 0}
+    - target: {fileID: 2497066617127190755, guid: 39491c72458757d4a954f3cfcc26837a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
