@@ -274,7 +274,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press 'E' to Accept Requests!
+  m_text: Let Click to Accept Requests!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
@@ -904,7 +904,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Press ''E'' to pin Requests on the corkboard. '
+  m_text: 'Left Click to pin Requests on the corkboard. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
