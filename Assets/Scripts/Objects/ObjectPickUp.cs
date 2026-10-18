@@ -64,7 +64,7 @@ public class ObjectPickUp : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetMouseButtonDown(0))
         {
             // =================================================
             // NOT HOLDING ANYTHING

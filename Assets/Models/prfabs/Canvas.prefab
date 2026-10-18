@@ -75,6 +75,67 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &358865510466992468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3986586599686036538}
+  - component: {fileID: 3433397837135683869}
+  m_Layer: 0
+  m_Name: CrosshairManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3986586599686036538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358865510466992468}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -960, y: -540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7897285774154196621}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3433397837135683869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358865510466992468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d27287ff031dc7b4c96bfa69ee15441d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrosshairManager
+  crosshairImage: {fileID: 5034501040002987791}
+  defaultCrosshair: {fileID: 21300000, guid: 0705639ae547bfd46a5849c180e258cc, type: 3}
+  interactCrosshair: {fileID: 21300000, guid: 02864a79efbcdf04caad250ee4652e26, type: 3}
+  grabbingCrosshair: {fileID: 21300000, guid: 02864a79efbcdf04caad250ee4652e26, type: 3}
+  playerCamera: {fileID: 0}
+  interactableTag: Interactable
+  pickupTag: canPickUp
+  interactionDistance: 3
+  interactionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  normalCursor: {fileID: 2800000, guid: ccdc14b6275a8b64e9ca0b166ff3d5f2, type: 3}
+  handCursor: {fileID: 2800000, guid: ccdc14b6275a8b64e9ca0b166ff3d5f2, type: 3}
+  normalCursorHotspot: {x: 0, y: 0}
+  handCursorHotspot: {x: 0, y: 0}
+  showCrosshairWhenGrabbing: 1
+  followGrabbedObject: 1
 --- !u!1 &655004479645910874
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +300,7 @@ RectTransform:
   m_GameObject: {fileID: 752223791098629133}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.06213818, y: 0.06213818, z: 0.06213818}
+  m_LocalScale: {x: 0.37166962, y: 0.37166962, z: 0.37166962}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7897285774154196621}
@@ -1149,6 +1210,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3986586599686036538}
   - {fileID: 7585610294254947152}
   - {fileID: 3556643218539637782}
   - {fileID: 778876456192691522}
@@ -1240,6 +1302,7 @@ MonoBehaviour:
   pauseMenuUI: {fileID: 884854427483808774}
   settingsMenuUI: {fileID: 1622366820534192483}
   controlsMenuUI: {fileID: 509623565466214279}
+  playerState: {fileID: 0}
 --- !u!1 &6730667302241801118
 GameObject:
   m_ObjectHideFlags: 0

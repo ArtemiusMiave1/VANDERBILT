@@ -145,7 +145,7 @@ MonoBehaviour:
   interactionDistance: 3
   interactionImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  interactableColor: {r: 1, g: 0, b: 0, a: 1}
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
   requestGenerator: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
@@ -222,7 +222,7 @@ MonoBehaviour:
   pickUpRange: 5
   corkBoard: {fileID: 0}
   requestLineManager: {fileID: 0}
-  heldRotationOffset: {x: 0, y: 0, z: 0}
+  heldRotationOffset: {x: -70, y: 0, z: 0}
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,15 +567,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8750301810806067918, guid: 0edd7351c9a668a48ae9ca9dbf0263d1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0129003525
+      value: -0.238
       objectReference: {fileID: 0}
     - target: {fileID: 8750301810806067918, guid: 0edd7351c9a668a48ae9ca9dbf0263d1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.162
+      value: 0.664
       objectReference: {fileID: 0}
     - target: {fileID: 8750301810806067918, guid: 0edd7351c9a668a48ae9ca9dbf0263d1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.839
+      value: 0.297
       objectReference: {fileID: 0}
     - target: {fileID: 8750301810806067918, guid: 0edd7351c9a668a48ae9ca9dbf0263d1, type: 3}
       propertyPath: m_LocalRotation.w

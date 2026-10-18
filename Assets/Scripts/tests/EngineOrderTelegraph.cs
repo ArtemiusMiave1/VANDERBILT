@@ -49,8 +49,8 @@ public class EngineOrderTelegraph : MonoBehaviour
     public float snapSpeed = 180f;
 
     [Header("Cursor")]
-    [Tooltip("Keep cursor on the original hit point.")]
-    public bool keepCursorOnGrabPoint = true;
+    [Tooltip("Warp the actual mouse cursor to the clicked point on the handle. Disable this if only the Canvas crosshair should follow.")]
+    public bool keepCursorOnGrabPoint = false;
 
     private Vector3 localGrabPoint;
 
@@ -110,7 +110,7 @@ public class EngineOrderTelegraph : MonoBehaviour
             return;
         }
 
-        // Remember the handle's original attachment.
+        // Store the handle's original attachment.
         originalHandlePivotPosition =
             pivot.InverseTransformPoint(handle.position);
 
@@ -197,7 +197,7 @@ public class EngineOrderTelegraph : MonoBehaviour
             return;
         }
 
-        // Store the exact hit point in handle local space.
+        // Save the exact point clicked on the handle.
         localGrabPoint =
             handle.InverseTransformPoint(hit.point);
 
@@ -211,6 +211,16 @@ public class EngineOrderTelegraph : MonoBehaviour
         {
             playerState.SetState(
                 PlayerState.State.Grabbing
+            );
+        }
+
+        // Tell CrosshairManager to follow the clicked point.
+        // This must happen AFTER setting PlayerState.Grabbing.
+        if (CrosshairManager.Instance != null)
+        {
+            CrosshairManager.Instance.SetGrabbedObject(
+                handle,
+                hit.point
             );
         }
     }
@@ -315,7 +325,8 @@ public class EngineOrderTelegraph : MonoBehaviour
 
         if (direction.magnitude < minimumDistanceFromPivot)
         {
-            // Use previous direction if exactly at centre.
+            // If the handle is exactly at the pivot,
+            // use its previous direction instead.
             if (direction.sqrMagnitude < 0.000001f)
             {
                 direction = new Vector2(
@@ -356,7 +367,7 @@ public class EngineOrderTelegraph : MonoBehaviour
             maximumZ
         );
 
-        // X remains fixed.
+        // Keep X fixed.
         targetLocalPosition.x =
             currentLocalPosition.x;
 
@@ -365,13 +376,15 @@ public class EngineOrderTelegraph : MonoBehaviour
                 targetLocalPosition
             );
 
-        // Update pivot and speed in real time.
+        // Update pivot, throttle, and handle rotation.
         RotatePivotTowardsHandle();
         UpdateSpeedFromPivot();
 
         RotateHandleTowardsPivot();
         UpdateCurrentValue();
 
+        // Optional: move the hardware cursor as well.
+        // The Canvas crosshair follows independently.
         if (keepCursorOnGrabPoint)
         {
             KeepCursorOnGrabPoint();
@@ -379,7 +392,7 @@ public class EngineOrderTelegraph : MonoBehaviour
     }
 
     // =========================================================
-    // KEEP CURSOR ON ORIGINAL GRAB POINT
+    // OPTIONAL HARDWARE CURSOR FOLLOWING
     // =========================================================
 
     private void KeepCursorOnGrabPoint()
@@ -413,8 +426,6 @@ public class EngineOrderTelegraph : MonoBehaviour
             cursorPosition
         );
 
-        // Prevent cursor repositioning from being
-        // interpreted as additional mouse movement.
         previousMousePosition = cursorPosition;
     }
 
@@ -453,6 +464,11 @@ public class EngineOrderTelegraph : MonoBehaviour
             playerState.SetState(
                 PlayerState.State.Gameplay
             );
+        }
+        else if (CrosshairManager.Instance != null)
+        {
+            // Fallback when no PlayerState is assigned.
+            CrosshairManager.Instance.StopGrabbing();
         }
     }
 
@@ -600,7 +616,7 @@ public class EngineOrderTelegraph : MonoBehaviour
     }
 
     // =========================================================
-    // REAL-TIME SPEED + SOUND
+    // REAL-TIME SPEED AND SOUND
     // =========================================================
 
     private void UpdateSpeedFromPivot()
@@ -620,7 +636,7 @@ public class EngineOrderTelegraph : MonoBehaviour
             4
         );
 
-        // Only play sound when speed state changes.
+        // Only play sound when the throttle state changes.
         if (newSpeedState != speedState)
         {
             speedState = newSpeedState;
