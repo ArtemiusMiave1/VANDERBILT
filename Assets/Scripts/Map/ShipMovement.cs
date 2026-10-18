@@ -8,14 +8,15 @@ public class ShipMovement : MonoBehaviour
     public float speed = 5f;
 
     [Header("Speed Control")]
-    [Tooltip("Physical lever that controls the ship's speed.")]
-    public TestLever speedControl;
+    [Tooltip("Engine Order Telegraph controlling the ship's speed (0%, 25%, 50%, 75%, 100%).")]
+    public EngineOrderTelegraph engineTelegraph;
 
     [Header("Current Movement Stats")]
     public float currentSpeed;
     public float currentCargoWeight;
 
-    [Range(0, 5)]
+    [Range(0, 4)]
+    [Tooltip("Telegraph state: 0=Stop, 1=25%, 2=50%, 3=75%, 4=100%.")]
     public int currentSpeedLevel = 0;
 
     [Header("Locations")]
@@ -90,7 +91,7 @@ public class ShipMovement : MonoBehaviour
     [Tooltip("Trigger that hides the fax machine.")]
     public string faxHideTrigger = "Hide";
 
-    private bool wasAtResourceDepot = false; 
+    private bool wasAtResourceDepot = false;
 
     // =========================================================
     // PRIVATE VARIABLES
@@ -1221,47 +1222,17 @@ public class ShipMovement : MonoBehaviour
 
     private void UpdateSpeedLevel()
     {
-        if (speedControl == null)
+        // Keep the previous full-speed fallback if no controller is assigned.
+        if (engineTelegraph == null)
         {
-            currentSpeedLevel = 5;
-            currentFuelCost = 5;
-
+            currentSpeedLevel = 4;
+            currentFuelCost = 4;
             return;
         }
 
-
-        float leverSpeed =
-            speedControl.GetSpeed();
-
-
-        if (leverSpeed <= 0f)
-        {
-            currentSpeedLevel = 0;
-        }
-        else if (leverSpeed <= 20f)
-        {
-            currentSpeedLevel = 1;
-        }
-        else if (leverSpeed <= 40f)
-        {
-            currentSpeedLevel = 2;
-        }
-        else if (leverSpeed <= 60f)
-        {
-            currentSpeedLevel = 3;
-        }
-        else if (leverSpeed <= 80f)
-        {
-            currentSpeedLevel = 4;
-        }
-        else
-        {
-            currentSpeedLevel = 5;
-        }
-
-
-        currentFuelCost =
-            currentSpeedLevel;
+        // The telegraph updates its speed state live while being dragged.
+        currentSpeedLevel = Mathf.Clamp(engineTelegraph.GetSpeedState(), 0, 4);
+        currentFuelCost = currentSpeedLevel;
     }
 
 
@@ -1276,7 +1247,7 @@ public class ShipMovement : MonoBehaviour
 
 
         float speedPercentage =
-            currentSpeedLevel / 5f;
+            currentSpeedLevel / 4f;
 
 
         float cargoSpeedMultiplier =
@@ -1351,11 +1322,10 @@ public class ShipMovement : MonoBehaviour
 
     public float GetLeverSpeed()
     {
-        if (speedControl == null)
+        if (engineTelegraph == null)
             return 100f;
 
-
-        return speedControl.GetSpeed();
+        return engineTelegraph.GetSpeed();
     }
 
 

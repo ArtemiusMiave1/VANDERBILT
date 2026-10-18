@@ -175,6 +175,7 @@ MonoBehaviour:
   maximumY: 0.5
   minimumZ: -0.5
   maximumZ: 0.5
+  minimumDistanceFromPivot: 0.3
   minimumPivotAngle: -90
   maximumPivotAngle: 90
   pivotRotationOffset: 0
@@ -324,7 +325,7 @@ GameObject:
   - component: {fileID: 3866116937190783852}
   m_Layer: 0
   m_Name: HandleHitbox
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

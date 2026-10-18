@@ -63,6 +63,26 @@ public class PlayerState : MonoBehaviour
                 EnableGrabbing();
                 break;
         }
+        if (CrosshairManager.Instance != null)
+        {
+            switch (newState)
+            {
+                case State.Gameplay:
+                    CrosshairManager.Instance.StopGrabbing();
+                    CrosshairManager.Instance.StopReading();
+                    break;
+
+                case State.Book:
+                case State.Menu:
+                case State.Dialogue:
+                    CrosshairManager.Instance.StartReading();
+                    break;
+
+                case State.Grabbing:
+                    CrosshairManager.Instance.StartGrabbing();
+                    break;
+            }
+        }
     }
 
     // =========================================================
@@ -129,6 +149,7 @@ public class PlayerState : MonoBehaviour
         // Unlock and show cursor.
         if (lockMouse != null)
             lockMouse.LockCursor(false);
+            Cursor.visible = false;
     }
 
     // =========================================================
