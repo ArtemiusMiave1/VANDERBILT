@@ -639,6 +639,8 @@ public class RequestPaper : MonoBehaviour
             fragileCondition =
                 FragileCondition.Damaged;
 
+            soundManager.PlaySFX(soundManager.Damaged);
+          
             UpdateConditionStamp();
 
             Debug.Log(
@@ -660,6 +662,8 @@ public class RequestPaper : MonoBehaviour
         {
             fragileCondition =
                 FragileCondition.Broken;
+
+            soundManager.PlaySFX(soundManager.Break);
 
             UpdateConditionStamp();
 

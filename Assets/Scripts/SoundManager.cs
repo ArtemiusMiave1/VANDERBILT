@@ -14,6 +14,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip Button;
     public AudioClip Lever;
     public AudioClip RequestDeliveryHatch;
+    public AudioClip Break;
+    public AudioClip Damaged;
 
     [Header("Request Sound Volumes")]
     [Range(0f, 1f)] public float RequestVolume = 1f;
@@ -22,6 +24,8 @@ public class SoundManager : MonoBehaviour
     [Range(0f, 1f)] public float ButtonVolume = 1f;
     [Range(0f, 1f)] public float LeverVolume = 1f;
     [Range(0f, 1f)] public float RequestDeliveryHatchVolume = 1f;
+    [Range(0f, 1f)] public float BreakVolume = 1f;
+    [Range(0f, 1f)] public float DamagedVolume = 1f;
 
 
     [Header("Fax Sounds")]
@@ -172,6 +176,10 @@ public class SoundManager : MonoBehaviour
             volume = LandingVolume;
         else if (clip == StopMoving)
             volume = StopMovingVolume;
+        else if (clip == Break)
+            volume = BreakVolume;
+        else if (clip == Damaged) 
+            volume = DamagedVolume;
 
         SFXSource.PlayOneShot(clip, volume);
     }

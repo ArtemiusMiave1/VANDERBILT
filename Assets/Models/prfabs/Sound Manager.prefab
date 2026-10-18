@@ -579,12 +579,16 @@ MonoBehaviour:
   Button: {fileID: 8300000, guid: bcde9f5f31bb26545ab3e6fb68b44b27, type: 3}
   Lever: {fileID: 8300000, guid: 06f3dc9748da0334192d555e1f601ac8, type: 3}
   RequestDeliveryHatch: {fileID: 8300000, guid: d3a365fbdbbb3e149afb39c3f5976787, type: 3}
+  Break: {fileID: 8300000, guid: b9380c40e6bf2cd4e8228b13a89c7e7e, type: 3}
+  Damaged: {fileID: 8300000, guid: 757a0d8ca5318fa40b1c9b579104962a, type: 3}
   RequestVolume: 1
   RequestAcceptedVolume: 1
-  RequestCompleteVolume: 0.786
+  RequestCompleteVolume: 0.874
   ButtonVolume: 0.553
   LeverVolume: 0.65
   RequestDeliveryHatchVolume: 1
+  BreakVolume: 0.505
+  DamagedVolume: 0.835
   FaxPrint: {fileID: 8300000, guid: d8245574d5885194d83cab782cd617a3, type: 3}
   FaxPurchase: {fileID: 8300000, guid: 8dc62523a246b174387feb08850f0a4f, type: 3}
   FaxPrintVolume: 1
@@ -1420,7 +1424,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 72aa74a29ac74864b9465f8d199c69ab, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.676
+  m_Volume: 0.52
   m_Pitch: 1
   Loop: 1
   Mute: 0
