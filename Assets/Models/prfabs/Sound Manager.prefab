@@ -581,7 +581,7 @@ MonoBehaviour:
   RequestDeliveryHatch: {fileID: 8300000, guid: d3a365fbdbbb3e149afb39c3f5976787, type: 3}
   RequestVolume: 1
   RequestAcceptedVolume: 1
-  RequestCompleteVolume: 1
+  RequestCompleteVolume: 0.786
   ButtonVolume: 0.553
   LeverVolume: 0.65
   RequestDeliveryHatchVolume: 1
