@@ -1455,6 +1455,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7897285774154196621}
     m_Modifications:
+    - target: {fileID: 893401499519047300, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1049392748218506012, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1543,6 +1547,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3723806784922233621, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 3723806784922233621, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.7
+      objectReference: {fileID: 0}
     - target: {fileID: 4021597501306590517, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
       propertyPath: m_text
       value: Fill out Order Forms at Resource Depots to purchase fuel/resources.
@@ -1583,6 +1595,18 @@ PrefabInstance:
     - target: {fileID: 6616304893069399434, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073538669625355590, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7166222699622973331, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 102.5313
+      objectReference: {fileID: 0}
+    - target: {fileID: 7166222699622973331, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -14.0776
       objectReference: {fileID: 0}
     - target: {fileID: 8552370542897693424, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
       propertyPath: m_IsActive
@@ -2189,6 +2213,38 @@ PrefabInstance:
       propertyPath: exitButton
       value: 
       objectReference: {fileID: 8271898561466894093}
+    - target: {fileID: 3050000218176445070, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_fontSize
+      value: 5.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050000218176445070, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050000218176445070, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 5.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 4823458322397107608, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642740426702060159, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 5.81113
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642740426702060159, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 6.96492
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642740426702060159, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -39.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642740426702060159, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 39.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6642067377068390634, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
       propertyPath: IndexPageButton
       value: 
@@ -2275,7 +2331,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7485285647392327391, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3487650267964142867, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9c9dd524b885454eaf71c1babccbbcb, type: 3}
