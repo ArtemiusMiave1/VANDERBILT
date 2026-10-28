@@ -229,6 +229,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6946563443612571845, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
   m_PrefabInstance: {fileID: 4349624929307356314}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1182420375 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6633960279088991000, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede1f84481b35bd478d6627bf0657725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerState
 --- !u!1 &1287656230
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +552,18 @@ PrefabInstance:
       propertyPath: routeCameraShake
       value: 
       objectReference: {fileID: 1595112559}
+    - target: {fileID: 3223352044908585947, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: defaultCrosshair
+      value: 
+      objectReference: {fileID: 21300000, guid: d718e75cbafa5914994aac172dd087d2, type: 3}
+    - target: {fileID: 3223352044908585947, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: grabbingCrosshair
+      value: 
+      objectReference: {fileID: 21300000, guid: 0ba953f721fd6af42b9dea120710277d, type: 3}
+    - target: {fileID: 3223352044908585947, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: interactCrosshair
+      value: 
+      objectReference: {fileID: 21300000, guid: 0ba953f721fd6af42b9dea120710277d, type: 3}
     - target: {fileID: 3223664380969652253, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -645,6 +668,10 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8921541320580243343, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: playerState
+      value: 
+      objectReference: {fileID: 1182420375}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

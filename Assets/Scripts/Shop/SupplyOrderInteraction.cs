@@ -13,6 +13,7 @@ public class SupplyOrderInteraction : MonoBehaviour
     public FirstPersonDrifter playerMovement;
     public MouseLook playerMouseLook;
     public MouseLook cameraMouseLook;
+    public PlayerState playerState;
 
 
     // =========================================================
@@ -22,9 +23,8 @@ public class SupplyOrderInteraction : MonoBehaviour
     private void Start()
     {
         // The Fax itself is controlled by ShipMovement.
-        //
-        // ShipMovement will activate it when the ship has
-        // stopped at a Resource Depot.
+        // ShipMovement activates it when the ship stops
+        // at a Resource Depot.
 
         if (uiCamera != null)
         {
@@ -39,162 +39,108 @@ public class SupplyOrderInteraction : MonoBehaviour
 
     public void OpenSupplyOrder()
     {
-        // -----------------------------------------------------
-        // Disable player movement
-        // -----------------------------------------------------
-
+        // Disable player movement.
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
         }
 
-
-        // -----------------------------------------------------
-        // Disable player looking
-        // -----------------------------------------------------
-
+        // Disable player looking.
         if (playerMouseLook != null)
         {
             playerMouseLook.enabled = false;
         }
-
 
         if (cameraMouseLook != null)
         {
             cameraMouseLook.enabled = false;
         }
 
-
-        // -----------------------------------------------------
-        // Disable player camera
-        // -----------------------------------------------------
-
+        // Disable player camera.
         if (playerCamera != null)
         {
             playerCamera.gameObject.SetActive(false);
         }
 
-
-        // -----------------------------------------------------
-        // Enable close-up UI camera
-        // -----------------------------------------------------
-
+        // Enable close-up UI camera.
         if (uiCamera != null)
         {
             uiCamera.gameObject.SetActive(true);
         }
 
-
-        // -----------------------------------------------------
-        // Show the order form
-        // -----------------------------------------------------
-        //
-        // This is safe because the player has interacted
-        // with the Fax.
-        //
-        // We DO NOT hide it when CloseSupplyOrder()
-        // is called.
-
+        // Show the Order Form.
         if (supplyOrderUI != null)
         {
             supplyOrderUI.SetActive(true);
         }
 
-
-        // -----------------------------------------------------
-        // Enable mouse
-        // -----------------------------------------------------
-
-        Cursor.lockState =
-            CursorLockMode.None;
-
-        Cursor.visible = true;
+        // Switch to Book state.
+        // This disables gameplay camera controls and
+        // shows the regular mouse cursor.
+        if (playerState != null)
+        {
+            playerState.SetState(PlayerState.State.Book);
+        }
+        else
+        {
+            // Fallback if PlayerState is not assigned.
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
 
     // =========================================================
     // CLOSE SUPPLY ORDER
     // =========================================================
-    //
-    // Called by the X button.
-    //
-    // IMPORTANT:
-    //
-    // This ONLY closes the close-up camera.
-    //
-    // It does NOT hide the Fax.
-    //
-    // The Fax stays visible because the ship is still
-    // stopped at the Resource Depot.
-    // =========================================================
 
     public void CloseSupplyOrder()
     {
-        // -----------------------------------------------------
-        // Disable close-up camera
-        // -----------------------------------------------------
-
+        // Disable close-up camera.
         if (uiCamera != null)
         {
             uiCamera.gameObject.SetActive(false);
         }
 
-
-        // -----------------------------------------------------
-        // Enable player camera
-        // -----------------------------------------------------
-
+        // Enable player camera.
         if (playerCamera != null)
         {
             playerCamera.gameObject.SetActive(true);
         }
 
-
-        // -----------------------------------------------------
-        // Enable player movement
-        // -----------------------------------------------------
-
+        // Re-enable player movement.
         if (playerMovement != null)
         {
             playerMovement.enabled = true;
         }
 
-
-        // -----------------------------------------------------
-        // Enable player looking
-        // -----------------------------------------------------
-
+        // Re-enable player looking.
         if (playerMouseLook != null)
         {
             playerMouseLook.enabled = true;
         }
-
 
         if (cameraMouseLook != null)
         {
             cameraMouseLook.enabled = true;
         }
 
+        // Return to Gameplay state.
+        // This restores the gameplay cursor behavior
+        // and stops the reading crosshair state.
+        if (playerState != null)
+        {
+            playerState.SetState(PlayerState.State.Gameplay);
+        }
+        else
+        {
+            // Fallback if PlayerState is not assigned.
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
-        // -----------------------------------------------------
-        // Lock mouse
-        // -----------------------------------------------------
-
-        Cursor.lockState =
-            CursorLockMode.Locked;
-
-        Cursor.visible = false;
-
-
-        // -----------------------------------------------------
-        // DO NOT HIDE THE FAX
-        // -----------------------------------------------------
-        //
-        // Do NOT put this here:
-        //
-        // supplyOrderUI.SetActive(false);
-        //
-        // ShipMovement will hide the Fax automatically
-        // when the player starts travelling.
+        // IMPORTANT:
+        // Do NOT hide the Fax here.
+        // ShipMovement handles hiding it when travelling.
     }
 }

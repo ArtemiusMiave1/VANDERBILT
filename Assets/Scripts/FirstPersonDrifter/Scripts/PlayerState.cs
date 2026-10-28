@@ -41,6 +41,7 @@ public class PlayerState : MonoBehaviour
     {
         currentState = newState;
 
+        // Apply the appropriate player controls.
         switch (currentState)
         {
             case State.Gameplay:
@@ -63,6 +64,15 @@ public class PlayerState : MonoBehaviour
                 EnableGrabbing();
                 break;
         }
+
+        // Control the regular mouse cursor.
+        // Visible in UI and Book states, hidden in Gameplay and Grabbing.
+        Cursor.visible =
+            newState == State.Book ||
+            newState == State.Menu ||
+            newState == State.Dialogue;
+
+        // Control the center-screen crosshair.
         if (CrosshairManager.Instance != null)
         {
             switch (newState)
@@ -102,7 +112,7 @@ public class PlayerState : MonoBehaviour
     }
 
     // =========================================================
-    // BOOK
+    // BOOK / ORDER FORM
     // =========================================================
 
     private void EnableBook()
@@ -146,10 +156,9 @@ public class PlayerState : MonoBehaviour
         if (mouseLook2 != null)
             mouseLook2.enabled = false;
 
-        // Unlock and show cursor.
+        // Unlock the mouse for grabbing interactions.
         if (lockMouse != null)
             lockMouse.LockCursor(false);
-            Cursor.visible = false;
     }
 
     // =========================================================
