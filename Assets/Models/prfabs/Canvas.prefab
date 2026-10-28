@@ -1535,7 +1535,56 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1064073807845054885, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_text
+      value: Left Click to Accept Requests!
+      objectReference: {fileID: 0}
+    - target: {fileID: 3245750007461632028, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021597501306590517, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_text
+      value: Fill out Order Forms at Resource Depots to purchase fuel/resources.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525954628406725240, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812306077121328295, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_text
+      value: 'Left Click and Hold at the map table to route your way!
+
+        Right
+        Click to remove route!
+
+        !TRY TO STEER CLEAR OF DANGEROUS ROUTES!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5818314908262706542, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5910283991322016296, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 201.0172
+      objectReference: {fileID: 0}
+    - target: {fileID: 5910283991322016296, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -33.49138
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990276300928601790, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 202.0468
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990276300928601790, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -9.5766
+      objectReference: {fileID: 0}
     - target: {fileID: 6616304893069399434, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8552370542897693424, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}

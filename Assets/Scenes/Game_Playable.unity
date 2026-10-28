@@ -502,6 +502,17 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &1998234591 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3032319774116315978, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd3d7cb146d6d945bda49c5fec575a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipMovement
 --- !u!1001 &4349624929307356314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -590,6 +601,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0cad04c8edd572e4794422dd8b206822, type: 2}
+    - target: {fileID: 5378655985673008494, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: shipMovement
+      value: 
+      objectReference: {fileID: 1998234591}
     - target: {fileID: 5742829615371906640, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_IsActive
       value: 1
