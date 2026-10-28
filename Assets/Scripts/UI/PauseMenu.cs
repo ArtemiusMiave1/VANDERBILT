@@ -24,21 +24,51 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = false;
     }
 
-    private void Update()
+    // =========================================================
+    // UPDATE
+    // =========================================================
+
+  private void Update()
+{
+    if (!Input.GetKeyDown(KeyCode.Escape))
+        return;
+
+    // If the pause menu is open, resume the game.
+    if (GameIsPaused)
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
+        Resume();
+        return;
     }
 
+    // If a book is open, close it with Escape.
+    if (playerState != null && playerState.IsBook())
+    {
+        HandBook handBook = FindFirstObjectByType<HandBook>();
+        TutBook tutBook = FindFirstObjectByType<TutBook>();
+
+        if (handBook != null &&
+            handBook.bookCanvas != null &&
+            handBook.bookCanvas.activeSelf)
+        {
+            handBook.CloseBook();
+            return;
+        }
+
+        if (tutBook != null &&
+            tutBook.bookCanvas != null &&
+            tutBook.bookCanvas.activeSelf)
+        {
+            tutBook.CloseBook();
+            return;
+        }
+
+        // Don't open the pause menu if the player is in Book state.
+        return;
+    }
+
+    // Otherwise, open the pause menu.
+    Pause();
+}
     // =========================================================
     // RESUME
     // =========================================================
@@ -50,9 +80,14 @@ public class PauseMenu : MonoBehaviour
             GameController.Instance.ResumeGame();
         }
 
-        pauseMenuUI.SetActive(false);
-        settingsMenuUI.SetActive(false);
-        controlsMenuUI.SetActive(false);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+
+        if (settingsMenuUI != null)
+            settingsMenuUI.SetActive(false);
+
+        if (controlsMenuUI != null)
+            controlsMenuUI.SetActive(false);
 
         Time.timeScale = 1f;
         AudioListener.pause = false;
@@ -65,7 +100,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState is managed by LockMouse.
     }
 
     // =========================================================
@@ -79,9 +114,14 @@ public class PauseMenu : MonoBehaviour
             GameController.Instance.PauseGame();
         }
 
-        pauseMenuUI.SetActive(true);
-        settingsMenuUI.SetActive(false);
-        controlsMenuUI.SetActive(false);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(true);
+
+        if (settingsMenuUI != null)
+            settingsMenuUI.SetActive(false);
+
+        if (controlsMenuUI != null)
+            controlsMenuUI.SetActive(false);
 
         Time.timeScale = 0f;
         AudioListener.pause = true;
@@ -103,9 +143,14 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenSettings()
     {
-        pauseMenuUI.SetActive(false);
-        settingsMenuUI.SetActive(true);
-        controlsMenuUI.SetActive(false);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+
+        if (settingsMenuUI != null)
+            settingsMenuUI.SetActive(true);
+
+        if (controlsMenuUI != null)
+            controlsMenuUI.SetActive(false);
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -113,9 +158,14 @@ public class PauseMenu : MonoBehaviour
 
     public void CloseSettings()
     {
-        settingsMenuUI.SetActive(false);
-        controlsMenuUI.SetActive(false);
-        pauseMenuUI.SetActive(true);
+        if (settingsMenuUI != null)
+            settingsMenuUI.SetActive(false);
+
+        if (controlsMenuUI != null)
+            controlsMenuUI.SetActive(false);
+
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(true);
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -127,9 +177,14 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenControls()
     {
-        pauseMenuUI.SetActive(false);
-        settingsMenuUI.SetActive(false);
-        controlsMenuUI.SetActive(true);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+
+        if (settingsMenuUI != null)
+            settingsMenuUI.SetActive(false);
+
+        if (controlsMenuUI != null)
+            controlsMenuUI.SetActive(true);
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -137,9 +192,14 @@ public class PauseMenu : MonoBehaviour
 
     public void CloseControls()
     {
-        controlsMenuUI.SetActive(false);
-        settingsMenuUI.SetActive(false);
-        pauseMenuUI.SetActive(true);
+        if (controlsMenuUI != null)
+            controlsMenuUI.SetActive(false);
+
+        if (settingsMenuUI != null)
+            settingsMenuUI.SetActive(false);
+
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(true);
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
