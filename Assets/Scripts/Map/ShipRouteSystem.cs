@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class ShipRouteSystem : MonoBehaviour
 {
+    [Header("Player State")]
+    public PlayerState playerState;
+
     [Header("Ship")]
     public ShipMovement shipMovement;
 
@@ -90,10 +93,19 @@ public class ShipRouteSystem : MonoBehaviour
 
     private void HandleMouseInput()
     {
-        // -----------------------------------------------------
-        // LEFT CLICK - ADD TO ROUTE
-        // -----------------------------------------------------
+        // Prevent map interaction while grabbing machinery.
+        if (playerState != null && playerState.IsGrabbing())
+        {
+            if (addingRoute)
+                StopAddingRoute();
 
+            if (removingRoute)
+                StopRemovingRoute();
+
+            return;
+        }
+
+        // LEFT CLICK - ADD TO ROUTE
         if (Input.GetMouseButtonDown(0))
         {
             if (IsMouseOverMap())
@@ -102,27 +114,17 @@ public class ShipRouteSystem : MonoBehaviour
             }
         }
 
-        if (
-            addingRoute &&
-            Input.GetMouseButton(0)
-        )
+        if (addingRoute && Input.GetMouseButton(0))
         {
             ContinueAddingRoute();
         }
 
-        if (
-            addingRoute &&
-            Input.GetMouseButtonUp(0)
-        )
+        if (addingRoute && Input.GetMouseButtonUp(0))
         {
             StopAddingRoute();
         }
 
-
-        // -----------------------------------------------------
         // RIGHT CLICK - REMOVE FROM ROUTE
-        // -----------------------------------------------------
-
         if (Input.GetMouseButtonDown(1))
         {
             if (IsMouseOverMap())
@@ -131,18 +133,12 @@ public class ShipRouteSystem : MonoBehaviour
             }
         }
 
-        if (
-            removingRoute &&
-            Input.GetMouseButton(1)
-        )
+        if (removingRoute && Input.GetMouseButton(1))
         {
             ContinueRemovingRoute();
         }
 
-        if (
-            removingRoute &&
-            Input.GetMouseButtonUp(1)
-        )
+        if (removingRoute && Input.GetMouseButtonUp(1))
         {
             StopRemovingRoute();
         }

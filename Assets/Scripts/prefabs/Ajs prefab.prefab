@@ -1336,6 +1336,10 @@ PrefabInstance:
       propertyPath: mapCamera
       value: 
       objectReference: {fileID: 8931616165998156052}
+    - target: {fileID: 1828638780300926911, guid: 66167fb239dfce04c88a3b8d01fbfdff, type: 3}
+      propertyPath: playerState
+      value: 
+      objectReference: {fileID: 5153473159633507531}
     - target: {fileID: 5074561657483304639, guid: 66167fb239dfce04c88a3b8d01fbfdff, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.159
