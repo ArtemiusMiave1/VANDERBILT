@@ -583,7 +583,7 @@ MonoBehaviour:
   Damaged: {fileID: 8300000, guid: 757a0d8ca5318fa40b1c9b579104962a, type: 3}
   RequestVolume: 1
   RequestAcceptedVolume: 1
-  RequestCompleteVolume: 0.874
+  RequestCompleteVolume: 0.7
   ButtonVolume: 0.553
   LeverVolume: 0.2
   RequestDeliveryHatchVolume: 1
