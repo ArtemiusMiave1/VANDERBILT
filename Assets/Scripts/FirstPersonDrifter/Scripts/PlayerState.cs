@@ -125,6 +125,8 @@ public class PlayerState : MonoBehaviour
 
         if (lockMouse != null)
             lockMouse.LockCursor(false);
+
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
     // =========================================================
@@ -141,6 +143,8 @@ public class PlayerState : MonoBehaviour
 
         if (lockMouse != null)
             lockMouse.LockCursor(false);
+
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);//
     }
 
     // =========================================================

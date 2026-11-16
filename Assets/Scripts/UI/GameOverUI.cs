@@ -7,5 +7,6 @@ public class GameOverUI : MonoBehaviour
         // Make the mouse cursor visible and usable.
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 }

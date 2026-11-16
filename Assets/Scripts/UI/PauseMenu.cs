@@ -135,6 +135,8 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
     // =========================================================
@@ -154,6 +156,7 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
     public void CloseSettings()
@@ -188,6 +191,9 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
     public void CloseControls()
@@ -217,6 +223,7 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         SceneManager.LoadScene("MainMenu");
     }

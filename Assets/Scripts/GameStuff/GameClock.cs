@@ -157,6 +157,10 @@ public class GameClock : MonoBehaviour
             print("stats");
         }
 
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
         SceneManager.LoadScene("GameEnd");
     }
 

@@ -22,7 +22,7 @@ public class GUIClipboard : MonoBehaviour
                 clipboardAnimator.SetBool("Toggle", TabToggle);
                 TabToggle = !TabToggle;
                 // this.gameObject.SetActive(TabToggle);
-                this.GetComponentInChildren<MeshRenderer>().enabled = !TabToggle;
+                //this.GetComponentInChildren<MeshRenderer>().enabled = !TabToggle;
                 print(TabToggle);
             }
         }

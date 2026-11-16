@@ -632,6 +632,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7153054749132460958, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: m_TaaSettings.m_Quality
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7432434083255420919, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.495
