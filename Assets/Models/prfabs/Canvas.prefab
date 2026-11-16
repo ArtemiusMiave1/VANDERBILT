@@ -1559,6 +1559,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Fill out Order Forms at Resource Depots to purchase fuel/resources.
       objectReference: {fileID: 0}
+    - target: {fileID: 4192454183150257324, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: f0b106721fafc474d9e57a6f656277d0, type: 3}
     - target: {fileID: 4525954628406725240, guid: f58759ffe7344be49b6710dbea05e7f9, type: 3}
       propertyPath: m_IsActive
       value: 0
