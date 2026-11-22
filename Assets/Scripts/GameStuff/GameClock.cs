@@ -79,8 +79,10 @@ public class GameClock : MonoBehaviour
 
     private void Update()
     {
-        // Runs independently of ship movement.
-        if (!clockRunning || dayEnded)
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        { EndDay(); }
+            // Runs independently of ship movement.
+            if (!clockRunning || dayEnded)
             return;
 
         if (realSecondsPerGameMinute <= 0f)
