@@ -119,9 +119,24 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &270073891 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 851457835402066774, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &417593712 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3223664380969652253, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &672534942 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4225437294879605893, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &788446540 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4166610707022753405, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
   m_PrefabInstance: {fileID: 4349624929307356314}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &888892219
@@ -240,6 +255,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede1f84481b35bd478d6627bf0657725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerState
+--- !u!1 &1205692939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1205692940}
+  - component: {fileID: 1205692941}
+  m_Layer: 0
+  m_Name: TutorialHighlight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1205692940
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205692939}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 417593712}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1205692941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205692939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f110601676b1d4da698d4c8acc388f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialHighlight
+  highlights:
+  - {fileID: 1776561279}
+  - {fileID: 788446540}
+  - {fileID: 270073891}
 --- !u!1 &1287656230
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +449,11 @@ MonoBehaviour:
   shakeSpeed: 15
   fadeInSpeed: 1.5
   fadeOutSpeed: 1
+--- !u!1 &1776561279 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2906486851891771532, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1860990954
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +604,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShipMovement
       objectReference: {fileID: 0}
+    - target: {fileID: 593499815350530787, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 851457835402066774, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: m_Name
+      value: Centre_highlight
+      objectReference: {fileID: 0}
     - target: {fileID: 990210535760057072, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -670,7 +746,10 @@ PrefabInstance:
       objectReference: {fileID: 1182420375}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3223664380969652253, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1205692940}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6946563443612337383, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       insertIndex: -1
