@@ -304,6 +304,9 @@ MonoBehaviour:
   - {fileID: 788446540}
   - {fileID: 270073891}
   - {fileID: 4349624929307356315}
+  - {fileID: 4349624929307356317}
+  - {fileID: 4349624929307356316}
+  - {fileID: 4349624929307356316}
 --- !u!1 &1287656230
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,6 +704,10 @@ PrefabInstance:
       propertyPath: shipMovement
       value: 
       objectReference: {fileID: 1998234591}
+    - target: {fileID: 5617799487702922409, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+      propertyPath: m_Name
+      value: Handle_highlight
+      objectReference: {fileID: 0}
     - target: {fileID: 5742829615371906640, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -796,6 +803,16 @@ PrefabInstance:
 --- !u!1 &4349624929307356315 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4732902153071497071, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4349624929307356316 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5617799487702922409, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
+  m_PrefabInstance: {fileID: 4349624929307356314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4349624929307356317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8464110286280384560, guid: bcc142a9947bb444ab33d1e14e39ddcb, type: 3}
   m_PrefabInstance: {fileID: 4349624929307356314}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
