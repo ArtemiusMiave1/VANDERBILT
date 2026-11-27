@@ -67,7 +67,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Once resources are delivered, head to HQ landmarks to collect your Gold.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_margin: {x: -66.3327, y: 0, z: -95.00012, w: -35.079193}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &406898829396200099
@@ -276,7 +276,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Let Click to Accept Requests!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_margin: {x: -66.3327, y: 0, z: -88.96405, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &550494595339605574
@@ -488,8 +488,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: X
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
-  m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
+  m_sharedMaterial: {fileID: 4192781077954921217, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -769,8 +769,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Next
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
-  m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
+  m_sharedMaterial: {fileID: 4192781077954921217, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -906,7 +906,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Left Click to pin Requests on the corkboard. '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -973,7 +973,7 @@ MonoBehaviour:
   m_margin: {x: 148.2796, y: -51.523804, z: -97.78296, w: -14.746307}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1858748003000277288
@@ -1120,7 +1120,7 @@ MonoBehaviour:
 
     !TRY TO STEER CLEAR OF DANGEROUS ROUTES!'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1187,7 +1187,7 @@ MonoBehaviour:
   m_margin: {x: -66.3327, y: 0, z: -121.44501, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2788414509718961526
@@ -1329,7 +1329,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Your ship takes more fuel the faster you travel!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1396,7 +1396,7 @@ MonoBehaviour:
   m_margin: {x: -248.27997, y: 53.423203, z: 245.2259, w: -85.85387}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3245750007461632028
@@ -1636,7 +1636,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Fuel will continue to run out the more you travel.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1703,7 +1703,7 @@ MonoBehaviour:
   m_margin: {x: 143.75569, y: 0, z: -126.346695, w: -35.062164}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3776353053668010994
@@ -1773,7 +1773,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Icons
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1840,7 +1840,7 @@ MonoBehaviour:
   m_margin: {x: -25.855835, y: -16.975708, z: -40.784668, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4399694295478117867
@@ -1910,8 +1910,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
-  m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
+  m_sharedMaterial: {fileID: 4192781077954921217, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2160,7 +2160,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: '!KEEP AN EYE OUT FOR YOUR FUEL USAGE!'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2227,7 +2227,7 @@ MonoBehaviour:
   m_margin: {x: 128.38991, y: 0, z: -123.85353, w: -35.062164}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &5256516056424984658
@@ -2571,7 +2571,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Fuel will continue to run out the more you travel.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2638,7 +2638,7 @@ MonoBehaviour:
   m_margin: {x: 143.75569, y: 0, z: -126.346695, w: -35.062164}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &5818314908262706542
@@ -2748,7 +2748,7 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2815,7 +2815,7 @@ MonoBehaviour:
   m_margin: {x: -247.32538, y: 53.423203, z: 245.2259, w: -85.85387}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6235673040372830524
@@ -3087,7 +3087,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Locations
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3154,7 +3154,7 @@ MonoBehaviour:
   m_margin: {x: -195.27081, y: 0, z: 52.304626, w: -107.642914}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6616304893069399434
@@ -3633,7 +3633,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Fill out Order Forms at Resource Depots to purchase resources.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3700,7 +3700,7 @@ MonoBehaviour:
   m_margin: {x: -22.914932, y: 0, z: -93.26819, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &7384002456386461280
@@ -3914,7 +3914,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'The more resources you have in your ship, the slower you will travel. '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3981,7 +3981,7 @@ MonoBehaviour:
   m_margin: {x: -66.3327, y: -8.268097, z: 51.371525, w: -51.766068}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &8238545111934003609
@@ -4053,7 +4053,7 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4120,7 +4120,7 @@ MonoBehaviour:
   m_margin: {x: 128.38991, y: 0, z: -114.77524, w: -35.062164}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &8475223108462475047
@@ -4447,7 +4447,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Press 'TAB' to check the clipboard to keep track of what you have!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7894748c3fe056149aedfd4c922b178f, type: 2}
   m_sharedMaterial: {fileID: 684841573654513516, guid: 0f10687f97f2ec543b004e45ba601f73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4514,7 +4514,7 @@ MonoBehaviour:
   m_margin: {x: -247.32538, y: 53.423203, z: 284.02295, w: -143.4551}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &9133809162992733525

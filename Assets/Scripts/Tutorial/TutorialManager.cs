@@ -17,8 +17,10 @@ public enum TutorialInteractionType
     ChartRoute,
     OpenClipboard,
     CompleteDelivery,
-    CollectPayment
+    CollectPayment,
+    PurchaseResources
 }
+
 
 [Serializable]
 public class TutorialStep
@@ -28,14 +30,27 @@ public class TutorialStep
     [TextArea(3, 6)]
     public string instruction;
 
+
+    [Header("Tutorial UI Objects")]
+
+    [Tooltip("Objects to activate during this step.")]
+    public GameObject[] stepObjects = new GameObject[0];
+
+
+    [Header("Highlights")]
+
     [Tooltip("Indices of all highlights to display.")]
     public int[] highlightIndices = new int[0];
 
+
     [Header("Progression")]
+
     public TutorialInteractionType interactionType =
         TutorialInteractionType.SpecificObject;
 
     public TutorialInteractable requiredObject;
+
+
     [Header("Route Settings")]
 
     public Location requiredDestination;
@@ -52,10 +67,12 @@ public class TutorialManager : MonoBehaviour
 
 
     [Header("References")]
+
     public TutorialHighlight tutorialHighlight;
 
 
     [Header("Tutorial UI")]
+
     public GameObject tutorialPanel;
 
     public TMP_Text instructionText;
@@ -66,6 +83,7 @@ public class TutorialManager : MonoBehaviour
 
 
     [Header("Tutorial Settings")]
+
     public bool startOnAwake = true;
 
     public bool hidePanelOnCompletion = false;
@@ -76,10 +94,12 @@ public class TutorialManager : MonoBehaviour
 
 
     [Header("Tutorial Steps")]
+
     public TutorialStep[] steps;
 
 
     [Header("Tutorial State")]
+
     [SerializeField]
     private int currentStep = -1;
 
@@ -103,6 +123,8 @@ public class TutorialManager : MonoBehaviour
         }
 
         Instance = this;
+
+        HideAllStepObjects();
     }
 
 
@@ -150,59 +172,36 @@ public class TutorialManager : MonoBehaviour
         DisplayCurrentStep();
     }
 
-    // =========================================================
-    // REPORT DELIVERY COMPLETED
-    // =========================================================
 
-    public void ReportDeliveryCompleted(RequestPaper request)
+    // --------------------------------------------------
+    // HIDE ALL STEP OBJECTS
+    // --------------------------------------------------
+
+    private void HideAllStepObjects()
     {
-        if (!tutorialActive)
+        if (steps == null)
             return;
 
-        if (request == null)
-            return;
-
-        if (!request.IsCompleted())
-            return;
-
-        if (
-            currentStep < 0 ||
-            currentStep >= steps.Length
-        )
-            return;
-
-        TutorialStep step = steps[currentStep];
-
-        if (step.interactionType !=
-            TutorialInteractionType.CompleteDelivery)
-            return;
-
-
-        // =====================================================
-        // CHECK REQUIRED DESTINATION
-        // =====================================================
-
-        if (
-            step.requiredDestination != null &&
-            request.GetTargetLocation() != step.requiredDestination
-        )
+        foreach (TutorialStep step in steps)
         {
-            return;
+            if (step == null || step.stepObjects == null)
+                continue;
+
+            foreach (GameObject obj in step.stepObjects)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(false);
+                }
+            }
         }
-
-
-        Debug.Log(
-            "Tutorial: Delivery completed - " +
-            request.GetRequestTitle()
-        );
-
-        NextStep();
     }
+
     // =========================================================
-    // REPORT PAYMENT COLLECTED
+    // REPORT RESOURCES PURCHASED
     // =========================================================
 
-    public void ReportPaymentCollected(int amount)
+    public void ReportResourcesPurchased(int amount)
     {
         if (!tutorialActive)
             return;
@@ -219,17 +218,38 @@ public class TutorialManager : MonoBehaviour
         TutorialStep step = steps[currentStep];
 
         if (step.interactionType !=
-            TutorialInteractionType.CollectPayment)
+            TutorialInteractionType.PurchaseResources)
             return;
 
-
         Debug.Log(
-            "Tutorial: Payment collected - " +
-            amount + " Gold"
+            "Tutorial: Purchased " +
+            amount +
+            " resources."
         );
 
         NextStep();
     }
+
+    // --------------------------------------------------
+    // SHOW STEP OBJECTS
+    // --------------------------------------------------
+
+    private void ShowStepObjects(TutorialStep step)
+    {
+        HideAllStepObjects();
+
+        if (step == null || step.stepObjects == null)
+            return;
+
+        foreach (GameObject obj in step.stepObjects)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(true);
+            }
+        }
+    }
+
 
     // --------------------------------------------------
     // DISPLAY CURRENT STEP
@@ -275,7 +295,11 @@ public class TutorialManager : MonoBehaviour
         }
 
 
-        // Update the highlighted object.
+        // Activate the current step's UI objects.
+        ShowStepObjects(step);
+
+
+        // Update the highlighted objects.
         if (tutorialHighlight != null)
         {
             tutorialHighlight.ShowHighlights(
@@ -290,9 +314,91 @@ public class TutorialManager : MonoBehaviour
         );
     }
 
-    // =========================================================
+
+    // --------------------------------------------------
+    // REPORT DELIVERY COMPLETED
+    // --------------------------------------------------
+
+    public void ReportDeliveryCompleted(RequestPaper request)
+    {
+        if (!tutorialActive)
+            return;
+
+        if (request == null)
+            return;
+
+        if (!request.IsCompleted())
+            return;
+
+        if (
+            currentStep < 0 ||
+            currentStep >= steps.Length
+        )
+            return;
+
+        TutorialStep step = steps[currentStep];
+
+        if (step.interactionType !=
+            TutorialInteractionType.CompleteDelivery)
+            return;
+
+
+        // Check required destination.
+        if (
+            step.requiredDestination != null &&
+            request.GetTargetLocation() != step.requiredDestination
+        )
+        {
+            return;
+        }
+
+
+        Debug.Log(
+            "Tutorial: Delivery completed - " +
+            request.GetRequestTitle()
+        );
+
+        NextStep();
+    }
+
+
+    // --------------------------------------------------
+    // REPORT PAYMENT COLLECTED
+    // --------------------------------------------------
+
+    public void ReportPaymentCollected(int amount)
+    {
+        if (!tutorialActive)
+            return;
+
+        if (amount <= 0)
+            return;
+
+        if (
+            currentStep < 0 ||
+            currentStep >= steps.Length
+        )
+            return;
+
+        TutorialStep step = steps[currentStep];
+
+        if (step.interactionType !=
+            TutorialInteractionType.CollectPayment)
+            return;
+
+
+        Debug.Log(
+            "Tutorial: Payment collected - " +
+            amount + " Gold"
+        );
+
+        NextStep();
+    }
+
+
+    // --------------------------------------------------
     // REPORT CLIPBOARD OPENED
-    // =========================================================
+    // --------------------------------------------------
 
     public void ReportClipboardOpened()
     {
@@ -311,6 +417,7 @@ public class TutorialManager : MonoBehaviour
             TutorialInteractionType.OpenClipboard)
             return;
 
+
         Debug.Log(
             "Tutorial Step Completed: " +
             step.stepName
@@ -319,13 +426,20 @@ public class TutorialManager : MonoBehaviour
         NextStep();
     }
 
+
+    // --------------------------------------------------
+    // CHECK ALLOWED ROUTE DESTINATION
+    // --------------------------------------------------
+
     public bool CanChartToLocation(Location location)
     {
         if (!tutorialActive)
             return true;
 
-        if (currentStep < 0 ||
-            currentStep >= steps.Length)
+        if (
+            currentStep < 0 ||
+            currentStep >= steps.Length
+        )
             return true;
 
         TutorialStep step = steps[currentStep];
@@ -338,13 +452,20 @@ public class TutorialManager : MonoBehaviour
                location == step.requiredDestination;
     }
 
+
+    // --------------------------------------------------
+    // REPORT ROUTE CHARTED
+    // --------------------------------------------------
+
     public void ReportRouteCharted(Location location)
     {
         if (!tutorialActive)
             return;
 
-        if (currentStep < 0 ||
-            currentStep >= steps.Length)
+        if (
+            currentStep < 0 ||
+            currentStep >= steps.Length
+        )
             return;
 
         TutorialStep step = steps[currentStep];
@@ -353,19 +474,23 @@ public class TutorialManager : MonoBehaviour
             TutorialInteractionType.ChartRoute)
             return;
 
-        if (location == null ||
-            location != step.requiredDestination)
+        if (
+            location == null ||
+            location != step.requiredDestination
+        )
             return;
 
         NextStep();
     }
+
 
     // --------------------------------------------------
     // REPORT INTERACTION
     // --------------------------------------------------
 
     public void ReportInteraction(
-    TutorialInteractable interactedObject)
+        TutorialInteractable interactedObject
+    )
     {
         if (!tutorialActive)
             return;
@@ -381,6 +506,7 @@ public class TutorialManager : MonoBehaviour
 
         TutorialStep step = steps[currentStep];
 
+
         // Only check assigned objects for this interaction type.
         if (step.interactionType !=
             TutorialInteractionType.SpecificObject)
@@ -388,6 +514,7 @@ public class TutorialManager : MonoBehaviour
 
         if (step.requiredObject != interactedObject)
             return;
+
 
         Debug.Log(
             "Tutorial Step Completed: " +
@@ -397,14 +524,16 @@ public class TutorialManager : MonoBehaviour
         NextStep();
     }
 
+
     // --------------------------------------------------
     // REPORT REQUEST INTERACTION
     // --------------------------------------------------
 
     public void ReportRequestInteraction(
-    RequestPaper request,
-    TutorialInteractionType interactionType =
-        TutorialInteractionType.AnyRequest)
+        RequestPaper request,
+        TutorialInteractionType interactionType =
+            TutorialInteractionType.AnyRequest
+    )
     {
         if (!tutorialActive)
             return;
@@ -430,6 +559,7 @@ public class TutorialManager : MonoBehaviour
         )
             return;
 
+
         Debug.Log(
             "Tutorial Step Completed: " +
             step.stepName
@@ -437,6 +567,7 @@ public class TutorialManager : MonoBehaviour
 
         NextStep();
     }
+
 
     // --------------------------------------------------
     // NEXT STEP
@@ -468,10 +599,16 @@ public class TutorialManager : MonoBehaviour
         tutorialActive = false;
         tutorialCompleted = true;
 
+
+        // Disable all tutorial step objects.
+        HideAllStepObjects();
+
+
         if (tutorialHighlight != null)
         {
             tutorialHighlight.HideAllHighlights();
         }
+
 
         if (instructionText != null)
         {
@@ -479,11 +616,13 @@ public class TutorialManager : MonoBehaviour
                 completionMessage;
         }
 
+
         if (stepNameText != null)
         {
             stepNameText.text =
                 "Tutorial Complete";
         }
+
 
         if (progressText != null)
         {
@@ -493,6 +632,7 @@ public class TutorialManager : MonoBehaviour
                 steps.Length;
         }
 
+
         if (
             hidePanelOnCompletion &&
             tutorialPanel != null
@@ -500,6 +640,7 @@ public class TutorialManager : MonoBehaviour
         {
             tutorialPanel.SetActive(false);
         }
+
 
         Debug.Log("Tutorial completed!");
     }
@@ -513,10 +654,16 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialActive = false;
 
+
+        // Disable all tutorial step objects.
+        HideAllStepObjects();
+
+
         if (tutorialHighlight != null)
         {
             tutorialHighlight.HideAllHighlights();
         }
+
 
         if (tutorialPanel != null)
         {
@@ -534,16 +681,22 @@ public class TutorialManager : MonoBehaviour
         return tutorialActive;
     }
 
+
     public bool IsTutorialCompleted()
     {
         return tutorialCompleted;
     }
+
 
     public int GetCurrentStep()
     {
         return currentStep;
     }
 
+
+    // --------------------------------------------------
+    // ON DESTROY
+    // --------------------------------------------------
 
     private void OnDestroy()
     {
