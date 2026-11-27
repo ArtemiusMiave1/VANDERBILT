@@ -271,8 +271,8 @@ MonoBehaviour:
   progressText: {fileID: 4805435329982207234}
   startOnAwake: 1
   hidePanelOnCompletion: 0
-  completionMessage: "Well done captain. \nPress ESC and head back to the menu to
-    begin your work shift."
+  completionMessage: "Well done captain. \n\nPress ESC and head back to the menu
+    to begin your work shift."
   steps:
   - stepName: Pick Up Request
     instruction: Select a request on the request line
@@ -289,14 +289,14 @@ MonoBehaviour:
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
   - stepName: Accept request
-    instruction: Place request on the corkboard
+    instruction: Place a new request on the corkboard
     stepObjects: []
     highlightIndices: 01000000
     interactionType: 3
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
   - stepName: Route towards a resource depot
-    instruction: Drag the string to the resource depot location
+    instruction: "Lleft click - Drags string \n\nRight click - Removes string."
     stepObjects: []
     highlightIndices: 0200000009000000
     interactionType: 5
@@ -305,15 +305,16 @@ MonoBehaviour:
   - stepName: Adjust speed
     instruction: 'Left click on the handle and drag to adjust speed
 
-      More speed
-      uses more fuel'
+
+      - More
+      speed uses more fuel'
     stepObjects: []
     highlightIndices: 05000000
     interactionType: 0
     requiredObject: {fileID: 4251709335868008979}
     requiredDestination: {fileID: 0}
   - stepName: 'Confirm Route '
-    instruction: Click button
+    instruction: Click the button and head to the resource station
     stepObjects: []
     highlightIndices: 0a000000
     interactionType: 0
@@ -326,30 +327,42 @@ MonoBehaviour:
     interactionType: 6
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
-  - stepName: Purchase resources
-    instruction: 'Click on the paper at the fax machine to bring up the order form '
+  - stepName: Open shops order form
+    instruction: 'Click on the paper at the fax machine to bring up the order form
+
+
+      Tip
+      - check corkboard for requested resource'
     stepObjects: []
     highlightIndices: 03000000
     interactionType: 0
     requiredObject: {fileID: 2917299220127984214}
     requiredDestination: {fileID: 0}
+  - stepName: Purchase Resources
+    instruction: "Purchase the resources for the delivery \n\n(40 food)"
+    stepObjects: []
+    highlightIndices: 0400000008000000
+    interactionType: 9
+    requiredObject: {fileID: 0}
+    requiredDestination: {fileID: 0}
   - stepName: 'Deliver Request '
-    instruction: 'Route you path towards the destination and travel there.
-
-
-      Right
-      clicking on a location removes the route.'
+    instruction: "Route your path towards the destination on the map and travel there
+      to complete delivery.\n\nTip \n- You can add multiple locations to your route\n-
+      Going through purple trade routes can damage cargo and lose fuel \n\nRight
+      click - removes string."
     stepObjects: []
     highlightIndices: 02000000
     interactionType: 7
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
   - stepName: Check your fuel and collect payment
-    instruction: 'Vanderbilt HQ to collect your request payments
+    instruction: 'Head to Vanderbilt HQ to collect your request payments
 
 
-      Make sure
-      to check the fuel tank for when you''re running low!'
+      Tip:
+
+      -
+      Make sure to check the fuel tank at the back for when you''re running low!'
     stepObjects: []
     highlightIndices: 0400000008000000
     interactionType: 8

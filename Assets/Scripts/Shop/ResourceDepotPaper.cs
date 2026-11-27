@@ -213,6 +213,10 @@ public class ResourceDepotPaper : MonoBehaviour
     // PURCHASE ORDER
     // =========================================================
 
+    // =========================================================
+    // PURCHASE ORDER
+    // =========================================================
+
     public void PurchaseOrder()
     {
         if (shipCargo == null)
@@ -229,6 +233,8 @@ public class ResourceDepotPaper : MonoBehaviour
 
         int total =
             CalculateTotal();
+
+        int totalResourcesPurchased = 0;
 
 
         // -----------------------------------------------------
@@ -268,12 +274,25 @@ public class ResourceDepotPaper : MonoBehaviour
                 amount
             );
 
+            totalResourcesPurchased += amount;
+
             Debug.Log(
                 "Amount " +
                 amount +
                 " row " +
                 row.name
             );
+        }
+
+
+        // -----------------------------------------------------
+        // PREVENT EMPTY PURCHASES
+        // -----------------------------------------------------
+
+        if (totalResourcesPurchased <= 0)
+        {
+            Debug.Log("No resources selected.");
+            return;
         }
 
 
@@ -343,5 +362,14 @@ public class ResourceDepotPaper : MonoBehaviour
         // -----------------------------------------------------
 
         UpdateTotal();
+
+
+        // -----------------------------------------------------
+        // TUTORIAL PROGRESSION
+        // -----------------------------------------------------
+
+        TutorialManager.Instance?.ReportResourcesPurchased(
+            totalResourcesPurchased
+        );
     }
 }
