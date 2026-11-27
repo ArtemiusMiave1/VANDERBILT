@@ -30,6 +30,8 @@ public class Location : MonoBehaviour
     [Header("Material")]
     public Material locationMaterial;
 
+    private Material runtimeMaterial;
+
 
     // --------------------------------------------------
     // AWAKE
@@ -37,13 +39,40 @@ public class Location : MonoBehaviour
 
     private void Awake()
     {
-        // If no icon plane was assigned,
-        // try to find a Renderer on this object.
         if (iconPlane == null)
         {
-            iconPlane =
-                GetComponent<Renderer>();
+            iconPlane = GetComponent<Renderer>();
         }
+    }
+
+
+    // --------------------------------------------------
+    // START
+    // --------------------------------------------------
+
+    private void Start()
+    {
+        RefreshVisuals();
+    }
+
+
+    // --------------------------------------------------
+    // REFRESH VISUALS
+    // --------------------------------------------------
+
+    [ContextMenu("Refresh Visuals")]
+    public void RefreshVisuals()
+    {
+        if (locationType == null)
+            return;
+
+        // Use the GameObject name if no ID was assigned.
+        if (string.IsNullOrEmpty(locationID))
+        {
+            locationID = gameObject.name;
+        }
+
+        SetLocationVisual();
     }
 
 
@@ -51,8 +80,7 @@ public class Location : MonoBehaviour
     // SET LOCATION DATA
     // --------------------------------------------------
 
-    public void SetLocationType(
-        LocationData type)
+    public void SetLocationType(LocationData type)
     {
         locationType = type;
 
@@ -74,16 +102,12 @@ public class Location : MonoBehaviour
     // SET LOCATION ID
     // --------------------------------------------------
 
-    public void SetLocationID(
-        string newID)
+    public void SetLocationID(string newID)
     {
         locationID = newID;
 
-        // Make the GameObject name match
-        // the generated location ID.
         gameObject.name = locationID;
 
-        // Update visual after the ID has been generated.
         SetLocationVisual();
     }
 
@@ -144,25 +168,12 @@ public class Location : MonoBehaviour
     private void SetLocationVisual()
     {
         if (locationType == null)
-        {
             return;
-        }
-
-
-        // ----------------------------------------------
-        // DISTRICT LOCATION
-        // ----------------------------------------------
 
         if (locationType.District)
         {
             SetDistrictVisual();
         }
-
-
-        // ----------------------------------------------
-        // NON-DISTRICT LOCATION
-        // ----------------------------------------------
-
         else
         {
             SetNonDistrictVisual();
@@ -176,20 +187,20 @@ public class Location : MonoBehaviour
 
     private void SetDistrictVisual()
     {
-        // Show the TextMeshPro.
+        // Show the district text.
         if (districtText != null)
         {
             districtText.gameObject.SetActive(true);
+            districtText.enabled = true;
 
-            districtText.text =
-                locationID;
+            districtText.text = locationID;
         }
 
-
-        // Hide the icon plane.
+        // Hide only the Renderer.
+        // Do not disable the entire location.
         if (iconPlane != null)
         {
-            iconPlane.gameObject.SetActive(false);
+            iconPlane.enabled = false;
         }
     }
 
@@ -203,11 +214,9 @@ public class Location : MonoBehaviour
         // Hide the district text.
         if (districtText != null)
         {
-            districtText.gameObject.SetActive(false);
+            districtText.enabled = false;
         }
 
-
-        // Show the icon plane.
         if (iconPlane == null)
         {
             Debug.LogError(
@@ -218,30 +227,30 @@ public class Location : MonoBehaviour
             return;
         }
 
+        // Enable the icon plane if it is a child object.
+        if (iconPlane.gameObject != gameObject)
+        {
+            iconPlane.gameObject.SetActive(true);
+        }
 
-        iconPlane.gameObject.SetActive(true);
+        iconPlane.enabled = true;
 
 
         // ----------------------------------------------
         // LOAD ICON
         // ----------------------------------------------
 
-        string iconName =
-            locationType.LocationType;
+        string iconName = locationType.LocationType;
 
-
-        Texture2D icon =
-            Resources.Load<Texture2D>(
-                "Icons/" + iconName
-            );
-
+        Texture2D icon = Resources.Load<Texture2D>(
+            "Icons/" + iconName
+        );
 
         if (icon == null)
         {
             Debug.LogError(
                 "Could not find location icon: " +
-                "Resources/Icons/" +
-                iconName
+                "Resources/Icons/" + iconName
             );
 
             return;
@@ -249,33 +258,67 @@ public class Location : MonoBehaviour
 
 
         // ----------------------------------------------
-        // GET MATERIAL
+        // SET MATERIAL
         // ----------------------------------------------
 
-        if (locationMaterial == null)
+        if (Application.isPlaying)
         {
-            locationMaterial =
-                iconPlane.material;
+            Material material = GetRuntimeMaterial();
+
+            if (material == null)
+                return;
+
+            material.mainTexture = icon;
+        }
+        else
+        {
+            // Preview the texture without modifying
+            // the original material asset.
+            MaterialPropertyBlock properties =
+                new MaterialPropertyBlock();
+
+            iconPlane.GetPropertyBlock(properties);
+
+            properties.SetTexture("_MainTex", icon);
+            properties.SetTexture("_BaseMap", icon);
+
+            iconPlane.SetPropertyBlock(properties);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // GET RUNTIME MATERIAL
+    // --------------------------------------------------
+
+    private Material GetRuntimeMaterial()
+    {
+        if (iconPlane == null)
+            return null;
+
+        if (runtimeMaterial == null)
+        {
+            Material sourceMaterial =
+                locationMaterial != null
+                ? locationMaterial
+                : iconPlane.sharedMaterial;
+
+            if (sourceMaterial == null)
+            {
+                Debug.LogError(
+                    gameObject.name +
+                    " has no material for the icon plane."
+                );
+
+                return null;
+            }
+
+            runtimeMaterial = new Material(sourceMaterial);
+
+            iconPlane.material = runtimeMaterial;
         }
 
-
-        if (locationMaterial == null)
-        {
-            Debug.LogError(
-                gameObject.name +
-                " has no material for the icon plane."
-            );
-
-            return;
-        }
-
-
-        // ----------------------------------------------
-        // SET ICON
-        // ----------------------------------------------
-
-        locationMaterial.mainTexture =
-            icon;
+        return runtimeMaterial;
     }
 
 
@@ -285,16 +328,17 @@ public class Location : MonoBehaviour
 
     public void Highlight()
     {
-        if (iconPlane != null)
+        if (iconPlane != null && !IsDistrict())
         {
-            iconPlane.material.color =
-                Color.yellow;
+            Material material = GetRuntimeMaterial();
+
+            if (material != null)
+                material.color = Color.yellow;
         }
 
         if (districtText != null)
         {
-            districtText.color =
-                Color.yellow;
+            districtText.color = Color.yellow;
         }
     }
 
@@ -305,16 +349,17 @@ public class Location : MonoBehaviour
 
     public void ClearHighlight()
     {
-        if (iconPlane != null)
+        if (iconPlane != null && !IsDistrict())
         {
-            iconPlane.material.color =
-                Color.white;
+            Material material = GetRuntimeMaterial();
+
+            if (material != null)
+                material.color = Color.white;
         }
 
         if (districtText != null)
         {
-            districtText.color =
-                Color.white;
+            districtText.color = Color.white;
         }
     }
 
@@ -336,5 +381,18 @@ public class Location : MonoBehaviour
         }
 
         return locationID;
+    }
+
+
+    // --------------------------------------------------
+    // CLEANUP
+    // --------------------------------------------------
+
+    private void OnDestroy()
+    {
+        if (runtimeMaterial != null)
+        {
+            Destroy(runtimeMaterial);
+        }
     }
 }

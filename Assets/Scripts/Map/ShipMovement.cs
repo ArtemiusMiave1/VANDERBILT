@@ -1016,6 +1016,16 @@ public class ShipMovement : MonoBehaviour
 
 
             totalGoldCollected += gold;
+
+            RequestVisualIndicator.RefreshVanderbiltPaymentLights();
+
+            // Tutorial progression.
+            if (totalGoldCollected > 0)
+            {
+                TutorialManager.Instance?.ReportPaymentCollected(
+                    totalGoldCollected
+                );
+            }
         }
 
 

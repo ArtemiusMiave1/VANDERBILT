@@ -169,6 +169,11 @@ public class ObjectPickUp : MonoBehaviour
 
         if (request != null)
         {
+            TutorialManager.Instance?.ReportRequestInteraction(
+                request,
+                TutorialInteractionType.PickUpRequest
+            );
+
             if (requestLineManager == null)
             {
                 requestLineManager =
@@ -326,8 +331,8 @@ public class ObjectPickUp : MonoBehaviour
             bool placed =
                 board.TryPlaceRequest(
                     request
-                );
 
+                );
 
             if (!placed)
             {
@@ -347,6 +352,10 @@ public class ObjectPickUp : MonoBehaviour
                 "Request placed on corkboard."
             );
 
+            TutorialManager.Instance?.ReportRequestInteraction(
+                request,
+                TutorialInteractionType.PlaceRequestOnBoard
+            );
             return;
         }
 
@@ -361,6 +370,10 @@ public class ObjectPickUp : MonoBehaviour
 
         if (dropZone != null)
         {
+            TutorialManager.Instance?.ReportRequestInteraction(
+                    request,
+                    TutorialInteractionType.DiscardRequest
+                );
             if (requestLineManager == null)
             {
                 requestLineManager =

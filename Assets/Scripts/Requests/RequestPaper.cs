@@ -749,6 +749,12 @@ public class RequestPaper : MonoBehaviour
 
     public void CompleteRequest()
     {
+        // =========================================================
+        // TUTORIAL PROGRESSION
+        // =========================================================
+
+        TutorialManager.Instance?.ReportDeliveryCompleted(this);
+
         if (completed)
             return;
         //soundManager.PlaySFX(soundManager.RequestDeliveryHatch); (Sound effect for it goes here)
@@ -937,12 +943,19 @@ public class RequestPaper : MonoBehaviour
         // SOUND
         // -----------------------------------------------------
 
-  
+
 
         Debug.Log(
-            "Request delivered: " +
-            GetRequestTitle()
+        "Request delivered: " +
+        GetRequestTitle()
         );
+
+        // =========================================================
+        // TUTORIAL PROGRESSION
+        // =========================================================
+
+        TutorialManager.Instance?.ReportDeliveryCompleted(this);
+
     }
 
 

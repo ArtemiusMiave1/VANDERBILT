@@ -257,13 +257,16 @@ public class ShipRouteSystem : MonoBehaviour
             hitLocation
         );
 
-        UpdateDraggingLine();
+        if (addingRoute)
+        {
+            UpdateDraggingLine();
+        }
     }
 
 
     private void TryAddLocation(
-        Location location
-    )
+    Location location
+)
     {
         if (location == null)
             return;
@@ -277,6 +280,20 @@ public class ShipRouteSystem : MonoBehaviour
          */
         if (route.Contains(location))
             return;
+
+
+        // =====================================================
+        // TUTORIAL RESTRICTION
+        // =====================================================
+
+        if (
+            TutorialManager.Instance != null &&
+            !TutorialManager.Instance.CanChartToLocation(location)
+        )
+        {
+            return;
+        }
+
 
         if (LocationManager.Instance == null)
         {
@@ -307,13 +324,6 @@ public class ShipRouteSystem : MonoBehaviour
          */
         if (connection.blocked)
         {
-            //Debug.Log(
-            //    "Route blocked between " +
-            //    lastDraggedLocation.GetDisplayName() +
-            //    " and " +
-            //    location.GetDisplayName()
-            //);
-
             return;
         }
 
@@ -327,10 +337,32 @@ public class ShipRouteSystem : MonoBehaviour
         lastDraggedLocation =
             location;
 
-        //Debug.Log(
-        //    "Added location to route: " +
-        //    location.GetDisplayName()
-        //);
+
+        // =====================================================
+        // TUTORIAL PROGRESSION
+        // =====================================================
+
+        if (
+    TutorialManager.Instance != null &&
+    TutorialManager.Instance.IsTutorialActive()
+)
+        {
+            int previousStep =
+                TutorialManager.Instance.GetCurrentStep();
+
+            TutorialManager.Instance.ReportRouteCharted(
+                location
+            );
+
+            if (
+                previousStep !=
+                TutorialManager.Instance.GetCurrentStep() ||
+                !TutorialManager.Instance.IsTutorialActive()
+            )
+            {
+                StopAddingRoute();
+            }
+        }
     }
 
 
@@ -718,8 +750,8 @@ public class ShipRouteSystem : MonoBehaviour
     // =========================================================
 
     public void SelectLocation(
-        Location location
-    )
+    Location location
+)
     {
         if (location == null)
             return;
@@ -729,6 +761,20 @@ public class ShipRouteSystem : MonoBehaviour
 
         if (LocationManager.Instance == null)
             return;
+
+
+        // =====================================================
+        // TUTORIAL RESTRICTION
+        // =====================================================
+
+        if (
+            TutorialManager.Instance != null &&
+            !TutorialManager.Instance.CanChartToLocation(location)
+        )
+        {
+            return;
+        }
+
 
         Location currentLocation =
             shipMovement.GetCurrentLocation();
@@ -785,10 +831,6 @@ public class ShipRouteSystem : MonoBehaviour
 
         if (connection.blocked)
         {
-            //Debug.Log(
-            //    "Route is blocked."
-            //);
-
             return;
         }
 
@@ -798,12 +840,14 @@ public class ShipRouteSystem : MonoBehaviour
 
         UpdateRouteLine();
 
-        //Debug.Log(
-        //    "Added route: " +
-        //    lastLocation.GetDisplayName() +
-        //    " -> " +
-        //    location.GetDisplayName()
-        //);
+
+        // =====================================================
+        // TUTORIAL PROGRESSION
+        // =====================================================
+
+        TutorialManager.Instance?.ReportRouteCharted(
+            location
+        );
     }
 
 

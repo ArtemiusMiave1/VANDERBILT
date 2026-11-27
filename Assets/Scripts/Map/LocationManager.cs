@@ -1,9 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-100)]
 public class LocationManager : MonoBehaviour
 {
     public static LocationManager Instance;
+    
+    [Header("Custom Route Dangers")]
+    public bool useCustomRouteDangers = true;
+
+    public bool randomiseUnassignedRoutes = false;
+
+    public List<CustomRouteDanger> customRouteDangers =
+        new List<CustomRouteDanger>();
 
     [Header("Locations")]
     public List<Location> locations =
@@ -25,6 +34,10 @@ public class LocationManager : MonoBehaviour
     [Tooltip("Chance of a route being very dangerous.")]
     public float veryDangerousRouteChance = 0.05f;
 
+    [Header("Custom Map")]
+    public bool useCustomMap = false;
+
+    public Transform customLocationsParent;
 
     // --------------------------------------------------
     // AWAKE
@@ -48,7 +61,11 @@ public class LocationManager : MonoBehaviour
 
     private void Start()
     {
-        if (generateConnectionsOnStart)
+        if (useCustomMap)
+        {
+            LoadCustomLocations();
+        }
+        else if (generateConnectionsOnStart)
         {
             GenerateConnections();
         }
@@ -139,8 +156,10 @@ public class LocationManager : MonoBehaviour
                 route.distance =
                     distance;
 
-                route.dangerLevel =
-                    GenerateDangerLevel();
+                route.dangerLevel = GetRouteDangerLevel(
+                    locationA,
+                    locationB
+                    );
 
                 route.fuelCost =
                     CalculateFuelCost(
@@ -177,11 +196,76 @@ public class LocationManager : MonoBehaviour
         );
     }
 
+    private int GetRouteDangerLevel(
+    Location locationA,
+    Location locationB)
+    {
+        if (useCustomMap && useCustomRouteDangers)
+        {
+            foreach (CustomRouteDanger customRoute
+                in customRouteDangers)
+            {
+                if (customRoute == null)
+                    continue;
+
+                if (customRoute.Matches(locationA, locationB))
+                {
+                    return (int)customRoute.dangerLevel;
+                }
+            }
+
+            // Unassigned custom routes default to normal.
+            if (!randomiseUnassignedRoutes)
+            {
+                return 0;
+            }
+        }
+
+        // Preserve the existing random danger system.
+        return GenerateDangerLevel();
+    }
 
     // --------------------------------------------------
     // GENERATE DANGER LEVEL
     // --------------------------------------------------
+    public void LoadCustomLocations()
+    {
+        if (customLocationsParent == null)
+        {
+            Debug.LogWarning(
+                "LocationManager: Custom locations parent not assigned."
+            );
 
+            return;
+        }
+
+        locations.Clear();
+
+        Location[] customLocations =
+            customLocationsParent.GetComponentsInChildren<Location>();
+
+        foreach (Location location in customLocations)
+        {
+            if (location == null)
+                continue;
+
+            // Initialise the location's data and visuals.
+            if (location.locationType != null)
+            {
+                location.SetLocationType(location.locationType);
+            }
+
+            AddLocation(location);
+        }
+
+        Debug.Log(
+            "LocationManager: Loaded " +
+            locations.Count +
+            " custom locations."
+        );
+
+        GenerateConnections();
+    }
     private int GenerateDangerLevel()
     {
         float roll =

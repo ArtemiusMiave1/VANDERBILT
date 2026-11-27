@@ -17,6 +17,7 @@ public class GUIClipboard : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+            TutorialManager.Instance?.ReportClipboardOpened();
             if (clipboardAnimator)
             {
                 clipboardAnimator.SetBool("Toggle", TabToggle);

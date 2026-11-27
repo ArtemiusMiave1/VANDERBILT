@@ -393,6 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04fdbc79fa2a6f444b54974750795c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipRouteSystem
+  playerState: {fileID: 0}
   shipMovement: {fileID: 3055191488580099447}
   route: []
   routeLine: {fileID: 4302954418759944234}
@@ -872,9 +873,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocationManager
   locations: []
   connectionDistance: 0.5
-  generateConnectionsOnStart: 0
+  generateConnectionsOnStart: 1
   dangerousRouteChance: 0.15
   veryDangerousRouteChance: 0.05
+  useCustomMap: 0
+  customLocationsParent: {fileID: 0}
 --- !u!1 &4490011531477394716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,6 +1546,8 @@ MonoBehaviour:
   orbitSpeed: 20
   rotationSpeed: 5
   modelRotationOffset: 0
+  shipMovement: {fileID: 0}
+  travelRotationSpeed: 5
 --- !u!114 &5346970326173260513
 MonoBehaviour:
   m_ObjectHideFlags: 0

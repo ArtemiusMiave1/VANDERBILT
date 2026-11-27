@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-50)]
 public class RandomLocationSpawner : MonoBehaviour
 {
     [Header("Location")]
@@ -53,6 +54,21 @@ public class RandomLocationSpawner : MonoBehaviour
 
     public void SpawnLocations()
     {
+        if (locationManager == null)
+        {
+            locationManager = LocationManager.Instance;
+        }
+
+        if (locationManager != null &&
+            locationManager.useCustomMap)
+        {
+            Debug.Log(
+                "RandomLocationSpawner: Custom map enabled. Skipping generation."
+            );
+
+            return;
+        }
+
         ClearExistingLocations();
 
         if (!ValidateSetup())
