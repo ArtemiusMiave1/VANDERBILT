@@ -25,11 +25,6 @@ public class EndOfDayUI : MonoBehaviour
     [Header("Scene Settings")]
     public string gameplaySceneName = "Game";
 
-    private void Start()
-    {
-        DisplayStats();
-    }
-
     public void DisplayStats()
     {
         if (DailyStatsManager.Instance == null)

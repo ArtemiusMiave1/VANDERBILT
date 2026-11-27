@@ -60,12 +60,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipCargo
   totalCargoWeight: 0
-  food: 90
-  medicine: 90
-  machinery: 90
+  food: 60
+  medicine: 60
+  machinery: 0
   fuel: 100
-  gold: 200
-  weapons: 90
+  gold: 400
+  weapons: 30
   maxCargoWeight: 750
   foodWeight: 0.3
   medicineWeight: 1
@@ -159,15 +159,17 @@ MonoBehaviour:
     requests:
       accepted: 0
       completed: 0
-      failed: 0
+      discarded: 0
       damaged: 0
       expired: 0
     economy:
       moneyEarned: 0
       moneySpent: 0
       fuelConsumed: 0
-      distanceTravelled: 0
+      locationsVisited: 0
   dailyHistory: []
+  gameplaySceneName: Game_Playable
+  resetStatsOnGameplayLoad: 1
 --- !u!1 &7117615551185245126
 GameObject:
   m_ObjectHideFlags: 0

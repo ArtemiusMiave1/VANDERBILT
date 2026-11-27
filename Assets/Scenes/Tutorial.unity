@@ -1328,59 +1328,18 @@ PrefabInstance:
       value: -189.71654
       objectReference: {fileID: 0}
     - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[10].stepName
-      value: Collect payment
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[3].instruction
-      value: "Left click - Drags string \n\nRight click - Removes string."
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
       propertyPath: steps.Array.data[9].instruction
-      value: "Route your path towards the destination on the map and travel there
-        to complete delivery.\nTip \n- You can add multiple locations to your route\n-
-        Going through purple trade routes can damage cargo and lose fuel \nRight
-        click - removes string."
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[0].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[1].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[2].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[3].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[4].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[5].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[6].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[7].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[8].stepObjects.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      propertyPath: steps.Array.data[9].stepObjects.Array.size
-      value: 0
+      value: 'Travel to the request destination to complete the delivery
+
+
+        Tip:
+
+        -
+        You can add multiple locations to your route
+
+
+        Purple trade route
+        - can damage cargo and lose fuel'
       objectReference: {fileID: 0}
     - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
       propertyPath: steps.Array.data[10].stepObjects.Array.size

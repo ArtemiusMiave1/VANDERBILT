@@ -28,3 +28,36 @@ Weapons Contract,Cirri,Weapons,30,Gold,400,9,Security has approved a new weapons
 Balanced Supplies,Groundmeats,Food,30,Medicine,15,10,The settlement needs both food and medical supplies. We will accept whatever help you can provide.,Unrest,6,FALSE,TRUE,Settlement,None,None
 Workshop Emergency,Groundmeats,Machinery,12,Fuel,20,7,The workshop is almost completely shut down. Bring the parts and we'll get production moving again.,Unrest,7,FALSE,TRUE,Industrial,None,UrgentDelivery
 Last Defence,Groundmeats,Weapons,12,Food,40,8,"Something is coming. We need weapons now, and we'll trade our remaining food to get them.",Unrest,18,FALSE,FALSE,Military,Last Stand,UrgentDelivery
+Title,Faction,RequestedResources,RequestedAmount,Reward,RewardAmount,TimeLimit,Dialogue,Consequences,ConsequencesAmount,Completed,Repeatable,LocationType,Unlockables,Requirement
+Broken Assembly Line,Groundmeats,Machinery,20,Gold,110,8,"The assembly line has stopped again. Without replacement machinery the workers will lose another day's wages.",Unrest,6,FALSE,TRUE,Factory,None,Fragile
+Workers Lunch,Groundmeats,Food,35,Gold,90,10,"The workers have been promised a meal at the end of their shift. Help us keep that promise.",Unrest,4,FALSE,TRUE,Factory,None,None
+Production Quota,Cirri,Machinery,35,Gold,280,10,"Our production targets have increased. Deliver the necessary machinery to expand operations.",Pollution,8,FALSE,TRUE,Factory,None,Fragile
+Industrial Furnaces,Cirri,Coal,50,Gold,240,8,"The furnaces must remain operational throughout the night. We require another shipment of coal.",Pollution,10,FALSE,TRUE,Factory,None,UrgentDelivery
+Trapped Miners,Groundmeats,Medicine,15,Gold,130,6,"A section of the mine has collapsed. The injured workers need medical supplies immediately.",Disease,6,FALSE,TRUE,Mine,None,UrgentDelivery
+Mining Equipment Failure,Groundmeats,Machinery,20,Gold,120,9,"Our equipment is falling apart. We cannot continue working without replacement parts.",Unrest,7,FALSE,TRUE,Mine,None,Fragile
+Deep Excavation,Cirri,Machinery,40,Gold,320,12,"The lower deposits remain untouched. Deliver the equipment required to expand our excavation.",Pollution,10,FALSE,TRUE,Mine,None,Fragile
+Mining Operations,Cirri,Fuel,45,Gold,230,8,"The extraction equipment is consuming more fuel than anticipated. Replenish our reserves.",Pollution,7,FALSE,TRUE,Mine,None,None
+Community Kitchen,Groundmeats,Food,40,Gold,100,9,"The community kitchen is feeding more families every day. We need another shipment of provisions.",Unrest,5,FALSE,TRUE,Residential,None,None
+District Sickness,Groundmeats,Medicine,25,Gold,150,6,"Illness has spread through the residential blocks. Our neighbours cannot afford treatment.",Disease,8,FALSE,TRUE,Residential,None,UrgentDelivery
+Evening Reception,Cirri,Food,45,Gold,220,10,"An important reception is being held this evening. Ensure our kitchens are adequately supplied.",Pollution,4,FALSE,TRUE,Residential,None,None
+Private Heating,Cirri,Coal,35,Gold,180,8,"The residents have complained about the temperature. Deliver coal to maintain their heating systems.",Pollution,6,FALSE,TRUE,Residential,None,None
+Stranded Transport,Groundmeats,Fuel,25,Gold,100,7,"Our transport vessel cannot leave the dock without fuel. Several workers are waiting to return home.",Unrest,5,FALSE,TRUE,Airship Dock,None,UrgentDelivery
+Dockside Repairs,Groundmeats,Machinery,15,Gold,120,10,"The loading equipment has broken down. We need replacement machinery before another shipment arrives.",Unrest,6,FALSE,TRUE,Airship Dock,None,Fragile
+Commercial Fleet,Cirri,Fuel,60,Gold,300,10,"Our commercial fleet is preparing for departure. Replenish the fuel reserves without delay.",Pollution,8,FALSE,TRUE,Airship Dock,None,None
+Premium Airship Parts,Cirri,Machinery,30,Gold,260,8,"Several private vessels require replacement components. Handle the shipment with care.",Pollution,5,FALSE,TRUE,Airship Dock,None,Fragile
+Barracks Provisions,Groundmeats,Food,30,Gold,100,9,"The workers stationed at the barracks have received no provisions this week. Send whatever food you can spare.",Unrest,5,FALSE,TRUE,Military,None,None
+Medical Relief,Groundmeats,Medicine,20,Gold,140,7,"The infirmary is treating injured workers from the surrounding districts. Medical supplies are running low.",Disease,6,FALSE,TRUE,Military,None,UrgentDelivery
+Garrison Resupply,Cirri,Food,50,Gold,220,10,"The garrison requires additional provisions to maintain its operations throughout the district.",Unrest,8,FALSE,TRUE,Military,None,None
+Armoured Transport Repairs,Cirri,Machinery,30,Gold,280,9,"Several government transport vehicles require maintenance. Deliver the requested replacement components.",Unrest,10,FALSE,TRUE,Military,None,Fragile
+Overcrowded Ward,Groundmeats,Medicine,30,Gold,170,6,"Every bed in the ward is occupied. We are running out of the supplies needed to care for our patients.",Disease,10,FALSE,TRUE,Hospital,None,UrgentDelivery
+Patient Meals,Groundmeats,Food,35,Gold,100,9,"Our patients have been surviving on reduced rations. We need food to keep the hospital functioning.",Unrest,5,FALSE,TRUE,Hospital,None,None
+Specialist Treatment,Cirri,Medicine,25,Gold,280,7,"Our specialist physicians require additional medical supplies for their private patients.",Pollution,5,FALSE,TRUE,Hospital,None,Fragile
+Medical Equipment,Cirri,Machinery,20,Gold,240,10,"New medical facilities are being prepared. Deliver the equipment required to complete their installation.",Pollution,6,FALSE,TRUE,Hospital,None,Fragile
+Depot Food Shortage,Groundmeats,Food,40,Gold,110,10,"The depot has exhausted its affordable food reserves. Help us replenish the shelves for local workers.",Unrest,6,FALSE,TRUE,ResourceDepot,None,None
+Affordable Fuel Supplies,Groundmeats,Fuel,30,Gold,120,8,"Independent transport crews are struggling to find affordable fuel. We need another shipment for our reserves.",Unrest,7,FALSE,TRUE,ResourceDepot,None,None
+Wholesale Machinery,Cirri,Machinery,35,Gold,260,12,"Demand for industrial machinery has increased. Deliver additional stock to fulfil our commercial orders.",Pollution,7,FALSE,TRUE,ResourceDepot,None,Fragile
+Bulk Ore Shipment,Cirri,Ore,50,Gold,250,10,"Several manufacturers have placed large orders for raw materials. Replenish the depot's ore reserves.",Pollution,8,FALSE,TRUE,ResourceDepot,None,None
+Workers Canteen,Groundmeats,Food,30,Gold,90,10,"The workers maintaining Vanderbilt's headquarters have been left without sufficient provisions. We require assistance.",Unrest,5,FALSE,TRUE,Vanderbilt,None,None
+Maintenance Crew,Groundmeats,Machinery,15,Gold,110,9,"The maintenance crews have been told to continue working with broken equipment. We need replacement parts.",Unrest,6,FALSE,TRUE,Vanderbilt,None,Fragile
+Executive Provisions,Cirri,Food,60,Gold,300,12,"The Vanderbilt estate is hosting several prominent industrial representatives. Deliver the requested provisions.",Pollution,5,FALSE,TRUE,Vanderbilt,None,None
+Industrial Headquarters,Cirri,Machinery,40,Gold,350,10,"House Vanderbilt is expanding its administrative and industrial facilities. Deliver the machinery required for construction.",Pollution,12,FALSE,TRUE,Vanderbilt,None,Fragile

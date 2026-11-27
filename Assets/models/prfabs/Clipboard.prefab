@@ -356,6 +356,10 @@ PrefabInstance:
       propertyPath: shipCargo
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3562997867750157599, guid: ed21beadfd2675e4e97addbbb78a15a5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5251331942042264923, guid: ed21beadfd2675e4e97addbbb78a15a5, type: 3}
       propertyPath: m_LocalScale.x
       value: 34.113575

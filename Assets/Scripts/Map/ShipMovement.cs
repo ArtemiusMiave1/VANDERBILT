@@ -468,6 +468,8 @@ public class ShipMovement : MonoBehaviour
 
     private void TriggerGameOver()
     {
+        DailyStatsManager.Instance.EndDay();
+
         if (isGameOver)
             return;
 
