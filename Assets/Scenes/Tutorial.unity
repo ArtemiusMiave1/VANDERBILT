@@ -849,6 +849,8 @@ MonoBehaviour:
       fuelConsumed: 0
       locationsVisited: 0
   dailyHistory: []
+  gameplaySceneName: Game_Playable
+  resetStatsOnGameplayLoad: 1
 --- !u!4 &1287656232
 Transform:
   m_ObjectHideFlags: 0
@@ -1332,14 +1334,8 @@ PrefabInstance:
       value: 'Travel to the request destination to complete the delivery
 
 
-        Tip:
-
-        -
-        You can add multiple locations to your route
-
-
-        Purple trade route
-        - can damage cargo and lose fuel'
+        Purple
+        trade route - can damage cargo and lose fuel'
       objectReference: {fileID: 0}
     - target: {fileID: 7373083389140794141, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
       propertyPath: steps.Array.data[10].stepObjects.Array.size
@@ -1499,30 +1495,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 8708330827724149001, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7816510732016302651, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4799492518892499685, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6899608507860720115, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7895040837990784308, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3886652528606787158, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2456987740601863634, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4731497245047848180, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5560056055764380322, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 7512078967761702652, guid: 731e54836d83b3a46aaa49bd305ca863, type: 3}

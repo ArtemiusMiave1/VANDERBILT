@@ -282,20 +282,20 @@ MonoBehaviour:
     interactionType: 2
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
-  - stepName: Discard request
-    instruction: Click on the bottom request line
-    stepObjects:
-    - {fileID: 0}
-    highlightIndices: 07000000
-    interactionType: 4
-    requiredObject: {fileID: 0}
-    requiredDestination: {fileID: 0}
   - stepName: Accept request
-    instruction: Place a new request on the corkboard
+    instruction: Place the request on the corkboard
     stepObjects:
     - {fileID: 0}
     highlightIndices: 01000000
     interactionType: 3
+    requiredObject: {fileID: 0}
+    requiredDestination: {fileID: 0}
+  - stepName: Discard request
+    instruction: Place a new request on the bottom discard line
+    stepObjects:
+    - {fileID: 0}
+    highlightIndices: 07000000
+    interactionType: 4
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
   - stepName: Route towards a resource depot
@@ -335,11 +335,7 @@ MonoBehaviour:
     requiredObject: {fileID: 0}
     requiredDestination: {fileID: 0}
   - stepName: Open shops order form
-    instruction: 'Click on the paper at the fax machine to bring up the order form
-
-
-      Tip
-      - check corkboard for requested resource'
+    instruction: Click on the paper at the fax machine to bring up the order form
     stepObjects:
     - {fileID: 0}
     highlightIndices: 03000000
@@ -356,9 +352,8 @@ MonoBehaviour:
     requiredDestination: {fileID: 0}
   - stepName: 'Deliver Request '
     instruction: "Route your path towards the destination on the map and travel there
-      to complete delivery.\nTip \n- You can add multiple locations to your route\n-
-      Going through purple trade routes can damage cargo and lose fuel \nRight click
-      - removes string."
+      to complete delivery.\nTip \n- Going through purple trade routes can damage
+      cargo and lose fuel \nRight click - removes string."
     stepObjects: []
     highlightIndices: 02000000
     interactionType: 7
@@ -1153,6 +1148,10 @@ PrefabInstance:
       propertyPath: book
       value: 
       objectReference: {fileID: 3869992383709374790}
+    - target: {fileID: 4787091144980372873, guid: ebaf9ca46989f8a42b62d6663fb1adfe, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5983860521544649352, guid: ebaf9ca46989f8a42b62d6663fb1adfe, type: 3}
       propertyPath: m_Name
       value: Tutorialbook
